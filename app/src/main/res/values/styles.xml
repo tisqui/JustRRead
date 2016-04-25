@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.JustRReadApp" parent="AppTheme"/>
+
+    <style name="ActionBarThemeOverlay" parent="">
+        <item name="android:textColorPrimary">@color/primaryTextColorToolbar</item>
+        <item name="android:textColorHighlight">@color/hightlightTextColorPopup</item>
+        <item name="android:actionMenuTextColor">@color/primaryTextColorToolbar</item>
+        <item name="android:textColorSecondary">@color/primaryTextColorToolbar</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/primaryTextColorToolbar</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.JustRReadApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="Theme.JustRReadApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/primaryTextColorPopup</item>
+        <item name="android:background">@color/popupBackground</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+</resources>
