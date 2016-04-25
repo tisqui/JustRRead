@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="8dp"
+              android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/fragment_feed_list_item_up_btn"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:text="+"/>
+
+        <TextView
+            android:id="@+id/fragment_feed_list_item_votes_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"/>
+
+        <Button
+            android:id="@+id/fragment_feed_list_item_down_btn"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:text="-"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/fragment_feed_list_item_thumbnail"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:src="@android:drawable/gallery_thumb"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fragment_feed_list_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post title"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/fragment_feed_list_item_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(imgur.net)"/>
+
+        <TextView
+            android:id="@+id/fragment_feed_list_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22 days ago"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/fragment_feed_list_item_comments_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"/>
+
+            <Button
+                android:id="@+id/fragment_feed_list_item_share_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Share"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <Button
+            android:id="@+id/fragment_feed_list_item_open_btn"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:text=">"/>
+
+</LinearLayout>
