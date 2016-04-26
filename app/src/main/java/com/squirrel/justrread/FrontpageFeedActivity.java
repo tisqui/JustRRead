@@ -2,18 +2,23 @@ package com.squirrel.justrread;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.squirrel.justrread.activities.BaseActivity;
+import com.squirrel.justrread.fragments.FeedFragment;
 
-public class FrontpageFeedActivity extends BaseActivity {
+public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frontpage_feed);
+        FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.feed_fragment));
+        initialize(savedInstanceState);
         getToolbar();
     }
 
@@ -23,7 +28,7 @@ public class FrontpageFeedActivity extends BaseActivity {
     private void initialize(Bundle savedInstanceState){
         if (savedInstanceState == null) {
             //no saved instance, get the data from the calling intent and add fragments
-//            addFragment(R.id.feed_list_container, new FeedFragment);
+
         } else {
             //got the saved instance, get the items from savedInstanceState.get..(Id);
         }
@@ -55,5 +60,8 @@ public class FrontpageFeedActivity extends BaseActivity {
         return new Intent(context, FrontpageFeedActivity.class);
     }
 
-
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //TODO smth
+    }
 }
