@@ -20,4 +20,11 @@ public class Navigator {
         }
     }
 
+    public void navigateToLogin(Context context){
+        if(context!= null){
+            Intent intentToLaunch = new Intent(context, LoginActivity.class);
+            context.startActivity(intentToLaunch);
+        }
+    }
+
 }

@@ -3,14 +3,27 @@ package com.squirrel.justrread;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.squirrel.justrread.activities.BaseActivity;
+import com.squirrel.justrread.activities.LoginActivity;
 import com.squirrel.justrread.fragments.FeedFragment;
 
+import net.dean.jraw.auth.AuthenticationManager;
+import net.dean.jraw.auth.AuthenticationState;
+import net.dean.jraw.auth.NoSuchTokenException;
+import net.dean.jraw.http.oauth.Credentials;
+import net.dean.jraw.http.oauth.OAuthException;
+
+
 public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener {
+
+    static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +33,8 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 .findFragmentById(R.id.feed_fragment));
         initialize(savedInstanceState);
         getToolbar();
+
+
     }
 
     /**
@@ -63,5 +78,42 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     @Override
     public void onFragmentInteraction(Uri uri) {
         //TODO smth
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AuthenticationState state = AuthenticationManager.get().checkAuthState();
+        Log.d(LOG_TAG, "AuthenticationState for onResume(): " + state);
+
+        switch (state) {
+            case READY:
+                break;
+            case NONE:
+                Toast.makeText(FrontpageFeedActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
+                break;
+            case NEED_REFRESH:
+                refreshAccessTokenAsync();
+                break;
+        }
+    }
+
+    private void refreshAccessTokenAsync() {
+        new AsyncTask<Credentials, Void, Void>() {
+            @Override
+            protected Void doInBackground(Credentials... params) {
+                try {
+                    AuthenticationManager.get().refreshAccessToken(LoginActivity.CREDENTIALS);
+                } catch (NoSuchTokenException | OAuthException e) {
+                    Log.e(LOG_TAG, "Could not refresh access token", e);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+                Log.d(LOG_TAG, "Reauthenticated");
+            }
+        }.execute();
     }
 }
