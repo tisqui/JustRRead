@@ -28,7 +28,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAuthentification = new Authentification();
+        mAuthentification = new Authentification(this);
 
 //        UserAgent myUserAgent = UserAgent.of();
 //

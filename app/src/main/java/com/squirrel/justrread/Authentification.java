@@ -1,5 +1,6 @@
 package com.squirrel.justrread;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -31,10 +32,10 @@ public class Authentification {
     private static final String RED_URL = BuildConfig.REDIRECT_URL;
     private  RedditTokenStore mRedditTokenStore;
 
-    public Authentification() {
+    public Authentification(Context context) {
         RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
         reddit.setLoggingMode(LoggingMode.ALWAYS);
-        mRedditTokenStore = new RedditTokenStore();
+        mRedditTokenStore = new RedditTokenStore(context);
         //initialize Authentification manager
         AuthenticationManager.get().init(reddit, new RefreshTokenHandler(mRedditTokenStore, reddit));
     }
