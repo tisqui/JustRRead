@@ -11,7 +11,7 @@ public class RedditTokenStore implements TokenStore {
 
     @Override
     public boolean isStored(String key) {
-        return mTempToken == null;
+        return mTempToken != null;
     }
 
     @Override

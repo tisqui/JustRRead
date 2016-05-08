@@ -40,6 +40,8 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         reddit.setLoggingMode(LoggingMode.ALWAYS);
         AuthenticationManager.get().init(reddit, new RefreshTokenHandler(new RedditTokenStore(), reddit));
 
+
+
         setContentView(R.layout.activity_frontpage_feed);
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment));
@@ -106,7 +108,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 Toast.makeText(FrontpageFeedActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
                 break;
             case NEED_REFRESH:
-//                refreshAccessTokenAsync();
+                refreshAccessTokenAsync();
                 break;
         }
     }
