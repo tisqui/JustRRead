@@ -12,11 +12,16 @@ import android.widget.Toast;
 
 import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.activities.LoginActivity;
+import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.fragments.FeedFragment;
 
+import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.auth.NoSuchTokenException;
+import net.dean.jraw.auth.RefreshTokenHandler;
+import net.dean.jraw.http.LoggingMode;
+import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthException;
 
@@ -28,6 +33,13 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UserAgent myUserAgent = UserAgent.of("","","","");
+
+        RedditClient reddit = new RedditClient(myUserAgent);
+        reddit.setLoggingMode(LoggingMode.ALWAYS);
+        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(new RedditTokenStore(), reddit));
+
         setContentView(R.layout.activity_frontpage_feed);
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment));
@@ -64,7 +76,8 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_login) {
+            Navigator.navigateToLogin(this);
             return true;
         }
 
@@ -93,7 +106,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 Toast.makeText(FrontpageFeedActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
                 break;
             case NEED_REFRESH:
-                refreshAccessTokenAsync();
+//                refreshAccessTokenAsync();
                 break;
         }
     }

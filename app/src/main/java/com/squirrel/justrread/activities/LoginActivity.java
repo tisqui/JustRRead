@@ -3,7 +3,6 @@ package com.squirrel.justrread.activities;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,9 +25,9 @@ import butterknife.ButterKnife;
 /**
  * Created by squirrel on 5/2/16.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
-    public static final Credentials CREDENTIALS = Credentials.installedApp("", "");
+    public static final Credentials CREDENTIALS = Credentials.installedApp("","");
     public static final String LOG_TAG = LoginActivity.class.getSimpleName();
     @Bind(R.id.login_webview) WebView mWebView;
 
@@ -37,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        activateToolbarWithHomeEnabled();
 
         // Create our RedditClient
         final OAuthHelper helper = AuthenticationManager.get().getRedditClient().getOAuthHelper();

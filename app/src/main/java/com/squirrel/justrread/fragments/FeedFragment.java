@@ -1,9 +1,12 @@
 package com.squirrel.justrread.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,12 +21,27 @@ import com.squirrel.justrread.data.Post;
 import java.util.ArrayList;
 
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private RecyclerView mRecyclerView;
     private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private LinearLayoutManager mLinearLayoutManager;
     private static final String SELECTED_KEY = "selected_position";
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 
     public interface Callback {
         /**

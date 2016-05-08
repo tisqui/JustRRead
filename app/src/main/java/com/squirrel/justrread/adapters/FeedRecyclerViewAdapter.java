@@ -21,7 +21,7 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
     private final String LOG_TAG = FeedRecyclerViewAdapter.class.getSimpleName();
     private int mSelectedPosition = 0;
 
-    private final String tempImageUrl = "http://i.imgur.com/0D2TXQ3.jpg";
+    private final String tempImageUrl = "http://i.imgur.com/EvrnaBB.jpg";
 
     public FeedRecyclerViewAdapter(List<Post> postList, Context context) {
         mPostList = postList;

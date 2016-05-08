@@ -13,14 +13,14 @@ public class Navigator {
     public Navigator() {
     }
 
-    public void navigateToFrontpageFeed(Context context) {
+    public static void navigateToFrontpageFeed(Context context) {
         if (context != null) {
             Intent intentToLaunch = FrontpageFeedActivity.getCallingIntent(context);
             context.startActivity(intentToLaunch);
         }
     }
 
-    public void navigateToLogin(Context context){
+    public static void navigateToLogin(Context context){
         if(context!= null){
             Intent intentToLaunch = new Intent(context, LoginActivity.class);
             context.startActivity(intentToLaunch);
