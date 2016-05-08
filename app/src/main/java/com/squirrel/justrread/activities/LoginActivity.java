@@ -8,6 +8,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.squirrel.justrread.BuildConfig;
 import com.squirrel.justrread.R;
 
 import net.dean.jraw.auth.AuthenticationManager;
@@ -27,7 +28,10 @@ import butterknife.ButterKnife;
  */
 public class LoginActivity extends BaseActivity {
 
-    public static final Credentials CREDENTIALS = Credentials.installedApp("","");
+    public static final String APP_ID = BuildConfig.APP_ID;
+    public static final String URL = BuildConfig.REDIRECT_URL;
+
+    public static final Credentials CREDENTIALS = Credentials.installedApp(APP_ID, URL);
     public static final String LOG_TAG = LoginActivity.class.getSimpleName();
     @Bind(R.id.login_webview) WebView mWebView;
 

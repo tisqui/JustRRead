@@ -27,6 +27,12 @@ android {
         exclude 'META-INF/NOTICE' // will not include NOTICE file
         exclude 'META-INF/LICENSE' // will not include LICENSE file
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'APP_ID', MyAppId
+        it.buildConfigField 'String', 'REDIRECT_URL', MyRedirectUrl
+        it.buildConfigField 'String', 'APP_UNIQUE_ID', MyUniqueAppId
+        it.buildConfigField 'String', 'USER_NAME', MyUserName
+    }
 }
 
 dependencies {

@@ -3,7 +3,6 @@ package com.squirrel.justrread;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,36 +10,31 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.squirrel.justrread.activities.BaseActivity;
-import com.squirrel.justrread.activities.LoginActivity;
 import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.fragments.FeedFragment;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
-import net.dean.jraw.auth.NoSuchTokenException;
-import net.dean.jraw.auth.RefreshTokenHandler;
-import net.dean.jraw.http.LoggingMode;
-import net.dean.jraw.http.UserAgent;
-import net.dean.jraw.http.oauth.Credentials;
-import net.dean.jraw.http.oauth.OAuthException;
 
 
 public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
+    RedditClient reddit;
+    Authentification mAuthentification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UserAgent myUserAgent = UserAgent.of("","","","");
+        mAuthentification = new Authentification();
 
-        RedditClient reddit = new RedditClient(myUserAgent);
-        reddit.setLoggingMode(LoggingMode.ALWAYS);
-        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(new RedditTokenStore(), reddit));
-
-
+//        UserAgent myUserAgent = UserAgent.of();
+//
+//        reddit = new RedditClient(myUserAgent);
+//        reddit.setLoggingMode(LoggingMode.ALWAYS);
+//        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(new RedditTokenStore(), reddit));
 
         setContentView(R.layout.activity_frontpage_feed);
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
@@ -48,8 +42,8 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         initialize(savedInstanceState);
         getToolbar();
 
-
     }
+
 
     /**
      * Initial settings of the activity
@@ -105,30 +99,58 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
             case READY:
                 break;
             case NONE:
-                Toast.makeText(FrontpageFeedActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FrontpageFeedActivity.this, "Authentification without login", Toast.LENGTH_SHORT).show();
+                mAuthentification.authentificateWithoutLoginAsync();
+//                authentificateWithoutLoginAsync();
                 break;
             case NEED_REFRESH:
-                refreshAccessTokenAsync();
+                mAuthentification.refreshAccessTokenAsync();
+//                refreshAccessTokenAsync();
                 break;
         }
     }
 
-    private void refreshAccessTokenAsync() {
-        new AsyncTask<Credentials, Void, Void>() {
-            @Override
-            protected Void doInBackground(Credentials... params) {
-                try {
-                    AuthenticationManager.get().refreshAccessToken(LoginActivity.CREDENTIALS);
-                } catch (NoSuchTokenException | OAuthException e) {
-                    Log.e(LOG_TAG, "Could not refresh access token", e);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void v) {
-                Log.d(LOG_TAG, "Reauthenticated");
-            }
-        }.execute();
-    }
+//    private void refreshAccessTokenAsync() {
+//        new AsyncTask<Credentials, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Credentials... params) {
+//                try {
+//                    AuthenticationManager.get().refreshAccessToken(LoginActivity.CREDENTIALS);
+//                } catch (NoSuchTokenException | OAuthException e) {
+//                    Log.e(LOG_TAG, "Could not refresh access token", e);
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void v) {
+//                Log.d(LOG_TAG, "Reauthenticated");
+//            }
+//        }.execute();
+//    }
+//
+//    private void authentificateWithoutLoginAsync(){
+//        new AsyncTask<String, Void, Void>(){
+//            @Override
+//            protected Void doInBackground(String... params) {
+//                final Credentials fcreds = Credentials.userlessApp(LoginActivity.APP_ID, UUID.randomUUID());
+//                OAuthData authData = null;
+//                try {
+//                    authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
+//                    AuthenticationManager.get().getRedditClient().authenticate(authData);
+//                } catch (OAuthException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                super.onPostExecute(aVoid);
+//                AuthenticationState state = AuthenticationManager.get().checkAuthState();
+//                Toast.makeText(getApplicationContext(), "State = " + state.toString(), Toast.LENGTH_SHORT).show();
+//                getFrontPageContent();
+//            }
+//        }.execute();
+//    }
 }
