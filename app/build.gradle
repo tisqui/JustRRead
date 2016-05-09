@@ -46,4 +46,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:support-v4:23.1.1'
     compile "net.dean.jraw:JRAW:0.8.0"
+    compile 'com.github.satyan:sugar:1.4'
+
 }

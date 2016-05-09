@@ -6,10 +6,17 @@
 
     <application
         android:allowBackup="true"
+        android:name="com.orm.SugarApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="DATABASE" android:value="reddit_reader.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.squirrel.justrread" />
+
         <activity
             android:name=".FrontpageFeedActivity"
             android:label="@string/frontpage_name"
@@ -23,6 +30,37 @@
             android:label="Login"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <provider
+            android:name=".data.RedditProvider"
+            android:authorities="@strings/content_authority"
+            android:exported="false"
+            android:syncable="true"/>
+
+        <!-- SyncAdapter's dummy authentication service -->
+        <service android:name=".sync.RedditAuthentificatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authentificator"/>
+        </service>
+
+        <!-- The SyncAdapter service -->
+        <service
+            android:name=".sync.RedditSyncService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"/>
+        </service>
+
     </application>
 
 </manifest>

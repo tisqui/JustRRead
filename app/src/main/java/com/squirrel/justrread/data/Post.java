@@ -1,12 +1,15 @@
 package com.squirrel.justrread.data;
 
+import com.orm.SugarRecord;
+
 import java.io.Serializable;
 
 /**
  * Created by squirrel on 4/25/16.
  */
-public class Post implements Serializable {
-    private String mId; //this item's identifier, e.g. "8xwlg"
+public class Post extends SugarRecord implements Serializable {
+
+    private String mPostId; //this item's identifier, e.g. "8xwlg"
     private String mName; //Fullname of comment, e.g. "t1_c3v7f8u"
     private int mUpVotes;
     private int mDownVotes;
@@ -26,7 +29,7 @@ public class Post implements Serializable {
 
     //TODO add the objects media, media_embed https://github.com/reddit/reddit/wiki/JSON
 
-    public Post(String id, String name,
+    public Post(String postId, String name,
                 int upVotes, int downVotes,
                 boolean likes, long created,
                 String author, String domain,
@@ -34,7 +37,7 @@ public class Post implements Serializable {
                 boolean nsfw, String subreddit,
                 String subredditId, String selfTextHtml,
                 String thumbnail, String title, String url) {
-        mId = id;
+        mPostId = postId;
         mName = name;
         mUpVotes = upVotes;
         mDownVotes = downVotes;
@@ -53,12 +56,12 @@ public class Post implements Serializable {
         mUrl = url;
     }
 
-    public String getId() {
-        return mId;
+    public String getPosId() {
+        return mPostId;
     }
 
     public void setId(String id) {
-        mId = id;
+        mPostId = id;
     }
 
     public String getName() {
@@ -192,7 +195,7 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "Post{" +
-                "mId='" + mId + '\'' +
+                "mId='" + mPostId + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mUpVotes=" + mUpVotes +
                 ", mDownVotes=" + mDownVotes +
