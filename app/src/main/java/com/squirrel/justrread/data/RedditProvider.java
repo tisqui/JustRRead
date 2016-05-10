@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 
 /**
  * Created by squirrel on 5/8/16.
+ * Dummy provider. All DB interaction will be handled by SugarORM
  */
 public class RedditProvider extends ContentProvider {
     public static final String CONTENT_AUTHORITY = "com.squirrel.justrread";
@@ -28,31 +29,33 @@ public class RedditProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Cursor retCursor;
-        switch (sUriMatcher.match(uri)) {
-            case POSTS:
-                retCursor = null;
-//                retCursor = Post.find(Post.class, selection, selectionArgs, null, null, null);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
-        return retCursor;
+//        Cursor retCursor;
+//        switch (sUriMatcher.match(uri)) {
+//            case POSTS:
+//                retCursor = null;
+////                retCursor = Post.find(Post.class, selection, selectionArgs, null, null, null);
+//                break;
+//            default:
+//                throw new UnsupportedOperationException("Unknown uri: " + uri);
+//        }
+//        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+//        return retCursor;
+        return null;
     }
 
     @Nullable
     @Override
     public String getType(Uri uri) {
-        final int match = sUriMatcher.match(uri);
-
-        switch (match) {
-            case POSTS:
-                //TODO find out if I need this
-                return null;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
+//        final int match = sUriMatcher.match(uri);
+//
+//        switch (match) {
+//            case POSTS:
+//                //TODO find out if I need this
+//                return null;
+//            default:
+//                throw new UnsupportedOperationException("Unknown uri: " + uri);
+//        }
+        return null;
     }
 
     @Nullable

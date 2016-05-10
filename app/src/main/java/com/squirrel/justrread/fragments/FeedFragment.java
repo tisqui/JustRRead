@@ -17,6 +17,7 @@ import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.data.Post;
+import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 
@@ -133,12 +134,18 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }));
 
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                //TODO add the load more logic
+
+            }
+        });
+
         // If there's instance state, get the last selected position
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
-
-        //TODO set the scroll listener (endless listener)
 
         return rootView;
 
