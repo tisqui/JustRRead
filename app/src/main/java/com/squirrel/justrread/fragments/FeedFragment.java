@@ -20,6 +20,7 @@ import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -186,7 +187,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         ArrayList<Post> postList = new ArrayList<>();
         for(int i = 0; i<10; i++){
             Post post = new Post("1", "123",
-                    123, 240, false, 2344, "username123", "imgur.com",
+                    123, 240, 10, new Date(Date.parse("03/03/2015")), "username123", "imgur.com",
                     false, 17, true, "/r/WTF",
                     "123", "Russia Arrests Scientologist for Stealing $2 Million and Giving to Church",
                     "", "Tuna swallows a seagull and spits it out",

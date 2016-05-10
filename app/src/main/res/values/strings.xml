@@ -7,4 +7,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="account_type">justrread.squirrel.com</string>
     <string name="content_authority">com.squirrel.justrread</string>
+
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">justrread.squirrel.com</string>
 </resources>

@@ -3,6 +3,7 @@ package com.squirrel.justrread.data;
 import com.orm.SugarRecord;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by squirrel on 4/25/16.
@@ -13,8 +14,8 @@ public class Post extends SugarRecord implements Serializable {
     private String mName; //Fullname of comment, e.g. "t1_c3v7f8u"
     private int mUpVotes;
     private int mDownVotes;
-    private boolean mLikes;
-    private long mCreated;
+    private int mLikes;
+    private Date mCreated;
     private String mAuthor;
     private String mDomain;
     private boolean mSelfPost;
@@ -31,7 +32,7 @@ public class Post extends SugarRecord implements Serializable {
 
     public Post(String postId, String name,
                 int upVotes, int downVotes,
-                boolean likes, long created,
+                int likes, Date created,
                 String author, String domain,
                 boolean selfPost, int numComments,
                 boolean nsfw, String subreddit,
@@ -88,19 +89,19 @@ public class Post extends SugarRecord implements Serializable {
         mDownVotes = downVotes;
     }
 
-    public boolean isLikes() {
+    public int isLikes() {
         return mLikes;
     }
 
-    public void setLikes(boolean likes) {
+    public void setLikes(int likes) {
         mLikes = likes;
     }
 
-    public long getCreated() {
+    public Date getCreated() {
         return mCreated;
     }
 
-    public void setCreated(long created) {
+    public void setCreated(Date created) {
         mCreated = created;
     }
 
