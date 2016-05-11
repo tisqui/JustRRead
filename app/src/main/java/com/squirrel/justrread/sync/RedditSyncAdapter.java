@@ -67,6 +67,7 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                                 s.isNsfw(), s.getSubredditName(), s.getSubredditId(), s.getSelftext(), s.getThumbnail(), s.getTitle(), s.getUrl());
                         Log.d(LOG_TAG, post.toString());
                         post.save();
+                        Log.d(LOG_TAG, "Saved: " + Post.listAll(Post.class).toString());
                     }
                 }
             }

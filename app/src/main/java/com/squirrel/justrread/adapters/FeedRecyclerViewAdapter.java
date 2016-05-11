@@ -2,6 +2,7 @@ package com.squirrel.justrread.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
 
         //set all the data to the UI elements
         Glide.with(mContext)
-                .load(tempImageUrl)
+                .load(postItem.getThumbnail())
                 .centerCrop()
                 .placeholder(R.drawable.placeholder_img)
                 .error(R.drawable.placeholder_img)
@@ -65,10 +66,6 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
         return (null != mPostList ? mPostList.size() : 0);
     }
 
-    public void updateIPostsInList(List<Post> newPosts){
-        mPostList = newPosts;
-        notifyDataSetChanged();
-    }
 
     public void addPostsToList(List<Post> morePosts){
         mPostList.addAll(morePosts);
@@ -90,20 +87,11 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
         notifyItemChanged(mSelectedPosition);
     }
 
-//    public Cursor getCursor() {
-//        return mCursor;
-//    }
-
     public void swapPostsData(List<Post> posts){
+        Log.d(LOG_TAG, "New posts received");
         mPostList = posts;
         notifyDataSetChanged();
     }
-
-//    public void swapCursor(Cursor newCursor) {
-//        mCursor = newCursor;
-//        notifyDataSetChanged();
-////        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
-//    }
 
     public void selectView(RecyclerView.ViewHolder viewHolder) {
         if ( viewHolder instanceof FeedItemViewHolder ) {

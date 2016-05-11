@@ -84,7 +84,7 @@ public class Authentification {
         new AsyncTask<String, Void, Void>(){
             @Override
             protected Void doInBackground(String... params) {
-                final Credentials fcreds = Credentials.userlessApp("K6CKkRmk4Wkxbg", UUID.randomUUID());
+                final Credentials fcreds = Credentials.userlessApp(APP_ID, UUID.randomUUID());
                 OAuthData authData;
                 try {
                     authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);

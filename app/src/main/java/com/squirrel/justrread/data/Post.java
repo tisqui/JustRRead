@@ -28,6 +28,7 @@ public class Post extends SugarRecord implements Serializable {
     private String mTitle;
     private String mUrl;
 
+    public Post(){}
     //TODO add the objects media, media_embed https://github.com/reddit/reddit/wiki/JSON
 
     public Post(String postId, String name,

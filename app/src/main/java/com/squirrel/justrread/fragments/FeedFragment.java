@@ -1,7 +1,6 @@
 package com.squirrel.justrread.fragments;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +23,16 @@ import com.squirrel.justrread.sync.PostsLoader;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
-public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Post>> {
+    private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private LinearLayoutManager mLinearLayoutManager;
-    private long mInitialSelectedPost = -1;
+    private static final int POSTS_LOADER = 0;
     private static final String SELECTED_KEY = "selected_position";
 
     @Override
@@ -39,9 +41,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        mFeedRecyclerViewAdapter.(data);
-        if ( data.getCount() == 0 ) {
+    public void onLoadFinished(Loader<List<Post>> loader, List<Post> data) {
+        Log.d(LOG_TAG, "LOAD FINISHED");
+        mFeedRecyclerViewAdapter.swapPostsData(data);
+        if ( data.size() == 0 ) {
             getActivity().supportStartPostponedEnterTransition();
         } else {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -51,8 +54,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                         mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
                         int position = mPosition;
                         if (position == RecyclerView.NO_POSITION) {
-//                            Cursor data = mFeedRecyclerViewAdapter.getCursor();
-//                            int count = data.getCount();
                             //TODO figure out to what position move
                         }
                         if (position == RecyclerView.NO_POSITION) position = 0;
@@ -70,12 +71,12 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             });
         }
+
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-//        mFeedRecyclerViewAdapter.swapCursor(null);
-
+    public void onLoaderReset(Loader<List<Post>> loader) {
+        mFeedRecyclerViewAdapter.swapPostsData(null);
     }
 
     public interface Callback {
@@ -116,6 +117,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(POSTS_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
 
     }
@@ -213,6 +215,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onResume() {
         super.onResume();
 //        mFeedRecyclerViewAdapter.addPostsToList(generateDummyData());
+        mFeedRecyclerViewAdapter.swapPostsData(Post.listAll(Post.class));
         //TODO load information to the list, check the previous selected item and scroll to this item
     }
 
