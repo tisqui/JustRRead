@@ -10,12 +10,14 @@ import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.data.Post;
 
 import net.dean.jraw.auth.AuthenticationManager;
+import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
@@ -44,25 +46,35 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         //TODO add the sync code
 
-        //Get the posts data
-        SubredditPaginator paginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-        paginator.setLimit(50);
-        if(paginator != null){
-            // Request the first page
-            if(paginator.hasNext()) {
-                Listing<Submission> firstPage = paginator.next();
-                //delete the previous data, so we do not build the endless story
-                Post.deleteAll(Post.class);
+        AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
-                for (Submission s : firstPage) {
-                    // Save the post to DB
-                   Post post = new Post(s.getId(), s.getFullName(), s.getScore(), s.getScore(), s.getScore(),
-                           s.getCreated(), s.getAuthor(), s.getDomain(), s.isSelfPost(), s.getCommentCount(),
-                           s.isNsfw(), s.getSubredditName(), s.getSubredditId(), s.getSelftext(), s.getThumbnail(), s.getTitle(), s.getUrl());
-                    post.save();
+        if(state.equals(AuthenticationState.READY)){
+            //Get the posts data
+            Log.d(LOG_TAG, "Getting paginator:");
+            SubredditPaginator paginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+            paginator.setLimit(50);
+            if(paginator != null){
+                // Request the first page
+                if(paginator.hasNext()) {
+                    Listing<Submission> firstPage = paginator.next();
+                    //delete the previous data, so we do not build the endless story
+                    Post.deleteAll(Post.class);
+
+                    for (Submission s : firstPage) {
+                        // Save the post to DB
+                        Post post = new Post(s.getId(), s.getFullName(), s.getScore(), s.getScore(), s.getScore(),
+                                s.getCreated(), s.getAuthor(), s.getDomain(), s.isSelfPost(), s.getCommentCount(),
+                                s.isNsfw(), s.getSubredditName(), s.getSubredditId(), s.getSelftext(), s.getThumbnail(), s.getTitle(), s.getUrl());
+                        Log.d(LOG_TAG, post.toString());
+                        post.save();
+                    }
                 }
             }
         }
+        else{
+            //do nothing for now
+        }
+
     }
 
 

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.squirrel.justrread.activities.LoginActivity;
+import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
@@ -31,10 +32,12 @@ public class Authentification {
     private static final String APP_ID = BuildConfig.APP_ID;
     private static final String RED_URL = BuildConfig.REDIRECT_URL;
     private  RedditTokenStore mRedditTokenStore;
+    private Context mContext;
 
     public Authentification(Context context) {
         RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
         reddit.setLoggingMode(LoggingMode.ALWAYS);
+        mContext = context;
         mRedditTokenStore = new RedditTokenStore(context);
         //initialize Authentification manager
         AuthenticationManager.get().init(reddit, new RefreshTokenHandler(mRedditTokenStore, reddit));
@@ -81,7 +84,7 @@ public class Authentification {
         new AsyncTask<String, Void, Void>(){
             @Override
             protected Void doInBackground(String... params) {
-                final Credentials fcreds = Credentials.userlessApp(LoginActivity.APP_ID, UUID.randomUUID());
+                final Credentials fcreds = Credentials.userlessApp("K6CKkRmk4Wkxbg", UUID.randomUUID());
                 OAuthData authData;
                 try {
                     authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
@@ -95,7 +98,12 @@ public class Authentification {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                getFrontPageContent();
+                Log.d(LOG_TAG, "Authentification DONE");
+                AuthenticationState state = AuthenticationManager.get().checkAuthState();
+                Log.d(LOG_TAG, "AuthenticationState state: " + state);
+//                getFrontPageContent();
+                Log.d(LOG_TAG, "SYNCING POSTS:");
+                RedditSyncAdapter.syncImmediately(mContext);
             }
         }.execute();
     }

@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 /**
  * Created by squirrel on 4/25/16.
  */
-public class FeedItemViewHolder extends RecyclerView.ViewHolder {
+public class FeedItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Bind(R.id.fragment_feed_list_item_up_btn) Button upBtn;
     @Bind(R.id.fragment_feed_list_item_votes_num) TextView numberOfVotesTextView;
     @Bind(R.id.fragment_feed_list_item_down_btn) Button downBtn;
@@ -29,5 +29,10 @@ public class FeedItemViewHolder extends RecyclerView.ViewHolder {
     public FeedItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

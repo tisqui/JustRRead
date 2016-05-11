@@ -18,6 +18,7 @@ import java.util.List;
 public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHolder> {
     private List<Post> mPostList;
     private Context mContext;
+//    private Cursor mCursor;
     private final String LOG_TAG = FeedRecyclerViewAdapter.class.getSimpleName();
     private int mSelectedPosition = 0;
 
@@ -37,6 +38,7 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
 
     @Override
     public void onBindViewHolder(FeedItemViewHolder holder, int position) {
+
         Post postItem = mPostList.get(position);
         holder.itemView.setSelected(mSelectedPosition == position);
 
@@ -86,5 +88,27 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
         mSelectedPosition = position;
         notifyItemChanged(old_position);
         notifyItemChanged(mSelectedPosition);
+    }
+
+//    public Cursor getCursor() {
+//        return mCursor;
+//    }
+
+    public void swapPostsData(List<Post> posts){
+        mPostList = posts;
+        notifyDataSetChanged();
+    }
+
+//    public void swapCursor(Cursor newCursor) {
+//        mCursor = newCursor;
+//        notifyDataSetChanged();
+////        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+//    }
+
+    public void selectView(RecyclerView.ViewHolder viewHolder) {
+        if ( viewHolder instanceof FeedItemViewHolder ) {
+            FeedItemViewHolder vfh = (FeedItemViewHolder)viewHolder;
+            vfh.onClick(vfh.itemView);
+        }
     }
 }

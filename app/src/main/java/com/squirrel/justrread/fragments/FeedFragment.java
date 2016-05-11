@@ -12,12 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
+import com.squirrel.justrread.sync.PostsLoader;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,20 +30,51 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private LinearLayoutManager mLinearLayoutManager;
+    private long mInitialSelectedPost = -1;
     private static final String SELECTED_KEY = "selected_position";
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+    public PostsLoader onCreateLoader(int id, Bundle args) {
+        return new PostsLoader(getContext());
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        mFeedRecyclerViewAdapter.(data);
+        if ( data.getCount() == 0 ) {
+            getActivity().supportStartPostponedEnterTransition();
+        } else {
+            mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    if (mRecyclerView.getChildCount() > 0) {
+                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        int position = mPosition;
+                        if (position == RecyclerView.NO_POSITION) {
+//                            Cursor data = mFeedRecyclerViewAdapter.getCursor();
+//                            int count = data.getCount();
+                            //TODO figure out to what position move
+                        }
+                        if (position == RecyclerView.NO_POSITION) position = 0;
+                        // If we don't need to restart the loader, and there's a desired position to restore
+                        // to, do so now.
+                        mRecyclerView.smoothScrollToPosition(position);
+                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+//                        if (null != vh && mAutoSelectView) {
+//                            mFeedRecyclerViewAdapter.selectView(vh);
+//                        }
 
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+//        mFeedRecyclerViewAdapter.swapCursor(null);
 
     }
 
@@ -179,7 +212,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onResume() {
         super.onResume();
-        mFeedRecyclerViewAdapter.addPostsToList(generateDummyData());
+//        mFeedRecyclerViewAdapter.addPostsToList(generateDummyData());
         //TODO load information to the list, check the previous selected item and scroll to this item
     }
 
