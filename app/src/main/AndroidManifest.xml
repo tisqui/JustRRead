@@ -22,7 +22,7 @@
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.squirrel.justrread" />
 
         <activity
-            android:name=".FrontpageFeedActivity"
+            android:name=".activities.FrontpageFeedActivity"
             android:label="@string/frontpage_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

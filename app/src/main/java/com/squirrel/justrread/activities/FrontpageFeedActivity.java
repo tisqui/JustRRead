@@ -1,4 +1,4 @@
-package com.squirrel.justrread;
+package com.squirrel.justrread.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.squirrel.justrread.activities.BaseActivity;
-import com.squirrel.justrread.activities.Navigator;
+import com.squirrel.justrread.Authentification;
+import com.squirrel.justrread.R;
 import com.squirrel.justrread.fragments.FeedFragment;
 
 import net.dean.jraw.RedditClient;

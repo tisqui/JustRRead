@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
@@ -14,13 +15,18 @@ import android.util.Log;
 
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
-import com.squirrel.justrread.data.Post;
+import com.squirrel.justrread.data.RedditContract;
 
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
 
 /**
  * Created by squirrel on 5/8/16.
@@ -58,24 +64,57 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                 if(paginator.hasNext()) {
                     Listing<Submission> firstPage = paginator.next();
                     //delete the previous data, so we do not build the endless story
-                    Post.deleteAll(Post.class);
+//                    List<Post> items = Post.listAll(Post.class);
+//                    Post.deleteAll(Post.class);
+
+                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
 
                     for (Submission s : firstPage) {
                         // Save the post to DB
-                        Post post = new Post(s.getId(), s.getFullName(), s.getScore(), s.getScore(), s.getScore(),
-                                s.getCreated(), s.getAuthor(), s.getDomain(), s.isSelfPost(), s.getCommentCount(),
-                                s.isNsfw(), s.getSubredditName(), s.getSubredditId(), s.getSelftext(), s.getThumbnail(), s.getTitle(), s.getUrl());
-                        Log.d(LOG_TAG, post.toString());
-                        post.save();
-                        Log.d(LOG_TAG, "Saved: " + Post.listAll(Post.class).toString());
+                        Log.d(LOG_TAG, s.toString());
+                        ContentValues postValues = new ContentValues();
+                        postValues.put(RedditContract.PostEntry.COLUMN_ID, s.getId());
+                        postValues.put(RedditContract.PostEntry.COLUMN_NAME, s.getFullName());
+                        postValues.put(RedditContract.PostEntry.COLUMN_UP_VOTES, s.getScore());
+                        postValues.put(RedditContract.PostEntry.COLUMN_DOWN_VOTES, s.getScore());
+                        postValues.put(RedditContract.PostEntry.COLUMN_LIKES, s.getScore());
+                        postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, dateToString(s.getCreated()));
+                        postValues.put(RedditContract.PostEntry.COLUMN_AUTHOR, s.getAuthor());
+                        postValues.put(RedditContract.PostEntry.COLUMN_DOMAIN, s.getDomain());
+                        postValues.put(RedditContract.PostEntry.COLUMN_SELF_POST, s.isSelfPost() ? 1:0);
+                        postValues.put(RedditContract.PostEntry.COLUMN_NUM_COMMENTS, s.getCommentCount());
+                        postValues.put(RedditContract.PostEntry.COLUMN_NSFW, s.isNsfw() ? 1:0);
+                        postValues.put(RedditContract.PostEntry.COLUMN_SUBREDDIT, s.getSubredditName());
+                        postValues.put(RedditContract.PostEntry.COLUMN_SUBREDDIT_ID, s.getSubredditId());
+                        postValues.put(RedditContract.PostEntry.COLUMN_SELFHTML, s.getSelftext());
+                        postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, s.getThumbnail());
+                        postValues.put(RedditContract.PostEntry.COLUMN_TITLE, s.getTitle());
+                        postValues.put(RedditContract.PostEntry.COLUMN_URL, s.getUrl());
+
+                        contentValuesList.add(postValues);
                     }
+
+                    int inserted = 0;
+                    // add to database
+                    if ( contentValuesList.size() > 0 ) {
+                        ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
+                        contentValuesList.toArray(cvArray);
+                        getContext().getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
+                        // TODO delete old data so we don't build up an endless history
+                    }
+                    Log.d(LOG_TAG, "Sync Complete. " + contentValuesList.size() + " Inserted");
                 }
             }
         }
         else{
-            //do nothing for now
+            //do nothing for now, but need to try authentificate
         }
 
+    }
+
+    private String dateToString(Date date){
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(date);
     }
 
 
