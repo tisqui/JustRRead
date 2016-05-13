@@ -52,6 +52,8 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         //TODO add the sync code
 
+        Log.d(LOG_TAG, "onPerformSync called");
+
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
         if(state.equals(AuthenticationState.READY)){

@@ -110,47 +110,4 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         }
     }
 
-//    private void refreshAccessTokenAsync() {
-//        new AsyncTask<Credentials, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Credentials... params) {
-//                try {
-//                    AuthenticationManager.get().refreshAccessToken(LoginActivity.CREDENTIALS);
-//                } catch (NoSuchTokenException | OAuthException e) {
-//                    Log.e(LOG_TAG, "Could not refresh access token", e);
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void v) {
-//                Log.d(LOG_TAG, "Reauthenticated");
-//            }
-//        }.execute();
-//    }
-//
-//    private void authentificateWithoutLoginAsync(){
-//        new AsyncTask<String, Void, Void>(){
-//            @Override
-//            protected Void doInBackground(String... params) {
-//                final Credentials fcreds = Credentials.userlessApp(LoginActivity.APP_ID, UUID.randomUUID());
-//                OAuthData authData = null;
-//                try {
-//                    authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
-//                    AuthenticationManager.get().getRedditClient().authenticate(authData);
-//                } catch (OAuthException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void aVoid) {
-//                super.onPostExecute(aVoid);
-//                AuthenticationState state = AuthenticationManager.get().checkAuthState();
-//                Toast.makeText(getApplicationContext(), "State = " + state.toString(), Toast.LENGTH_SHORT).show();
-//                getFrontPageContent();
-//            }
-//        }.execute();
-//    }
 }

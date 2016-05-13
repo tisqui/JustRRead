@@ -1,14 +1,15 @@
 package com.squirrel.justrread.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,13 @@ import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.data.Post;
+import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
-import com.squirrel.justrread.sync.PostsLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Post>> {
+public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
@@ -35,48 +35,99 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String SELECTED_KEY = "selected_position";
 
     @Override
-    public PostsLoader onCreateLoader(int id, Bundle args) {
-        return new PostsLoader(getContext());
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri postsUri = RedditContract.PostEntry.CONTENT_URI;
+
+        return new CursorLoader(getActivity(),
+                postsUri,
+                null,
+                null,
+                null,
+                null);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Post>> loader, List<Post> data) {
-        Log.d(LOG_TAG, "LOAD FINISHED");
-        mFeedRecyclerViewAdapter.swapPostsData(data);
-        if ( data.size() == 0 ) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mFeedRecyclerViewAdapter.swapCursor(data);
+//        updateEmptyView();
+        if ( data.getCount() == 0 ) {
             getActivity().supportStartPostponedEnterTransition();
         } else {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
+                    // Since we know we're going to get items, we keep the listener around until
+                    // we see Children.
                     if (mRecyclerView.getChildCount() > 0) {
                         mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
                         int position = mPosition;
-                        if (position == RecyclerView.NO_POSITION) {
-                            //TODO figure out to what position move
-                        }
                         if (position == RecyclerView.NO_POSITION) position = 0;
                         // If we don't need to restart the loader, and there's a desired position to restore
                         // to, do so now.
                         mRecyclerView.smoothScrollToPosition(position);
                         RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
 //                        if (null != vh && mAutoSelectView) {
-//                            mFeedRecyclerViewAdapter.selectView(vh);
+//                            FeedRecyclerViewAdapter.selectView(vh);
 //                        }
-
+//                        if ( mHoldForTransition ) {
+//                            getActivity().supportStartPostponedEnterTransition();
+//                        }
                         return true;
                     }
                     return false;
                 }
             });
         }
-
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Post>> loader) {
-        mFeedRecyclerViewAdapter.swapPostsData(null);
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mFeedRecyclerViewAdapter.swapCursor(null);
     }
+
+    //        @Override
+//    public PostsLoader onCreateLoader(int id, Bundle args) {
+//        return new PostsLoader(getContext());
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<List<Post>> loader, List<Post> data) {
+//        Log.d(LOG_TAG, "LOAD FINISHED");
+//        mFeedRecyclerViewAdapter.swapPostsData(data);
+//        if ( data.size() == 0 ) {
+//            getActivity().supportStartPostponedEnterTransition();
+//        } else {
+//            mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                @Override
+//                public boolean onPreDraw() {
+//                    if (mRecyclerView.getChildCount() > 0) {
+//                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+//                        int position = mPosition;
+//                        if (position == RecyclerView.NO_POSITION) {
+//                            //TODO figure out to what position move
+//                        }
+//                        if (position == RecyclerView.NO_POSITION) position = 0;
+//                        // If we don't need to restart the loader, and there's a desired position to restore
+//                        // to, do so now.
+//                        mRecyclerView.smoothScrollToPosition(position);
+//                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+////                        if (null != vh && mAutoSelectView) {
+////                            mFeedRecyclerViewAdapter.selectView(vh);
+////                        }
+//
+//                        return true;
+//                    }
+//                    return false;
+//                }
+//            });
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<List<Post>> loader) {
+//        mFeedRecyclerViewAdapter.swapPostsData(null);
+//    }
 
     public interface Callback {
         /**
@@ -218,19 +269,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         //TODO load information to the list, check the previous selected item and scroll to this item
     }
 
-    private ArrayList<Post> generateDummyData(){
-        ArrayList<Post> postList = new ArrayList<>();
-        for(int i = 0; i<10; i++){
-//            Post post = new Post("1", "123",
-//                    123, 240, 10, new Date(Date.parse("03/03/2015")), "username123", "imgur.com",
-//                    false, 17, true, "/r/WTF",
-//                    "123", "Russia Arrests Scientologist for Stealing $2 Million and Giving to Church",
-//                    "", "Tuna swallows a seagull and spits it out",
-//                    "google.com");
-//            postList.add(post);
-        }
-        return postList;
-    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -1,13 +1,11 @@
 package com.squirrel.justrread.data;
 
-import com.orm.SugarRecord;
-
 import java.io.Serializable;
 
 /**
  * Created by squirrel on 4/25/16.
  */
-public class Post extends SugarRecord implements Serializable {
+public class Post implements Serializable {
 
     private String mPostId; //this item's identifier, e.g. "8xwlg"
     private String mName; //Fullname of comment, e.g. "t1_c3v7f8u"
