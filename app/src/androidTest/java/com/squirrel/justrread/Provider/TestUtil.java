@@ -116,4 +116,10 @@ public class TestUtil extends AndroidTestCase {
     static TestContentObserver getTestContentObserver() {
         return TestContentObserver.getTestContentObserver();
     }
+
+    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+        assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
+        validateCurrentRecord(error, valueCursor, expectedValues);
+        valueCursor.close();
+    }
 }

@@ -102,4 +102,24 @@ public class TestDB extends AndroidTestCase {
         TestUtil.validateCurrentRecord("Quesry is not validated", cursor, movieValues);
         cursor.close();
     }
+
+    public void insertPost(){
+        RedditDBHelper redditDB = new RedditDBHelper(mContext);
+        SQLiteDatabase db = redditDB.getWritableDatabase();
+        ContentValues testValues = TestUtil.createPostTableValues(TestUtil.TEST_POST_ID);
+
+        long rowId;
+        rowId = db.insert(RedditDBHelper.Tables.POST, null, testValues);
+        assertTrue(rowId != -1);
+
+        Cursor cursor = db.query(RedditDBHelper.Tables.POST,null, null, null, null, null, null);
+        assertTrue("Error: No Records returned from movies query", cursor.moveToFirst());
+        TestUtil.validateCurrentRecord("Error: Location Query Validation Failed",
+                cursor, testValues);
+        assertFalse("Error: More than one record returned from movies query",
+                cursor.moveToNext());
+        cursor.close();
+        db.close();
+
+    }
 }
