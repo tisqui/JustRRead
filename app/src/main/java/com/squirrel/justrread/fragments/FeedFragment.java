@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
+import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private LinearLayoutManager mLinearLayoutManager;
     private static final int POSTS_LOADER = 0;
     private static final String SELECTED_KEY = "selected_position";
+
+    private int mCurrentPage;
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -51,7 +55,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mFeedRecyclerViewAdapter.swapCursor(data);
 //        updateEmptyView();
         if ( data.getCount() == 0 ) {
-            getActivity().supportStartPostponedEnterTransition();
+//            getActivity().supportStartPostponedEnterTransition();
         } else {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
@@ -85,49 +89,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mFeedRecyclerViewAdapter.swapCursor(null);
     }
 
-    //        @Override
-//    public PostsLoader onCreateLoader(int id, Bundle args) {
-//        return new PostsLoader(getContext());
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<List<Post>> loader, List<Post> data) {
-//        Log.d(LOG_TAG, "LOAD FINISHED");
-//        mFeedRecyclerViewAdapter.swapPostsData(data);
-//        if ( data.size() == 0 ) {
-//            getActivity().supportStartPostponedEnterTransition();
-//        } else {
-//            mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//                @Override
-//                public boolean onPreDraw() {
-//                    if (mRecyclerView.getChildCount() > 0) {
-//                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-//                        int position = mPosition;
-//                        if (position == RecyclerView.NO_POSITION) {
-//                            //TODO figure out to what position move
-//                        }
-//                        if (position == RecyclerView.NO_POSITION) position = 0;
-//                        // If we don't need to restart the loader, and there's a desired position to restore
-//                        // to, do so now.
-//                        mRecyclerView.smoothScrollToPosition(position);
-//                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
-////                        if (null != vh && mAutoSelectView) {
-////                            mFeedRecyclerViewAdapter.selectView(vh);
-////                        }
-//
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<List<Post>> loader) {
-//        mFeedRecyclerViewAdapter.swapPostsData(null);
-//    }
 
     public interface Callback {
         /**
@@ -194,6 +155,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mCurrentPage = 1;
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feed_recycler_view);
@@ -224,7 +187,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 //TODO add the load more logic
-
+                Log.d(LOG_TAG, "LOADING MORE");
+                RedditSyncAdapter.syncImmediately(getContext());
             }
         });
 

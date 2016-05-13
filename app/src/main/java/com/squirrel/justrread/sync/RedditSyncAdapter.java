@@ -35,10 +35,14 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
     private final String LOG_TAG = this.getClass().getSimpleName();
     // Interval at which to sync with the reddit.
     public static final int SYNC_INTERVAL = 60 * 60;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private final AccountManager mAccountManager;
     private Context mContext;
     private Authentification mAuthentification;
+
+    private SubredditPaginator mSubredditPaginator;
+
+    public static String PAGE = "page";
 
 
     public RedditSyncAdapter(Context context, boolean autoInitialize) {
@@ -46,6 +50,10 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
         mAuthentification = new Authentification(context);
         mAccountManager = AccountManager.get(context);
         mContext = context;
+    }
+
+    public void setSubredditPaginator(SubredditPaginator subredditPaginator) {
+        mSubredditPaginator = subredditPaginator;
     }
 
     @Override
@@ -56,65 +64,65 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
 
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
-        if(state.equals(AuthenticationState.READY)){
+        if (state.equals(AuthenticationState.READY)) {
             //Get the posts data
             Log.d(LOG_TAG, "Getting paginator:");
-            SubredditPaginator paginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-            paginator.setLimit(50);
-            if(paginator != null){
-                // Request the first page
-                if(paginator.hasNext()) {
-                    Listing<Submission> firstPage = paginator.next();
-                    //delete the previous data, so we do not build the endless story
+
+            if (mSubredditPaginator == null) {
+                Log.d("LOG_TAG", "Paginator null");
+                mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+                mSubredditPaginator.setLimit(50);
+            }
+            if (mSubredditPaginator.hasNext()) {
+                Listing<Submission> firstPage = mSubredditPaginator.next();
+                //delete the previous data, so we do not build the endless story
 //                    List<Post> items = Post.listAll(Post.class);
 //                    Post.deleteAll(Post.class);
 
-                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
+                Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
 
-                    for (Submission s : firstPage) {
-                        // Save the post to DB
-                        Log.d(LOG_TAG, s.toString());
-                        ContentValues postValues = new ContentValues();
-                        postValues.put(RedditContract.PostEntry.COLUMN_ID, s.getId());
-                        postValues.put(RedditContract.PostEntry.COLUMN_NAME, s.getFullName());
-                        postValues.put(RedditContract.PostEntry.COLUMN_UP_VOTES, s.getScore());
-                        postValues.put(RedditContract.PostEntry.COLUMN_DOWN_VOTES, s.getScore());
-                        postValues.put(RedditContract.PostEntry.COLUMN_LIKES, s.getScore());
-                        postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, dateToString(s.getCreated()));
-                        postValues.put(RedditContract.PostEntry.COLUMN_AUTHOR, s.getAuthor());
-                        postValues.put(RedditContract.PostEntry.COLUMN_DOMAIN, s.getDomain());
-                        postValues.put(RedditContract.PostEntry.COLUMN_SELF_POST, s.isSelfPost() ? 1:0);
-                        postValues.put(RedditContract.PostEntry.COLUMN_NUM_COMMENTS, s.getCommentCount());
-                        postValues.put(RedditContract.PostEntry.COLUMN_NSFW, s.isNsfw() ? 1:0);
-                        postValues.put(RedditContract.PostEntry.COLUMN_SUBREDDIT, s.getSubredditName());
-                        postValues.put(RedditContract.PostEntry.COLUMN_SUBREDDIT_ID, s.getSubredditId());
-                        postValues.put(RedditContract.PostEntry.COLUMN_SELFHTML, s.getSelftext());
-                        postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, s.getThumbnail());
-                        postValues.put(RedditContract.PostEntry.COLUMN_TITLE, s.getTitle());
-                        postValues.put(RedditContract.PostEntry.COLUMN_URL, s.getUrl());
+                for (Submission s : firstPage) {
+                    // Save the post to DB
+                    Log.d(LOG_TAG, s.toString());
+                    ContentValues postValues = new ContentValues();
+                    postValues.put(RedditContract.PostEntry.COLUMN_ID, s.getId());
+                    postValues.put(RedditContract.PostEntry.COLUMN_NAME, s.getFullName());
+                    postValues.put(RedditContract.PostEntry.COLUMN_UP_VOTES, s.getScore());
+                    postValues.put(RedditContract.PostEntry.COLUMN_DOWN_VOTES, s.getScore());
+                    postValues.put(RedditContract.PostEntry.COLUMN_LIKES, s.getScore());
+                    postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, dateToString(s.getCreated()));
+                    postValues.put(RedditContract.PostEntry.COLUMN_AUTHOR, s.getAuthor());
+                    postValues.put(RedditContract.PostEntry.COLUMN_DOMAIN, s.getDomain());
+                    postValues.put(RedditContract.PostEntry.COLUMN_SELF_POST, s.isSelfPost() ? 1 : 0);
+                    postValues.put(RedditContract.PostEntry.COLUMN_NUM_COMMENTS, s.getCommentCount());
+                    postValues.put(RedditContract.PostEntry.COLUMN_NSFW, s.isNsfw() ? 1 : 0);
+                    postValues.put(RedditContract.PostEntry.COLUMN_SUBREDDIT, s.getSubredditName());
+                    postValues.put(RedditContract.PostEntry.COLUMN_SUBREDDIT_ID, s.getSubredditId());
+                    postValues.put(RedditContract.PostEntry.COLUMN_SELFHTML, s.getSelftext());
+                    postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, s.getThumbnail());
+                    postValues.put(RedditContract.PostEntry.COLUMN_TITLE, s.getTitle());
+                    postValues.put(RedditContract.PostEntry.COLUMN_URL, s.getUrl());
 
-                        contentValuesList.add(postValues);
-                    }
-
-                    int inserted = 0;
-                    // add to database
-                    if ( contentValuesList.size() > 0 ) {
-                        ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
-                        contentValuesList.toArray(cvArray);
-                        getContext().getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
-                        // TODO delete old data so we don't build up an endless history
-                    }
-                    Log.d(LOG_TAG, "Sync Complete. " + contentValuesList.size() + " Inserted");
+                    contentValuesList.add(postValues);
                 }
+
+                int inserted = 0;
+                // add to database
+                if (contentValuesList.size() > 0) {
+                    ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
+                    contentValuesList.toArray(cvArray);
+                    getContext().getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
+                    // TODO delete old data so we don't build up an endless history
+                }
+                Log.d(LOG_TAG, "Sync Complete. " + contentValuesList.size() + " Inserted");
             }
-        }
-        else{
+        } else {
             //do nothing for now, but need to try authentificate
         }
 
     }
 
-    private String dateToString(Date date){
+    private String dateToString(Date date) {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formatter.format(date);
     }
@@ -156,7 +164,7 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
 
         // If the password doesn't exist, the account doesn't exist
-        if ( null == accountManager.getPassword(newAccount) ) {
+        if (null == accountManager.getPassword(newAccount)) {
 
         /*
          * Add the account and account type, no password or user data
@@ -196,6 +204,7 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
 
     /**
      * Helper method to have the sync adapter sync immediately
+     *
      * @param context The context used to access the account service
      */
     public static void syncImmediately(Context context) {
@@ -205,6 +214,5 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle);
     }
-
 
 }
