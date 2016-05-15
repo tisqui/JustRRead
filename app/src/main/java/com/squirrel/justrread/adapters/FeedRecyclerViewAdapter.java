@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHolder> {
     private List<Post> mPostList;
+    private View mEmptyView;
     private Cursor mCursor;
     private Context mContext;
     private final String LOG_TAG = FeedRecyclerViewAdapter.class.getSimpleName();
@@ -42,9 +43,10 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
     static final int COL_TITLE = 15;
     static final int COL_URL = 16;
 
-    public FeedRecyclerViewAdapter(List<Post> postList, Context context) {
+    public FeedRecyclerViewAdapter(List<Post> postList, Context context, View emptyView) {
         mPostList = postList;
         mContext = context;
+        mEmptyView = emptyView;
     }
 
     @Override
@@ -130,7 +132,7 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
-//        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     public void selectView(RecyclerView.ViewHolder viewHolder) {

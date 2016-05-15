@@ -1,6 +1,7 @@
 package com.squirrel.justrread.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,8 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.data.Post;
@@ -27,7 +30,7 @@ import com.squirrel.justrread.sync.RedditSyncAdapter;
 import java.util.ArrayList;
 
 
-public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
@@ -53,6 +56,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mFeedRecyclerViewAdapter.swapCursor(data);
+        updateEmptyView();
 //        updateEmptyView();
         if ( data.getCount() == 0 ) {
 //            getActivity().supportStartPostponedEnterTransition();
@@ -163,8 +167,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        View emptyView = rootView.findViewById(R.id.posts_list_emply_message);
 
-        mFeedRecyclerViewAdapter = new FeedRecyclerViewAdapter(new ArrayList<Post>(), getActivity().getApplicationContext());
+        mFeedRecyclerViewAdapter = new FeedRecyclerViewAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView);
         mRecyclerView.setAdapter(mFeedRecyclerViewAdapter);
 
         mRecyclerView.addOnItemTouchListener(new PostClickListener(getActivity().getApplicationContext(),
@@ -244,5 +249,43 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    /*
+       Updates the empty list view with contextually relevant information that the user can
+       use to determine why they aren't seeing weather.
+    */
+    private void updateEmptyView() {
+        if ( mFeedRecyclerViewAdapter.getItemCount() == 0 ) {
+            TextView tv = (TextView) getView().findViewById(R.id.posts_list_emply_message);
+            if ( null != tv ) {
+                // if cursor is empty, why?
+                int message = R.string.empty_posts_list;
+                @RedditSyncAdapter.PostsStatus int location = Utils.getPostsStatus(getActivity());
+                switch (location) {
+                    case RedditSyncAdapter.POSTS_STATUS_SERVER_DOWN:
+                        message = R.string.list_posts_server_is_down;
+                        break;
+                    case RedditSyncAdapter.POSTS_STATUS_SERVER_INVALID:
+                        message = R.string.list_posts_server_is_invalid;
+                        break;
+                    case RedditSyncAdapter.POSTS_STATUS_INVALID:
+                        message = R.string.list_posts_posts_invalid;
+                        break;
+                    default:
+                        if (!Utils.isNetworkAvailable(getActivity())) {
+                            message = R.string.no_network_available;
+                        }
+                }
+                tv.setText(message);
+            }
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_posts_status_key))) {
+            updateEmptyView();
+        }
     }
 }

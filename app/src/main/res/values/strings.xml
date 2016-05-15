@@ -3,11 +3,21 @@
     <string name="app_name">JustRRead</string>
     <string name="action_login">LOGIN</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Posts list -->
+    <string name="empty_posts_list">No posts loaded.</string>
+    <string name="no_network_available">No network available. Check the connection ad try again later.</string>
+    <string name="list_posts_server_is_down">Seems that server is down :(</string>
+    <string name="list_posts_server_is_invalid">Seems that server is invalid :(</string>
+    <string name="list_posts_posts_invalid">Seems that something went wrong :( Try once more. </string>
+
     <string name="account_type">justrread.squirrel.com</string>
     <string name="content_authority">com.squirrel.justrread</string>
 
     <!-- SyncAdapter related -->
     <string name="sync_account_type">justrread.squirrel.com</string>
+
+    <!-- Key name for storing posts status in SharedPreferences -->
+    <string name="pref_posts_status_key" translatable="false">loc-status</string>
+
+
 </resources>

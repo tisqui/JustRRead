@@ -7,10 +7,13 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.squirrel.justrread.Authentification;
@@ -23,6 +26,8 @@ import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +48,16 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
     private SubredditPaginator mSubredditPaginator;
 
     public static String PAGE = "page";
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({POSTS_STATUS_OK, POSTS_STATUS_SERVER_DOWN, POSTS_STATUS_SERVER_INVALID,  POSTS_STATUS_UNKNOWN, POSTS_STATUS_INVALID})
+    public @interface PostsStatus {}
+
+    public static final int POSTS_STATUS_OK = 0;
+    public static final int POSTS_STATUS_SERVER_DOWN = 1;
+    public static final int POSTS_STATUS_SERVER_INVALID = 2;
+    public static final int POSTS_STATUS_UNKNOWN = 3;
+    public static final int POSTS_STATUS_INVALID = 4;
 
 
     public RedditSyncAdapter(Context context, boolean autoInitialize) {
@@ -115,6 +130,7 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                     // TODO delete old data so we don't build up an endless history
                 }
                 Log.d(LOG_TAG, "Sync Complete. " + contentValuesList.size() + " Inserted");
+                setPostsStatus(getContext(), POSTS_STATUS_OK);
             }
         } else {
             //do nothing for now, but need to try authentificate
@@ -213,6 +229,13 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle);
+    }
+
+    static private void setPostsStatus(Context c, @PostsStatus int locationStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_posts_status_key), locationStatus);
+        spe.commit();
     }
 
 }

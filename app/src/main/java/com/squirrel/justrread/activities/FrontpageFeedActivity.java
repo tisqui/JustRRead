@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.fragments.FeedFragment;
 
 import net.dean.jraw.RedditClient;
@@ -95,18 +96,23 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
         Log.d(LOG_TAG, "AuthenticationState for onResume(): " + state);
 
-        switch (state) {
-            case READY:
-                break;
-            case NONE:
-                Toast.makeText(FrontpageFeedActivity.this, "Authentification without login", Toast.LENGTH_SHORT).show();
-                mAuthentification.authentificateWithoutLoginAsync();
+        if(Utils.isNetworkAvailable(getApplicationContext())){
+            switch (state) {
+                case READY:
+                    break;
+                case NONE:
+                    Toast.makeText(FrontpageFeedActivity.this, "Authentification without login", Toast.LENGTH_SHORT).show();
+                    mAuthentification.authentificateWithoutLoginAsync();
 //                authentificateWithoutLoginAsync();
-                break;
-            case NEED_REFRESH:
-                mAuthentification.refreshAccessTokenAsync();
+                    break;
+                case NEED_REFRESH:
+                    mAuthentification.refreshAccessTokenAsync();
 //                refreshAccessTokenAsync();
-                break;
+                    break;
+            }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
         }
     }
 
