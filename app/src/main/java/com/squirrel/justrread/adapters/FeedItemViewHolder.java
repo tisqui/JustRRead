@@ -24,7 +24,6 @@ public class FeedItemViewHolder extends RecyclerView.ViewHolder implements View.
     @Bind(R.id.fragment_feed_list_item_time) TextView postDateTextView;
     @Bind(R.id.fragment_feed_list_item_comments_btn) Button commentsBtn;
     @Bind(R.id.fragment_feed_list_item_share_btn) Button shareBtn;
-    @Bind(R.id.fragment_feed_list_item_open_btn) Button openBtn;
 
     public FeedItemViewHolder(View itemView) {
         super(itemView);

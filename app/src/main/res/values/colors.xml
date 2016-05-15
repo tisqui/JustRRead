@@ -7,4 +7,14 @@
     <color name="primaryTextColorPopup">#757575</color>
     <color name="hightlightTextColorPopup">#00B0FF</color>
     <color name="popupBackground">#FFFFFF</color>
+    <color name="mainBackground">#FFFFFF</color>
+
+    <!-- Posts list item -->
+    <color name="buttonsTextColor">#F44336</color>
+    <color name="imgBg">#EEEEEE</color>
+    <color name="postsListDivider">#EEEEEE</color>
+    <color name="postsListdateTextColor">#BDBDBD</color>
+    <color name="tisteTextColor">#212121</color>
+
+
 </resources>

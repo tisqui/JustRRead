@@ -189,6 +189,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 //TODO add the load more logic
                 Log.d(LOG_TAG, "LOADING MORE");
                 RedditSyncAdapter.syncImmediately(getContext());
+                mPosition +=50;
             }
         });
 

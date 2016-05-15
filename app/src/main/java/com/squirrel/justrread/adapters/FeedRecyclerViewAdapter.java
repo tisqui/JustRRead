@@ -42,8 +42,6 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
     static final int COL_TITLE = 15;
     static final int COL_URL = 16;
 
-    private final String tempImageUrl = "http://i.imgur.com/EvrnaBB.jpg";
-
     public FeedRecyclerViewAdapter(List<Post> postList, Context context) {
         mPostList = postList;
         mContext = context;
@@ -65,17 +63,23 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
         holder.itemView.setSelected(mSelectedPosition == position);
 
         //set all the data to the UI elements
-        Glide.with(mContext)
-                .load(postItem.getThumbnail())
-                .centerCrop()
-                .placeholder(R.drawable.placeholder_img)
-                .error(R.drawable.placeholder_img)
-                .into(holder.thumbnailImageView);
+
+        if(postItem.getThumbnail() == null){
+            holder.thumbnailImageView.setVisibility(View.GONE);
+        }else{
+            holder.thumbnailImageView.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(postItem.getThumbnail())
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_duck_white_36dp)
+                    .error(R.drawable.ic_duck_white_36dp)
+                    .into(holder.thumbnailImageView);
+        }
 
         holder.titleTextView.setText(postItem.getTitle());
         holder.sourceTextView.setText(postItem.getDomain());
         holder.postDateTextView.setText(String.valueOf(postItem.getCreated()));
-        holder.commentsBtn.setText(postItem.getNumComments() + " comments");
+        holder.commentsBtn.setText(postItem.getNumComments()+"");
         holder.numberOfVotesTextView.setText(postItem.getUpVotes()+ "");
 
         //TODO add callbacks for all the buttons
