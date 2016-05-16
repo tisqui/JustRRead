@@ -1,9 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.squirrel.justrread.fragments.FeedFragment">
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/feed_swipe_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.squirrel.justrread.fragments.FeedFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/feed_recycler_view"
@@ -20,7 +22,9 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp"
         android:gravity="center"
+        android:text="@string/empty_posts_list"
         app:layout_anchor="@+id/feed_recycler_view"
-        app:layout_anchorGravity="fill"
-        android:text="@string/empty_posts_list" />
-</FrameLayout>
+        app:layout_anchorGravity="fill"/>
+
+
+</android.support.v4.widget.SwipeRefreshLayout>

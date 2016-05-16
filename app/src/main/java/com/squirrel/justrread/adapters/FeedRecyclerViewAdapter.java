@@ -163,4 +163,6 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
                 cursor.getString(COL_URL)
         );
     }
+
+
 }

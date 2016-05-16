@@ -14,7 +14,6 @@ import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.fragments.FeedFragment;
 
-import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 
@@ -22,7 +21,6 @@ import net.dean.jraw.auth.AuthenticationState;
 public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
-    RedditClient reddit;
     Authentification mAuthentification;
 
     @Override

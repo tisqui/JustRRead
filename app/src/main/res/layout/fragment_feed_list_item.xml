@@ -105,12 +105,12 @@
                     android:text="10"
                     android:textColor="@color/buttonsTextColor"/>
 
-                <Button
-                    android:id="@+id/fragment_feed_list_item_share_btn"
-                    style="@style/ListItemButtons"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_share_variant"/>
+                <!--<Button-->
+                    <!--android:id="@+id/fragment_feed_list_item_share_btn"-->
+                    <!--style="@style/ListItemButtons"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:drawableLeft="@drawable/ic_share_variant"/>-->
 
             </LinearLayout>
 

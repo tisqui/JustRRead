@@ -5,7 +5,7 @@
 
     <!-- Posts list -->
     <string name="empty_posts_list">No posts loaded.</string>
-    <string name="no_network_available">No network available. Check the connection ad try again later.</string>
+    <string name="no_network_available">No network available. Check the connection and try again later.</string>
     <string name="list_posts_server_is_down">Seems that server is down :(</string>
     <string name="list_posts_server_is_invalid">Seems that server is invalid :(</string>
     <string name="list_posts_posts_invalid">Seems that something went wrong :( Try once more. </string>

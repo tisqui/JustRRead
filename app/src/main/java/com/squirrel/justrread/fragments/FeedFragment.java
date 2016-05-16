@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,17 +24,22 @@ import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
+import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
+import net.dean.jraw.auth.AuthenticationManager;
+import net.dean.jraw.paginators.SubredditPaginator;
+
 import java.util.ArrayList;
 
 
-public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener, SwipeRefreshLayout.OnRefreshListener {
     private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeContainer;
     private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private LinearLayoutManager mLinearLayoutManager;
@@ -40,6 +47,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String SELECTED_KEY = "selected_position";
 
     private int mCurrentPage;
+    private SubredditPaginator mSubredditPaginator;
+    private RedditAPI mRedditAPI;
+
+    private boolean mCanUpdate = true;
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -86,6 +97,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             });
         }
+        mSwipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -140,6 +152,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRedditAPI = new RedditAPI();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
@@ -191,10 +204,29 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                //TODO add the load more logic
-                Log.d(LOG_TAG, "LOADING MORE");
-                RedditSyncAdapter.syncImmediately(getContext());
-                mPosition +=50;
+                if(mCanUpdate){
+                    Log.d(LOG_TAG, "LOADING MORE");
+                    if(mSubredditPaginator != null){
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                mCanUpdate = false;
+                                mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                super.onPostExecute(aVoid);
+                                mCanUpdate = true;
+                                mCurrentPage++;
+                                mPosition +=50;
+                            }
+                        }.execute();
+                    }
+                }else{
+                    Log.d(LOG_TAG, "Previous Update is still in progress, can't load more now.");
+                }
             }
         });
 
@@ -202,6 +234,17 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
+
+        //set the refresh
+        mSwipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.feed_swipe_container);
+        mSwipeContainer.setOnRefreshListener(this);
+
+        // Configure the refreshing colors
+        mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
 
         return rootView;
 
@@ -234,9 +277,24 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onResume() {
         super.onResume();
-//        mFeedRecyclerViewAdapter.addPostsToList(generateDummyData());
-//        mFeedRecyclerViewAdapter.swapPostsData(Post.listAll(Post.class));
-        //TODO load information to the list, check the previous selected item and scroll to this item
+        mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+        mSubredditPaginator.setLimit(50);
+        if (mCanUpdate){
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    mCanUpdate = false;
+                    mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    mCanUpdate = true;
+                }
+            }.execute();
+        }
     }
 
 
@@ -286,6 +344,33 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_posts_status_key))) {
             updateEmptyView();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d(LOG_TAG, "Refresh of the list started");
+        if(mCanUpdate){
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    mCanUpdate = false;
+                    mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+                    mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    mCanUpdate = true;
+                    mPosition = 0;
+                    mCurrentPage = 1;
+                }
+            }.execute();
+        }
+        else{
+            Log.d(LOG_TAG, "Previous Update is still in progress");
         }
     }
 }

@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.squirrel.justrread.activities.LoginActivity;
-import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
@@ -101,9 +100,7 @@ public class Authentification {
                 Log.d(LOG_TAG, "Authentification DONE");
                 AuthenticationState state = AuthenticationManager.get().checkAuthState();
                 Log.d(LOG_TAG, "AuthenticationState state: " + state);
-//                getFrontPageContent();
-                Log.d(LOG_TAG, "SYNCING POSTS:");
-                RedditSyncAdapter.syncImmediately(mContext);
+//                new RedditAPI().getPostsFront(null, 50, mContext);
             }
         }.execute();
     }
