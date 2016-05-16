@@ -18,6 +18,8 @@
 
     <!-- Key name for storing posts status in SharedPreferences -->
     <string name="pref_posts_status_key" translatable="false">loc-status</string>
+    <string name="menu_web_refresh_text">Refresh</string>
+    <string name="menu_web_share_text">Share link</string>
 
 
 </resources>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 
 import java.util.List;
@@ -24,24 +25,6 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
     private Context mContext;
     private final String LOG_TAG = FeedRecyclerViewAdapter.class.getSimpleName();
     private int mSelectedPosition = 0;
-
-    static final int COL_POST_ID = 0;
-    static final int COL_NAME = 1;
-    static final int COL_UP_VOTES = 2;
-    static final int COL_DOWN_VOTES = 3;
-    static final int COL_LIKES = 4;
-    static final int COL_DATE_CREATED = 5;
-    static final int COL_AUTHOR = 6;
-    static final int COL_DOMAIN = 7;
-    static final int COL_SELF = 8;
-    static final int COL_NUM_COMMENTS = 9;
-    static final int COL_NSFW = 10;
-    static final int COL_SUBREDDIT = 11;
-    static final int COL_SUBREDDIT_ID = 12;
-    static final int COL_SELFHTML = 13;
-    static final int COL_THUMBNAIL = 14;
-    static final int COL_TITLE = 15;
-    static final int COL_URL = 16;
 
     public FeedRecyclerViewAdapter(List<Post> postList, Context context, View emptyView) {
         mPostList = postList;
@@ -61,7 +44,7 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
 
         mCursor.moveToPosition(position);
 //        Post postItem = mPostList.get(position);
-        Post postItem = mapPost(mCursor);
+        Post postItem = DataMapper.mapCursorToPost(mCursor);
         holder.itemView.setSelected(mSelectedPosition == position);
 
         //set all the data to the UI elements
@@ -121,6 +104,9 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
         mSelectedPosition = position;
         notifyItemChanged(old_position);
         notifyItemChanged(mSelectedPosition);
+
+        mCursor.moveToPosition(position);
+
     }
 
     public void swapPostsData(List<Post> posts){
@@ -140,28 +126,6 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedItemViewHo
             FeedItemViewHolder vfh = (FeedItemViewHolder)viewHolder;
             vfh.onClick(vfh.itemView);
         }
-    }
-
-    private Post mapPost(Cursor cursor){
-        return new Post(
-                cursor.getString(COL_POST_ID),
-                cursor.getString(COL_NAME),
-                cursor.getInt(COL_UP_VOTES),
-                cursor.getInt(COL_DOWN_VOTES),
-                cursor.getInt(COL_LIKES),
-                cursor.getString(COL_DATE_CREATED),
-                cursor.getString(COL_AUTHOR),
-                cursor.getString(COL_DOMAIN),
-                cursor.getInt(COL_SELF)==1 ? true:false,
-                cursor.getInt(COL_NUM_COMMENTS),
-                cursor.getInt(COL_NSFW)==1 ? true:false,
-                cursor.getString(COL_SUBREDDIT),
-                cursor.getString(COL_SUBREDDIT_ID),
-                cursor.getString(COL_SELFHTML),
-                cursor.getString(COL_THUMBNAIL),
-                cursor.getString(COL_TITLE),
-                cursor.getString(COL_URL)
-        );
     }
 
 

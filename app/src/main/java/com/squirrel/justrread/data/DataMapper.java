@@ -1,6 +1,7 @@
 package com.squirrel.justrread.data;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import net.dean.jraw.models.Submission;
 
@@ -13,6 +14,24 @@ import java.util.Date;
  */
 public class DataMapper {
     private static final String LOG_TAG = DataMapper.class.getSimpleName();
+
+    static final int COL_POST_ID = 0;
+    static final int COL_NAME = 1;
+    static final int COL_UP_VOTES = 2;
+    static final int COL_DOWN_VOTES = 3;
+    static final int COL_LIKES = 4;
+    static final int COL_DATE_CREATED = 5;
+    static final int COL_AUTHOR = 6;
+    static final int COL_DOMAIN = 7;
+    static final int COL_SELF = 8;
+    static final int COL_NUM_COMMENTS = 9;
+    static final int COL_NSFW = 10;
+    static final int COL_SUBREDDIT = 11;
+    static final int COL_SUBREDDIT_ID = 12;
+    static final int COL_SELFHTML = 13;
+    static final int COL_THUMBNAIL = 14;
+    static final int COL_TITLE = 15;
+    static final int COL_URL = 16;
 
     public static ContentValues mapSubmissionToContentValues(Submission s){
         ContentValues postValues = new ContentValues();
@@ -40,5 +59,27 @@ public class DataMapper {
     private static String dateToString(Date date) {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formatter.format(date);
+    }
+
+    public static Post mapCursorToPost(Cursor cursor){
+        return new Post(
+                cursor.getString(COL_POST_ID),
+                cursor.getString(COL_NAME),
+                cursor.getInt(COL_UP_VOTES),
+                cursor.getInt(COL_DOWN_VOTES),
+                cursor.getInt(COL_LIKES),
+                cursor.getString(COL_DATE_CREATED),
+                cursor.getString(COL_AUTHOR),
+                cursor.getString(COL_DOMAIN),
+                cursor.getInt(COL_SELF)==1 ? true:false,
+                cursor.getInt(COL_NUM_COMMENTS),
+                cursor.getInt(COL_NSFW)==1 ? true:false,
+                cursor.getString(COL_SUBREDDIT),
+                cursor.getString(COL_SUBREDDIT_ID),
+                cursor.getString(COL_SELFHTML),
+                cursor.getString(COL_THUMBNAIL),
+                cursor.getString(COL_TITLE),
+                cursor.getString(COL_URL)
+        );
     }
 }

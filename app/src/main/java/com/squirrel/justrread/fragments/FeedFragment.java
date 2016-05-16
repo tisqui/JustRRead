@@ -22,9 +22,11 @@ import android.widget.TextView;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.api.RedditAPI;
+import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
@@ -190,8 +192,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onItemClick(View view, int position) {
                 mFeedRecyclerViewAdapter.onClick(view, position);
-//                ((Callback) getActivity())
-//                        .onItemSelected(mFeedRecyclerViewAdapter.getPost(position));
+                Post post = DataMapper.mapCursorToPost(mFeedRecyclerViewAdapter.getCursor());
+                Navigator.navigateToWebview(getContext(), post.getUrl());
                 mPosition = position;
             }
 

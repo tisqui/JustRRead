@@ -25,4 +25,13 @@ public class Navigator {
         }
     }
 
+    public static void navigateToWebview(Context context, String url){
+        if(context!=null && url != null){
+            Intent intentToLaunch = new Intent(context, WebActivity.class);
+            intentToLaunch.putExtra(WebActivity.EXTRA_URL, url);
+            intentToLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intentToLaunch);
+        }
+    }
+
 }
