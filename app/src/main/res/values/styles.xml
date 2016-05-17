@@ -10,6 +10,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/mainBackground</item>
         <item name="android:colorBackground">@color/mainBackground</item>
+        <item name="android:textColorPrimary">@color/primaryTextColorToolbar</item>
     </style>
 
     <style name="Theme.JustRReadApp" parent="AppTheme"/>
@@ -30,8 +31,8 @@
     <style name="Theme.JustRReadApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="Theme.JustRReadApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColor">@color/primaryTextColorPopup</item>
         <item name="android:background">@color/popupBackground</item>
+        <item name="android:textColorPrimary">@color/primaryTextColorPopup</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

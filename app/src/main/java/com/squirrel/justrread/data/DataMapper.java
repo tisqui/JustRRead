@@ -3,6 +3,8 @@ package com.squirrel.justrread.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.squirrel.justrread.Utils;
+
 import net.dean.jraw.models.Submission;
 
 import java.text.Format;
@@ -40,7 +42,7 @@ public class DataMapper {
         postValues.put(RedditContract.PostEntry.COLUMN_UP_VOTES, s.getScore());
         postValues.put(RedditContract.PostEntry.COLUMN_DOWN_VOTES, s.getScore());
         postValues.put(RedditContract.PostEntry.COLUMN_LIKES, s.getScore());
-        postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, dateToString(s.getCreated()));
+        postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, Utils.persistDate(s.getCreated()));
         postValues.put(RedditContract.PostEntry.COLUMN_AUTHOR, s.getAuthor());
         postValues.put(RedditContract.PostEntry.COLUMN_DOMAIN, s.getDomain());
         postValues.put(RedditContract.PostEntry.COLUMN_SELF_POST, s.isSelfPost() ? 1 : 0);
@@ -68,7 +70,7 @@ public class DataMapper {
                 cursor.getInt(COL_UP_VOTES),
                 cursor.getInt(COL_DOWN_VOTES),
                 cursor.getInt(COL_LIKES),
-                cursor.getString(COL_DATE_CREATED),
+                new Date(cursor.getLong(COL_DATE_CREATED)),
                 cursor.getString(COL_AUTHOR),
                 cursor.getString(COL_DOMAIN),
                 cursor.getInt(COL_SELF)==1 ? true:false,

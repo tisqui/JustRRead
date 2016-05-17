@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.RedditContract;
 
 import net.dean.jraw.auth.AuthenticationManager;
@@ -105,7 +106,7 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                     postValues.put(RedditContract.PostEntry.COLUMN_UP_VOTES, s.getScore());
                     postValues.put(RedditContract.PostEntry.COLUMN_DOWN_VOTES, s.getScore());
                     postValues.put(RedditContract.PostEntry.COLUMN_LIKES, s.getScore());
-                    postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, dateToString(s.getCreated()));
+                    postValues.put(RedditContract.PostEntry.COLUMN_DATE_CREATED, Utils.persistDate(s.getCreated()));
                     postValues.put(RedditContract.PostEntry.COLUMN_AUTHOR, s.getAuthor());
                     postValues.put(RedditContract.PostEntry.COLUMN_DOMAIN, s.getDomain());
                     postValues.put(RedditContract.PostEntry.COLUMN_SELF_POST, s.isSelfPost() ? 1 : 0);

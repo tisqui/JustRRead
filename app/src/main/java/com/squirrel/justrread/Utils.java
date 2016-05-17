@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
+import java.util.Date;
+
 /**
  * Created by squirrel on 5/15/16.
  */
@@ -49,4 +51,12 @@ public class Utils {
         spe.putInt(c.getString(R.string.pref_posts_status_key), RedditSyncAdapter.POSTS_STATUS_UNKNOWN);
         spe.apply();
     }
+
+    public static Long persistDate(Date date) {
+        if (date != null) {
+            return date.getTime();
+        }
+        return null;
+    }
+
 }

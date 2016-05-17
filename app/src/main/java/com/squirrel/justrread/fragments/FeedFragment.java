@@ -70,7 +70,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mFeedRecyclerViewAdapter.swapCursor(data);
         updateEmptyView();
-//        updateEmptyView();
         if ( data.getCount() == 0 ) {
 //            getActivity().supportStartPostponedEnterTransition();
         } else {
@@ -246,7 +245,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
 
         return rootView;
 

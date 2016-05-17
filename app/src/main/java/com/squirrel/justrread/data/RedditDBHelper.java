@@ -33,7 +33,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 PostEntry.COLUMN_UP_VOTES + " INTEGER, " +
                 PostEntry.COLUMN_DOWN_VOTES + " INTEGER, " +
                 PostEntry.COLUMN_LIKES + " INTEGER, " +
-                PostEntry.COLUMN_DATE_CREATED + " TEXT, " +
+                PostEntry.COLUMN_DATE_CREATED + " INTEGER, " +
                 PostEntry.COLUMN_AUTHOR + " TEXT, " +
                 PostEntry.COLUMN_DOMAIN + " TEXT, " +
                 PostEntry.COLUMN_SELF_POST + " INTEGER, " +

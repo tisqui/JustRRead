@@ -9,6 +9,7 @@ import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class PostsLoader extends AsyncTaskLoader<List<Post>> {
                 cursor.getInt(COL_UP_VOTES),
                 cursor.getInt(COL_DOWN_VOTES),
                 cursor.getInt(COL_LIKES),
-                cursor.getString(COL_DATE_CREATED),
+                new Date(cursor.getLong(COL_DATE_CREATED)),
                 cursor.getString(COL_AUTHOR),
                 cursor.getString(COL_DOMAIN),
                 cursor.getInt(COL_SELF)==1 ? true:false,

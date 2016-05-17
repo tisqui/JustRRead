@@ -1,6 +1,7 @@
 package com.squirrel.justrread.data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by squirrel on 4/25/16.
@@ -12,7 +13,7 @@ public class Post implements Serializable {
     private int mUpVotes;
     private int mDownVotes;
     private int mLikes;
-    private String mCreated;
+    private Date mCreated;
     private String mAuthor;
     private String mDomain;
     private boolean mSelfPost;
@@ -30,7 +31,7 @@ public class Post implements Serializable {
 
     public Post(String postId, String name,
                 int upVotes, int downVotes,
-                int likes, String created,
+                int likes, Date created,
                 String author, String domain,
                 boolean selfPost, int numComments,
                 boolean nsfw, String subreddit,
@@ -95,11 +96,11 @@ public class Post implements Serializable {
         mLikes = likes;
     }
 
-    public String getCreated() {
+    public Date getCreated() {
         return mCreated;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(Date created) {
         mCreated = created;
     }
 

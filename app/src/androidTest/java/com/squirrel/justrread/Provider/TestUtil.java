@@ -11,6 +11,7 @@ import android.test.AndroidTestCase;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class TestUtil extends AndroidTestCase {
     }
 
     static Post createPost(String id){
-        return new Post(id, "Name", 100, 200, 100, "date", "author", "domain", true, 100, true, "subreddit",
+        return new Post(id, "Name", 100, 200, 100, new Date(System.currentTimeMillis()), "author", "domain", true, 100, true, "subreddit",
                 "subreddit id", "html", "link", "title", "url");
     }
 
