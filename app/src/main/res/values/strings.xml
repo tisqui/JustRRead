@@ -22,4 +22,8 @@
     <string name="menu_web_share_text">Share link</string>
 
 
+    <string name="drawer_open">Opened</string>
+    <string name="drawer_close">Closed</string>
+
+
 </resources>

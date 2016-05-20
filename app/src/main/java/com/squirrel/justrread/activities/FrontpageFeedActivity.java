@@ -1,12 +1,22 @@
 package com.squirrel.justrread.activities;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.squirrel.justrread.Authentification;
@@ -22,12 +32,21 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
     Authentification mAuthentification;
+    private static String AUTH_STATE = "auth_state";
+    private static String[] mSubredditsList = {"/WTF", "/aww", "/funny"};
+
+    private DrawerLayout mDrawerLayout;
+    private LinearLayout mDrawerLinearLayout;
+    private ListView mDrawerSubredditsList;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAuthentification = new Authentification(this);
+        initialize(savedInstanceState);
 
 //        UserAgent myUserAgent = UserAgent.of();
 //
@@ -35,14 +54,72 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
 //        reddit.setLoggingMode(LoggingMode.ALWAYS);
 //        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(new RedditTokenStore(), reddit));
 
+
         setContentView(R.layout.activity_frontpage_feed);
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment));
-        initialize(savedInstanceState);
         getToolbar();
+
+        mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer_linear_layout);
+        mDrawerSubredditsList = (ListView) findViewById(R.id.drawer_subreddits_listview);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerSubredditsList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mSubredditsList));
+        mDrawerSubredditsList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_comment_outline,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        )  {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
     }
 
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerLinearLayout);
+        menu.findItem(R.id.action_login).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     /**
      * Initial settings of the activity
@@ -50,9 +127,11 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     private void initialize(Bundle savedInstanceState){
         if (savedInstanceState == null) {
             //no saved instance, get the data from the calling intent and add fragments
-
+            mAuthentification = new Authentification(this);
+            checkAuthentification();
         } else {
             //got the saved instance, get the items from savedInstanceState.get..(Id);
+            checkAuthentification();
         }
     }
 
@@ -69,6 +148,10 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_login) {
@@ -91,6 +174,9 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private void checkAuthentification(){
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
         Log.d(LOG_TAG, "AuthenticationState for onResume(): " + state);
 
@@ -113,5 +199,46 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
             Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the auth state
+        savedInstanceState.putString(AUTH_STATE, AuthenticationManager.get().checkAuthState().toString());
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+        /** Swaps fragments in the main content view */
+        private void selectItem(int position) {
+            // Create a new fragment and specify the planet to show based on position
+            Fragment fragment = new Fragment();
+            Bundle args = new Bundle();
+            //put arguments
+//        args.putString(SubredditFragment.SubredditId, position);
+//        fragment.setArguments(args);
+
+//        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.content_frame, fragment)
+//                .commit();
+
+            // Highlight the selected item, update the title, and close the drawer
+            mDrawerSubredditsList.setItemChecked(position, true);
+//            setTitle(mSubredditsList[position]);
+            mDrawerLayout.closeDrawer(mDrawerSubredditsList);
+        }
+
+        @Override
+        public void setTitle(CharSequence title) {
+            mTitle = title;
+            getSupportActionBar().setTitle(mTitle);
+        }
 
 }

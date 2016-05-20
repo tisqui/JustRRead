@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,13 +11,21 @@
     tools:showIn="@layout/activity_frontpage_feed">
 
     <fragment
-        android:layout_below="@+id/application_toolbar"
         android:id="@+id/feed_fragment"
         android:name="com.squirrel.justrread.fragments.FeedFragment"
-        tools:context="com.squirrel.justrread.fragments.FeedFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/application_toolbar"
+        tools:context="com.squirrel.justrread.fragments.FeedFragment"
         >
-
     </fragment>
-</RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/left_drawer_linear_layout"
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+        <include layout="@layout/drawer_content"/>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>
