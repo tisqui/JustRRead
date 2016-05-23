@@ -41,7 +41,7 @@
             android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
             android:gravity="center_vertical"
             android:text="@string/drawer_all_item"
-            android:textColor="@color/drawerTextColor"
+            android:textColor="@drawable/text_drawer_color_selector"
             android:fontFamily="sans-serif-medium"
             android:textSize="@dimen/drawer_list_item_text_size"/>
     </RelativeLayout>
@@ -125,6 +125,8 @@
         <Button
             android:id="@+id/drawer_edit_subreddits_button"
             style="@style/DrawerButtons"
+            android:background="@drawable/button_drawer_selector"
+            android:textColor="@drawable/button_drawer_text_color_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -142,7 +144,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginBottom="@dimen/drawer_items_margin_bottom"
-        android:layout_marginLeft="@dimen/drawer_item_margin_left"
         android:layout_marginTop="@dimen/drawer_item_margin_top"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"

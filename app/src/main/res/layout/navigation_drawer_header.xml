@@ -29,8 +29,9 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/drawerButtonTextColor"
             android:text="Settings"
+            android:background="@drawable/button_drawer_selector"
+            android:textColor="@drawable/button_drawer_text_color_selector"
             />
 
         <Button
@@ -38,8 +39,9 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/drawerButtonTextColor"
             android:text="Login"
+            android:background="@drawable/button_drawer_selector"
+            android:textColor="@drawable/button_drawer_text_color_selector"
             />
     </LinearLayout>
 

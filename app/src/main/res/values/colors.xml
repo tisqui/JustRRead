@@ -19,9 +19,12 @@
     <!-- Drawer -->
     <color name="drawerBackground">#FFFFFF</color>
     <color name="drawerTextColor">#212121</color>
+    <color name="drawerItemBackgroundPressed">#BBDEFB</color>
+    <color name="drawerTextColorPressed">#F44336</color>
     <color name="drawerTextColorHighlight">@color/colorPrimary</color>
-    <color name="drawerBlocksDivider">@color/colorPrimaryDark</color>
+    <color name="drawerBlocksDivider">#EEEEEE</color>
     <color name="drawerButtonTextColor">#D32F2F</color>
+    <color name="drawerButtonTextColorPressed">#FFFFFF</color>
     <color name="drawerButtonBackground">@color/colorPrimaryDark</color>
 
 </resources>
