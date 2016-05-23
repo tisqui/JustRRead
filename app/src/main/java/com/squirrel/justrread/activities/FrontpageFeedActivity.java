@@ -36,6 +36,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     private static String[] mSubredditsList = {"/WTF", "/aww", "/funny"};
 
     private DrawerLayout mDrawerLayout;
+    private DrawerController mDrawerController;
     private LinearLayout mDrawerLinearLayout;
     private ListView mDrawerSubredditsList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -106,6 +107,10 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
        mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
+        //set all the Drawer actions
+        mDrawerController = new DrawerController();
+        mDrawerController.initDrawerActions(this, mDrawerLayout);
+
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -113,7 +118,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerLinearLayout);
-        menu.findItem(R.id.action_login).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_all).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -164,8 +169,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_login) {
-            Navigator.navigateToLogin(this);
+        if (id == R.id.action_all) {
             return true;
         }
 

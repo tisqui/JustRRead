@@ -2,6 +2,8 @@
     <string name="frontpage_name">Front</string>
     <string name="app_name">JustRRead</string>
     <string name="action_login">LOGIN</string>
+    <string name="action_all">All</string>
+
 
     <!-- Posts list -->
     <string name="empty_posts_list">No posts loaded.</string>
