@@ -16,5 +16,12 @@
     <color name="postsListdateTextColor">#BDBDBD</color>
     <color name="tisteTextColor">#212121</color>
 
+    <!-- Drawer -->
+    <color name="drawerBackground">#FFFFFF</color>
+    <color name="drawerTextColor">#212121</color>
+    <color name="drawerTextColorHighlight">@color/colorPrimary</color>
+    <color name="drawerBlocksDivider">@color/colorPrimaryDark</color>
+    <color name="drawerButtonTextColor">#D32F2F</color>
+    <color name="drawerButtonBackground">@color/colorPrimaryDark</color>
 
 </resources>

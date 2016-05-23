@@ -1,106 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="240dp"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:layout_gravity="start"
-    style="@style/ActionBarThemeOverlay">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/drawer_width"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:orientation="vertical"
+    android:background="@color/drawerBackground">
+
+    <include
+        android:id="@+id/drawer_header"
+        layout="@layout/navigation_drawer_header"></include>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/postsListDivider"/>
+        android:layout_marginBottom="@dimen/drawer_div_padding_top_bottom"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left"
+        android:layout_marginRight="@dimen/drawer_item_margin_right"
+        android:layout_marginTop="@dimen/drawer_div_padding_top_bottom"
+        android:background="@color/drawerBlocksDivider"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/drawer_all_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left"
+        android:layout_marginRight="@dimen/drawer_item_margin_right">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_comment_outline"/>
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_reddit"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="All"
-            android:textSize="18dp"/>
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
+            android:gravity="center_vertical"
+            android:text="@string/drawer_all_item"
+            android:textColor="@color/drawerTextColor"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="@dimen/drawer_list_item_text_size"/>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/drawer_frontpage_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_comment_outline"/>
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_poll"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="Frontpage"
-            android:textSize="18dp"/>
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/drawer_frontpage_item"
+            android:textColor="@color/drawerTextColor"
+            android:textSize="@dimen/drawer_list_item_text_size"/>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/drawer_random_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_comment_outline"/>
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_dice_5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="Random"
-            android:textSize="18dp"/>
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/drawer_random_item"
+            android:textColor="@color/drawerTextColor"
+            android:textSize="@dimen/drawer_list_item_text_size"/>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/postsListDivider"/>
+        android:layout_marginBottom="@dimen/drawer_div_padding_top_bottom"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left"
+        android:layout_marginRight="@dimen/drawer_item_margin_right"
+        android:layout_marginTop="@dimen/drawer_div_padding_top_bottom"
+        android:background="@color/drawerBlocksDivider"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left"
+        android:layout_marginRight="@dimen/drawer_item_margin_left">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="SUBREDDITS"
-            android:textStyle="bold"
-            android:textSize="18dp"/>
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/drawer_subreddits_title"
+            android:textColor="@color/drawerTextColorHighlight"
+            android:textSize="@dimen/drawer_title_text_size"
+            android:textStyle="bold"/>
 
         <Button
+            android:id="@+id/drawer_edit_subreddits_button"
+            style="@style/DrawerButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/drawer_edit_subreddits_button"
-            android:text="Edit"
-            />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/drawer_item_margin_left"
+            android:layout_marginRight="@dimen/drawer_item_margin_right"
+            android:drawableRight="@drawable/ic_pencil"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <ListView
@@ -108,6 +141,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
+        android:layout_marginBottom="@dimen/drawer_items_margin_bottom"
+        android:layout_marginLeft="@dimen/drawer_item_margin_left"
+        android:layout_marginTop="@dimen/drawer_item_margin_top"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp">

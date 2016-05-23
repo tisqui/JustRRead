@@ -2,5 +2,10 @@
 <TextView
     android:id="@+id/drawer_subreddits_list_item_text"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:textColor="@color/drawerTextColor"
+    android:layout_margin="@dimen/drawer_item_margin_left"
+    android:textSize="@dimen/drawer_sub_list_item_text_size"
+    android:fontFamily="sans-serif-medium"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+    android:layout_height="48dp"
+    android:gravity="center_vertical"/>

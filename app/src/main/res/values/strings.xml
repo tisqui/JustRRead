@@ -21,9 +21,13 @@
     <string name="menu_web_refresh_text">Refresh</string>
     <string name="menu_web_share_text">Share link</string>
 
-
+    <!-- Nav drawer related -->
     <string name="drawer_open">Opened</string>
     <string name="drawer_close">Closed</string>
+    <string name="drawer_subreddits_title">SUBREDDITS</string>
+    <string name="drawer_all_item">All</string>
+    <string name="drawer_frontpage_item">Frontpage</string>
+    <string name="drawer_random_item">Random</string>
 
 
 </resources>

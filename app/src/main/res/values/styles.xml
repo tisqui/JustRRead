@@ -47,4 +47,9 @@
         <item name="android:padding">0dp</item>
     </style>
 
+    <style name="DrawerButtons" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/drawerButtonTextColor</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

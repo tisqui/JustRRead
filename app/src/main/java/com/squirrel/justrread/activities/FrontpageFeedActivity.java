@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,30 +71,40 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_comment_outline,  /* nav drawer icon to replace 'Up' caret */
+                getToolbar(),
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
-        )  {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
+        ){
+            public void onDrawerClosed(View view)
+            {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
+            public void onDrawerOpened(View drawerView)
+            {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
         };
 
         // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+//        mDrawerToggle.setDrawerIndicatorEnabled(false);
+//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_reddit, this.getTheme());
+//        mDrawerToggle.setHomeAsUpIndicator(drawable);
+//        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mDrawerLayout.isDrawerVisible(GravityCompat.START)) {
+//                    mDrawerLayout.closeDrawer(GravityCompat.START);
+//                } else {
+//                    mDrawerLayout.openDrawer(GravityCompat.START);
+//                }
+//            }
+//        });
+
+       mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
     }
 
@@ -217,8 +227,8 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         /** Swaps fragments in the main content view */
         private void selectItem(int position) {
             // Create a new fragment and specify the planet to show based on position
-            Fragment fragment = new Fragment();
-            Bundle args = new Bundle();
+//            Fragment fragment = new Fragment();
+//            Bundle args = new Bundle();
             //put arguments
 //        args.putString(SubredditFragment.SubredditId, position);
 //        fragment.setArguments(args);
@@ -230,9 +240,10 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
 //                .commit();
 
             // Highlight the selected item, update the title, and close the drawer
-            mDrawerSubredditsList.setItemChecked(position, true);
+//            mDrawerSubredditsList.setItemChecked(position, true);
 //            setTitle(mSubredditsList[position]);
-            mDrawerLayout.closeDrawer(mDrawerSubredditsList);
+            Toast.makeText(this, "Item " + position + "clicked", Toast.LENGTH_SHORT).show();
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
 
         @Override
