@@ -4,15 +4,25 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
+
+import net.dean.jraw.auth.AuthenticationManager;
+import net.dean.jraw.auth.AuthenticationState;
 
 /**
  * Created by squirrel on 4/24/16.
  */
 public class BaseActivity extends AppCompatActivity {
+    public static final String LOG_TAG = BaseActivity.class.getSimpleName();
     private Toolbar mToolbar;
-    Navigator navigator;
+    private Navigator navigator;
+    private Authentification mAuthentification;
+    private static String AUTH_STATE = "auth_state";
 
     public static final String FRONTPAGE_FEED_KEY = "FRONTPAGE_FEED";
 
@@ -20,6 +30,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navigator = new Navigator();
+
+        initialize(savedInstanceState);
     }
 
     protected Toolbar getToolbar() {
@@ -41,6 +53,19 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * Initial settings of the activity
+     */
+    private void initialize(Bundle savedInstanceState){
+        if (savedInstanceState == null) {
+            //no saved instance, get the data from the calling intent and add fragments
+            mAuthentification = new Authentification(this);
+            checkAuthentification();
+        } else {
+            //got the saved instance, get the items from savedInstanceState.get..(Id);
+            checkAuthentification();
+        }
+    }
+    /**
      * Add the fragment to this activity
      * @param containerId the container id to where to add the fragment
      * @param fragment fragment to add
@@ -49,5 +74,34 @@ public class BaseActivity extends AppCompatActivity {
 //        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
 //        fragmentTransaction.add(containerId, fragment);
 //        fragmentTransaction.commit();
+    }
+
+    private void checkAuthentification(){
+        AuthenticationState state = AuthenticationManager.get().checkAuthState();
+
+        if(Utils.isNetworkAvailable(getApplicationContext())){
+            switch (state) {
+                case READY:
+                    break;
+                case NONE:
+                    Log.d(LOG_TAG, "Authentification without login");
+                    mAuthentification.authentificateWithoutLoginAsync();
+                    break;
+                case NEED_REFRESH:
+                    Log.d(LOG_TAG, "Refreshing access token");
+                    mAuthentification.refreshAccessTokenAsync();
+                    break;
+            }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the auth state
+        savedInstanceState.putString(AUTH_STATE, AuthenticationManager.get().checkAuthState().toString());
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

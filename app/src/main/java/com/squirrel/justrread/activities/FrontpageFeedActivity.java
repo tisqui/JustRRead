@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,20 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
-import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.controllers.DrawerController;
 import com.squirrel.justrread.fragments.FeedFragment;
-
-import net.dean.jraw.auth.AuthenticationManager;
-import net.dean.jraw.auth.AuthenticationState;
 
 
 public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
-    Authentification mAuthentification;
-    private static String AUTH_STATE = "auth_state";
     private static String[] mSubredditsList = {"/WTF", "/aww", "/funny"};
 
     private DrawerLayout mDrawerLayout;
@@ -40,14 +33,12 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     private LinearLayout mDrawerLinearLayout;
     private ListView mDrawerSubredditsList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private CharSequence mDrawerTitle;
     private CharSequence mTitle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialize(savedInstanceState);
 
 //        UserAgent myUserAgent = UserAgent.of();
 //
@@ -108,8 +99,8 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
         //set all the Drawer actions
-        mDrawerController = new DrawerController();
-        mDrawerController.initDrawerActions(this, mDrawerLayout);
+        mDrawerController = new DrawerController(mDrawerLayout);
+        mDrawerController.initDrawerActions(this);
 
     }
 
@@ -136,19 +127,6 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /**
-     * Initial settings of the activity
-     */
-    private void initialize(Bundle savedInstanceState){
-        if (savedInstanceState == null) {
-            //no saved instance, get the data from the calling intent and add fragments
-            mAuthentification = new Authentification(this);
-            checkAuthentification();
-        } else {
-            //got the saved instance, get the items from savedInstanceState.get..(Id);
-            checkAuthentification();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,34 +168,9 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         super.onResume();
     }
 
-    private void checkAuthentification(){
-        AuthenticationState state = AuthenticationManager.get().checkAuthState();
-        Log.d(LOG_TAG, "AuthenticationState for onResume(): " + state);
-
-        if(Utils.isNetworkAvailable(getApplicationContext())){
-            switch (state) {
-                case READY:
-                    break;
-                case NONE:
-                    Toast.makeText(FrontpageFeedActivity.this, "Authentification without login", Toast.LENGTH_SHORT).show();
-                    mAuthentification.authentificateWithoutLoginAsync();
-//                authentificateWithoutLoginAsync();
-                    break;
-                case NEED_REFRESH:
-                    mAuthentification.refreshAccessTokenAsync();
-//                refreshAccessTokenAsync();
-                    break;
-            }
-        }
-        else{
-            Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the auth state
-        savedInstanceState.putString(AUTH_STATE, AuthenticationManager.get().checkAuthState().toString());
         super.onSaveInstanceState(savedInstanceState);
     }
 

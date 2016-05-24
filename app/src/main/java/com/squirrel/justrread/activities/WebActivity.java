@@ -68,7 +68,12 @@ public class WebActivity extends BaseActivity {
             uri = new URI(url);
 
             String domain = uri.getHost();
-            return domain.startsWith("www.") ? domain.substring(4) : domain;
+            String res;
+            if (domain != null) {
+                return domain.startsWith("www.") ? domain.substring(4) : domain;
+            } else {
+                return "No URL provided";
+            }
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
