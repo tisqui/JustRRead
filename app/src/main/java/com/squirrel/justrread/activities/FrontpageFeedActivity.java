@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.controllers.DrawerController;
 import com.squirrel.justrread.data.Post;
@@ -36,9 +37,12 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Init myInit = (Init)getApplicationContext();
+        myInit.initializeAuth();
+
         super.onCreate(savedInstanceState);
 
 //        UserAgent myUserAgent = UserAgent.of();

@@ -6,14 +6,10 @@ import android.util.Log;
 
 import com.squirrel.justrread.activities.LoginActivity;
 
-import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.auth.NoSuchTokenException;
-import net.dean.jraw.auth.RefreshTokenHandler;
-import net.dean.jraw.http.LoggingMode;
 import net.dean.jraw.http.NetworkException;
-import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
@@ -28,21 +24,18 @@ import java.util.UUID;
  */
 public class Authentification {
     private static String LOG_TAG = Authentification.class.getSimpleName();
-    private static final String APP_ID = BuildConfig.APP_ID;
-    private static final String RED_URL = BuildConfig.REDIRECT_URL;
-    private  RedditTokenStore mRedditTokenStore;
-    private Context mContext;
+
+    private RedditTokenStore mRedditTokenStore;
 
     public Authentification(Context context) {
-        RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
-        reddit.setLoggingMode(LoggingMode.ALWAYS);
-        mContext = context;
-        mRedditTokenStore = new RedditTokenStore(context);
-        //initialize Authentification manager
-        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(mRedditTokenStore, reddit));
+//        RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
+//        reddit.setLoggingMode(LoggingMode.ALWAYS);
+//        mRedditTokenStore = new RedditTokenStore(context);
+//        //initialize Authentification manager
+//        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(mRedditTokenStore, reddit));
     }
 
-    public void checkAuthState(){
+    public void checkAuthState() {
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
         Log.d(LOG_TAG, "AuthenticationState for onResume(): " + state);
 
@@ -72,6 +65,7 @@ public class Authentification {
                 }
                 return null;
             }
+
             @Override
             protected void onPostExecute(Void v) {
                 Log.d(LOG_TAG, "Reauthenticated");
@@ -79,11 +73,11 @@ public class Authentification {
         }.execute();
     }
 
-    public void authentificateWithoutLoginAsync(){
-        new AsyncTask<String, Void, Void>(){
+    public void authentificateWithoutLoginAsync() {
+        new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... params) {
-                final Credentials fcreds = Credentials.userlessApp(APP_ID, UUID.randomUUID());
+                final Credentials fcreds = Credentials.userlessApp(BuildConfig.APP_ID, UUID.randomUUID());
                 OAuthData authData;
                 try {
                     authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
@@ -113,16 +107,15 @@ public class Authentification {
 
                     String token = mRedditTokenStore.readToken("");
 
-                    if(token == null){
+                    if (token == null) {
                         //not logged in mode, authentificate without user
-                        final Credentials fcreds = Credentials.userlessApp(APP_ID, UUID.randomUUID());
+                        final Credentials fcreds = Credentials.userlessApp(BuildConfig.APP_ID, UUID.randomUUID());
                         OAuthData authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
                         AuthenticationManager.get().getRedditClient().authenticate(authData);
 
-                    }
-                    else {
+                    } else {
                         //some token exists, app was logged in
-                        Credentials credentials = Credentials.installedApp(APP_ID, RED_URL);
+                        Credentials credentials = Credentials.installedApp(BuildConfig.APP_ID, BuildConfig.REDIRECT_URL);
                         OAuthData finalData = AuthenticationManager.get().getRedditClient().getOAuthHelper().refreshToken(credentials);
                         AuthenticationManager.get().getRedditClient().authenticate(finalData);
                     }
@@ -141,16 +134,16 @@ public class Authentification {
 
 
     //FOR TEST PURPOSES ONLY
-    public void getFrontPageContent(){
-        new AsyncTask<String, Void, Void>(){
+    public void getFrontPageContent() {
+        new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... params) {
                 // Set up a Paginator for the front page
                 SubredditPaginator paginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
                 paginator.setLimit(50);
-                if(paginator != null){
+                if (paginator != null) {
                     // Request the first page
-                    if(paginator.hasNext()) {
+                    if (paginator.hasNext()) {
                         Listing<Submission> firstPage = paginator.next();
                         for (Submission s : firstPage) {
                             // Print some basic stats about the posts

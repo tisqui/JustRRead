@@ -68,6 +68,9 @@ public class BaseActivity extends AppCompatActivity {
             checkAuthentification();
         } else {
             //got the saved instance, get the items from savedInstanceState.get..(Id);
+            if(mAuthentification == null){
+                mAuthentification = new Authentification(this);
+            }
             checkAuthentification();
         }
     }
