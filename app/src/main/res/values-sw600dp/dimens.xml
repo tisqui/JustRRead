@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_height">160dp</dimen>
+
+    <!-- Posts list -->
+    <dimen name="smallTextSize">14dp</dimen>
+    <dimen name="titleTextSize">18dp</dimen>
+    <dimen name="feed_image_thumbnail_size">100dp</dimen>
+
+
+    <!-- Drawer -->
+    <dimen name="drawer_width">320dp</dimen>
+
+</resources>

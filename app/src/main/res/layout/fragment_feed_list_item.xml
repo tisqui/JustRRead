@@ -37,8 +37,8 @@
 
         <ImageView
             android:id="@+id/fragment_feed_list_item_thumbnail"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/feed_image_thumbnail_size"
+            android:layout_height="@dimen/feed_image_thumbnail_size"
             android:layout_margin="8dp"
             android:layout_toRightOf="@+id/voting_block"
             android:background="@color/imgBg"
