@@ -68,11 +68,12 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         }
 
         mCursor.moveToPosition(position);
-//        Post postItem = mPostList.get(position);
-        Post postItem = DataMapper.mapCursorToPost(mCursor);
-        holder.itemView.setSelected(mSelectedPosition == position);
+        if(mCursor !=null){
+            //        Post postItem = mPostList.get(position);
+            Post postItem = DataMapper.mapCursorToPost(mCursor);
+            holder.itemView.setSelected(mSelectedPosition == position);
 
-        bindPostsFeedViewHolder(holder, position);
+            bindPostsFeedViewHolder(holder, position);
 
 //        //set all the data to the UI elements
 //
@@ -94,8 +95,8 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 //        holder.commentsBtn.setText(postItem.getNumComments()+"");
 //        holder.numberOfVotesTextView.setText(postItem.getUpVotes()+ "");
 
-        //TODO add callbacks for all the buttons
-
+            //TODO add callbacks for all the buttons
+        }
     }
 
 //    @Override

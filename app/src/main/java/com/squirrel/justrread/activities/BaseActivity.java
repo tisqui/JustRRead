@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.Toast;
 
 import com.squirrel.justrread.Authentification;
@@ -39,6 +40,9 @@ public class BaseActivity extends AppCompatActivity {
             mToolbar = (Toolbar) findViewById(R.id.application_toolbar);
             if (mToolbar != null) {
                 setSupportActionBar(mToolbar);
+//                int statusBarHeight = getStatusBarHeight();
+//                mToolbar.setPadding(0, statusBarHeight, 0, 0);
+//                mToolbar.setMinimumHeight(getNavBarSize() + statusBarHeight);
             }
         }
         return mToolbar;
@@ -103,5 +107,22 @@ public class BaseActivity extends AppCompatActivity {
         // Save the auth state
         savedInstanceState.putString(AUTH_STATE, AuthenticationManager.get().checkAuthState().toString());
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    // A method to find height of the status bar
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    public int getNavBarSize(){
+        TypedValue tv = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
+        return actionBarHeight;
     }
 }
