@@ -26,6 +26,8 @@ public class BaseActivity extends AppCompatActivity {
     private static String AUTH_STATE = "auth_state";
 
     public static final String FRONTPAGE_FEED_KEY = "FRONTPAGE_FEED";
+    public static final String POST_DETAIL_KEY = "POST_DETAIL";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

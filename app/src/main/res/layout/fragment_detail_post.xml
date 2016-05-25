@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/post_detail_fragment_container"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.squirrel.justrread.fragments.DetailPostFragment"
+             android:layout_below="@+id/application_toolbar">
+
+    <TextView
+        android:id="@+id/detail_fragment_text"
+        android:layout_marginTop="72dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment"/>
+
+    <TextView
+        android:id="@+id/detail_fragment_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No data loaded"
+        android:visibility="gone"/>
+
+</FrameLayout>

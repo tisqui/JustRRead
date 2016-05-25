@@ -20,10 +20,11 @@ import android.widget.Toast;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.controllers.DrawerController;
+import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.fragments.FeedFragment;
 
 
-public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener {
+public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener, FeedFragment.Callback {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
     private static String[] mSubredditsList = {"/WTF", "/aww", "/funny"};
@@ -209,4 +210,15 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
             getSupportActionBar().setTitle(mTitle);
         }
 
+    @Override
+    public void onItemSelected(Post post) {
+        Intent intent = new Intent(this, DetailedPostActivity.class);
+        intent.putExtra(BaseActivity.POST_DETAIL_KEY, post);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onWebOpen(String url) {
+
+    }
 }

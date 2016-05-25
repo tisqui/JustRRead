@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context=".activities.DetailedPostActivity"
+              tools:showIn="@layout/activity_detailed_post">
+    <fragment
+        android:id="@+id/post_fragment"
+        android:name="com.squirrel.justrread.fragments.DetailPostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.squirrel.justrread.fragments.DetailPostFragment"
+        tools:layout="@layout/fragment_detail_post">
+    </fragment>
+
+</RelativeLayout>

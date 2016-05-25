@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
-import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.adapters.PostsFeedAdapter;
 import com.squirrel.justrread.api.RedditAPI;
@@ -113,6 +112,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
          * DetailFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(Post post);
+        public void onWebOpen(String url);
     }
 
 
@@ -193,7 +193,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onItemClick(View view, int position) {
                 mPostsFeedAdapter.onClick(view, position);
                 Post post = DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor());
-                Navigator.navigateToWebview(getContext(), post.getUrl());
+
+                ((Callback) getActivity()).onItemSelected(post);
+
+//                Navigator.navigateToWebview(getContext(), post.getUrl());
                 mPosition = position;
             }
 

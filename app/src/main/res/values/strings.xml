@@ -37,5 +37,10 @@
     <string name="action_top">Top</string>
     <string name="action_controversial">Controversial</string>
 
+    <!-- Detail Post screen -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_detail_share_text">Share</string>
+    <string name="action_details_search_text">Search</string>
+
 
 </resources>
