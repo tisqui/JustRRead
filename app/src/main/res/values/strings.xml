@@ -2,6 +2,8 @@
     <string name="frontpage_name">Front</string>
     <string name="app_name">JustRRead</string>
     <string name="action_login">LOGIN</string>
+
+    <!-- Menu main feed -->
     <string name="action_all">All</string>
 
 
@@ -30,6 +32,10 @@
     <string name="drawer_all_item">All</string>
     <string name="drawer_frontpage_item">Frontpage</string>
     <string name="drawer_random_item">Random</string>
+    <string name="action_hot">Hot</string>
+    <string name="action_new">New</string>
+    <string name="action_top">Top</string>
+    <string name="action_controversial">Controversial</string>
 
 
 </resources>

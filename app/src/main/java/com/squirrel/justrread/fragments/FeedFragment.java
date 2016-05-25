@@ -23,8 +23,8 @@ import android.widget.TextView;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.Navigator;
-import com.squirrel.justrread.adapters.FeedRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.PostClickListener;
+import com.squirrel.justrread.adapters.PostsFeedAdapter;
 import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
@@ -42,7 +42,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeContainer;
-    private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
+//    private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
+    private PostsFeedAdapter mPostsFeedAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private LinearLayoutManager mLinearLayoutManager;
     private static final int POSTS_LOADER = 0;
@@ -68,7 +69,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mFeedRecyclerViewAdapter.swapCursor(data);
+        mPostsFeedAdapter.swapCursor(data);
         updateEmptyView();
         if ( data.getCount() == 0 ) {
 //            getActivity().supportStartPostponedEnterTransition();
@@ -103,7 +104,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mFeedRecyclerViewAdapter.swapCursor(null);
+        mPostsFeedAdapter.swapCursor(null);
     }
 
 
@@ -183,15 +184,15 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         View emptyView = rootView.findViewById(R.id.posts_list_emply_message);
 
-        mFeedRecyclerViewAdapter = new FeedRecyclerViewAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView);
-        mRecyclerView.setAdapter(mFeedRecyclerViewAdapter);
+        mPostsFeedAdapter = new PostsFeedAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView);
+        mRecyclerView.setAdapter(mPostsFeedAdapter);
 
         mRecyclerView.addOnItemTouchListener(new PostClickListener(getActivity().getApplicationContext(),
                 mRecyclerView, new PostClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                mFeedRecyclerViewAdapter.onClick(view, position);
-                Post post = DataMapper.mapCursorToPost(mFeedRecyclerViewAdapter.getCursor());
+                mPostsFeedAdapter.onClick(view, position);
+                Post post = DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor());
                 Navigator.navigateToWebview(getContext(), post.getUrl());
                 mPosition = position;
             }
@@ -207,6 +208,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onLoadMore(int page, int totalItemsCount) {
                 if(mCanUpdate){
                     Log.d(LOG_TAG, "LOADING MORE");
+                    //show the loading
+                    mPostsFeedAdapter.showLoading(true);
+                    mPostsFeedAdapter.notifyDataSetChanged();
+
                     if(mSubredditPaginator != null){
                         new AsyncTask<Void, Void, Void>(){
                             @Override
@@ -219,9 +224,11 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                             @Override
                             protected void onPostExecute(Void aVoid) {
                                 super.onPostExecute(aVoid);
+                                mPostsFeedAdapter.showLoading(false);
+                                mPostsFeedAdapter.notifyDataSetChanged();
                                 mCanUpdate = true;
                                 mCurrentPage++;
-                                mPosition +=50;
+                                mPosition +=51;
                             }
                         }.execute();
                     }
@@ -314,7 +321,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
        use to determine why they aren't seeing weather.
     */
     private void updateEmptyView() {
-        if ( mFeedRecyclerViewAdapter.getItemCount() == 0 ) {
+        if ( mPostsFeedAdapter.getItemCount() == 0 ) {
             TextView tv = (TextView) getView().findViewById(R.id.posts_list_emply_message);
             if ( null != tv ) {
                 // if cursor is empty, why?
