@@ -133,7 +133,6 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         mSelectedPosition = position;
         notifyItemChanged(old_position);
         notifyItemChanged(mSelectedPosition);
-
         mCursor.moveToPosition(position);
 
     }

@@ -22,13 +22,15 @@ import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.controllers.DrawerController;
 import com.squirrel.justrread.data.Post;
+import com.squirrel.justrread.fragments.DetailPostFragment;
 import com.squirrel.justrread.fragments.FeedFragment;
 
 
-public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener, FeedFragment.Callback {
+public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener, FeedFragment.Callback, DetailPostFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
     private static String[] mSubredditsList = {"/WTF", "/aww", "/funny"};
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private DrawerLayout mDrawerLayout;
     private DrawerController mDrawerController;
@@ -36,6 +38,9 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     private ListView mDrawerSubredditsList;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
+
+    private boolean mTwoPane;
+    private boolean isFirstLaunch = true; //the flag to define if the app was launched for the first time
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,13 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment));
         getToolbar();
+
+        if (findViewById(R.id.two_pane_fragment_post_detail) != null) {
+            // The application is in two pane mode
+            mTwoPane = true;
+        } else {
+            mTwoPane = false;
+        }
 
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer_linear_layout);
         mDrawerSubredditsList = (ListView) findViewById(R.id.drawer_subreddits_listview);
@@ -216,13 +228,41 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
 
     @Override
     public void onItemSelected(Post post) {
-        Intent intent = new Intent(this, DetailedPostActivity.class);
-        intent.putExtra(BaseActivity.POST_DETAIL_KEY, post);
-        startActivity(intent);
+
+        if(isFirstLaunch){
+            isFirstLaunch = false;
+            if(mTwoPane){
+                setDetailsFragmentForTablet(post);
+            }
+        }else {
+            if (mTwoPane) {
+                setDetailsFragmentForTablet(post);
+            } else {
+                Intent intent = new Intent(this, DetailedPostActivity.class);
+                intent.putExtra(BaseActivity.POST_DETAIL_KEY, post);
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
     public void onWebOpen(String url) {
 
     }
+
+    private void setDetailsFragmentForTablet(Post post){
+        Bundle args = new Bundle();
+        args.putSerializable(BaseActivity.POST_DETAIL_KEY, post);
+
+        //pass the movie object to the fragment
+        DetailPostFragment detailsFragment = new DetailPostFragment();
+        detailsFragment.setArguments(args);
+
+        //start fragment transaction
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.two_pane_fragment_post_detail, detailsFragment, DETAILFRAGMENT_TAG)
+                .commit();
+    }
+
+
 }

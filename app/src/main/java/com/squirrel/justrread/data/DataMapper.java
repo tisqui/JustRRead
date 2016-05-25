@@ -55,6 +55,9 @@ public class DataMapper {
         postValues.put(RedditContract.PostEntry.COLUMN_TITLE, s.getTitle());
         postValues.put(RedditContract.PostEntry.COLUMN_URL, s.getUrl());
 
+//        s.getOEmbedMedia().getHeight();
+//        s.getOEmbedMedia().getUrl();
+
         return postValues;
     }
 

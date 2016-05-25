@@ -16,7 +16,6 @@
             android:id="@+id/detail_top_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
             android:background="@color/detail_info_block_background"
             android:elevation="8dp">
 
@@ -95,7 +94,7 @@
             <ImageView
                 android:id="@+id/detail_thumbnail"
                 android:layout_width="wrap_content"
-                android:layout_height="160dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_info_block"
                 android:layout_marginTop="16dp"
                 android:background="@color/imgBg"

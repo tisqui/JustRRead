@@ -8,6 +8,8 @@
     <color name="hightlightTextColorPopup">#00B0FF</color>
     <color name="popupBackground">#FFFFFF</color>
     <color name="mainBackground">#FFFFFF</color>
+    <color name="mainDividerColor">#EEEEEE</color>
+
 
     <!-- Posts list item -->
     <color name="buttonsTextColor">#F44336</color>

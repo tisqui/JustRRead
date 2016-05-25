@@ -193,11 +193,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onItemClick(View view, int position) {
                 mPostsFeedAdapter.onClick(view, position);
                 Post post = DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor());
-
-                ((Callback) getActivity()).onItemSelected(post);
-
-//                Navigator.navigateToWebview(getContext(), post.getUrl());
                 mPosition = position;
+                ((Callback) getActivity()).onItemSelected(post);
+//                Navigator.navigateToWebview(getContext(), post.getUrl());
             }
 
             @Override

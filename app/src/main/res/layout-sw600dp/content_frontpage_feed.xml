@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.FrontpageFeedActivity"
+    tools:showIn="@layout/activity_frontpage_feed">
+
+    <!--
+    two-pane layout for the Items master/detail flow.
+    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/tablet_divider"
+        android:showDividers="middle"
+        android:layout_below="@+id/application_toolbar">
+
+        <fragment
+            android:id="@+id/feed_fragment"
+            android:name="com.squirrel.justrread.fragments.FeedFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            tools:context="com.squirrel.justrread.fragments.FeedFragment"
+            android:layout_weight="2"
+            tools:layout="@layout/fragment_feed">
+        </fragment>
+
+        <FrameLayout
+            android:id="@+id/two_pane_fragment_post_detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/left_drawer_linear_layout"
+        android:layout_width="@dimen/drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+        <include layout="@layout/drawer_content"/>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>
