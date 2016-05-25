@@ -10,12 +10,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.data.Post;
@@ -29,16 +33,49 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
     private static final int POST_COMMENTS_LOADER = 1;
     private Post mPost;
 
-    @Bind(R.id.detail_fragment_text)
-    TextView mTextView;
-
     @Bind(R.id.detail_fragment_empty)
     TextView mEmptyView;
+
+    @Bind(R.id.detail_comments_list_emply_message)
+    TextView mEmptyCommentsView;
+
+    @Bind(R.id.detail_subreddit)
+    TextView mDetailSubreddit;
+
+    @Bind(R.id.detail_author)
+    TextView mDetailAuthor;
+
+    @Bind(R.id.detail_title)
+    TextView mDetailTitle;
+
+    @Bind(R.id.detail_source)
+    TextView mDetailSource;
+
+    @Bind(R.id.detail_time)
+    TextView mDetailTime;
+
+    @Bind(R.id.detail_thumbnail)
+    ImageView mDetailThumb;
+
+    @Bind(R.id.detail_text)
+    TextView mDetailText;
+
+    @Bind(R.id.detail_num_comments)
+    TextView mDetailNumComments;
+
+    @Bind(R.id.detail_votes_num)
+    TextView mDetailVotesNum;
+
+    @Bind(R.id.detail_up_btn)
+    Button mUpBtn;
+
+    @Bind(R.id.detail_down_btn)
+    Button mDownBtn;
+
 
     public DetailPostFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +99,36 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
 
         if(mPost != null){
             mEmptyView.setVisibility(View.GONE);
-            mTextView.setText(mPost.toString());
+
+            //set all the UI elements
+            if(mPost.getSubreddit() != null){
+                mDetailSubreddit.setText(mPost.getSubreddit());
+            }
+            mDetailAuthor.setText(mPost.getAuthor());
+            mDetailTitle.setText(mPost.getTitle());
+
+            if(mPost.getThumbnail() == null){
+                mDetailThumb.setVisibility(View.GONE);
+            }else{
+                mDetailThumb.setVisibility(View.VISIBLE);
+                Glide.with(getContext())
+                        .load(mPost.getThumbnail())
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_duck_white_36dp)
+                        .error(R.drawable.ic_duck_white_36dp)
+                        .into(mDetailThumb);
+            }
+
+            mDetailText.setText(Html.fromHtml(mPost.getSelfTextHtml()));
+            if(mPost.getNumComments() == 0){
+                mDetailNumComments.setText("No comments");
+            } else{
+                mDetailNumComments.setText(mPost.getNumComments() + " comments");
+            }
+
+            mDetailVotesNum.setText(mPost.getUpVotes()+"");
+
+            mEmptyCommentsView.setVisibility(View.VISIBLE);
         }
         else{
             Toast.makeText(getContext(), "Post information was not properly passed to the fragment", Toast.LENGTH_SHORT).show();

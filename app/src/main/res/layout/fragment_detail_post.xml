@@ -1,23 +1,198 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/post_detail_fragment_container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.squirrel.justrread.fragments.DetailPostFragment"
-             android:layout_below="@+id/application_toolbar">
+<ScrollView
+    android:id="@+id/post_detail_fragment_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/application_toolbar">
 
-    <TextView
-        android:id="@+id/detail_fragment_text"
-        android:layout_marginTop="72dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:layout_height="wrap_content"
+        tools:context="com.squirrel.justrread.fragments.DetailPostFragment">
 
-    <TextView
-        android:id="@+id/detail_fragment_empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="No data loaded"
-        android:visibility="gone"/>
+        <RelativeLayout
+            android:id="@+id/detail_top_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:background="@color/detail_info_block_background"
+            android:elevation="8dp">
 
-</FrameLayout>
+            <LinearLayout
+                android:id="@+id/detail_upper_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/detail_subreddit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/r/WTF"
+                    android:textColor="@color/detail_grey_text"
+                    android:textSize="@dimen/smallTextSize"/>
+
+                <TextView
+                    android:id="@+id/detail_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="author"
+                    android:textColor="@color/detail_grey_text"
+                    android:textSize="@dimen/smallTextSize"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_upper_block"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:maxLines="3"
+                android:text="Post title"
+                android:textColor="@color/tisteTextColor"
+                android:textSize="@dimen/titleTextSize"/>
+
+            <LinearLayout
+                android:id="@+id/detail_info_block"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_title"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/detail_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="(imgur.net)"
+                    android:textColor="@color/postsListdateTextColor"
+                    android:textSize="@dimen/smallTextSize"/>
+
+                <TextView
+                    android:id="@+id/detail_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="22 days ago"
+                    android:textColor="@color/postsListdateTextColor"
+                    android:textSize="@dimen/smallTextSize"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/detail_thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="160dp"
+                android:layout_below="@+id/detail_info_block"
+                android:layout_marginTop="16dp"
+                android:background="@color/imgBg"
+                android:scaleType="center"
+                android:src="@drawable/ic_duck_white_36dp"/>
+
+            <TextView
+                android:id="@+id/detail_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_thumbnail"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Test text description"/>
+
+            <RelativeLayout
+                android:id="@+id/detail_voting_block"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_text"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/detail_num_comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="550 comments"
+                    android:textColor="@color/tisteTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/detail_text"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/detail_votes_num"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="@color/colorAccent"/>
+
+                <Button
+                    android:id="@+id/detail_up_btn"
+                    style="@style/ListItemButtons"
+                    android:drawableStart="@drawable/ic_arrow_right_bold_circle_grey600_18dp"/>
+
+                <Button
+                    android:id="@+id/detail_down_btn"
+                    style="@style/ListItemButtons"
+                    android:drawableStart="@drawable/ic_arrow_right_bold_circle_grey600_18dp"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/detail_fragment_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No data loaded"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/feed_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_top_block">
+        </android.support.v7.widget.RecyclerView>
+
+        <!-- empty comments -->
+        <TextView
+            android:id="@+id/detail_comments_list_emply_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/detail_top_block"
+            android:layout_margin="32dp"
+            android:gravity="center"
+            android:text="@string/empty_comments_list"
+            android:visibility="gone"
+            app:layout_anchor="@+id/feed_recycler_view"
+            app:layout_anchorGravity="fill"/>
+
+    </RelativeLayout>
+</ScrollView>

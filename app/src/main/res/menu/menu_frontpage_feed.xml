@@ -2,6 +2,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".activities.FrontpageFeedActivity">
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="150"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_magnify"
+        app:showAsAction="always"/>
+
     <item
         android:id="@+id/action_all"
         android:orderInCategory="100"
