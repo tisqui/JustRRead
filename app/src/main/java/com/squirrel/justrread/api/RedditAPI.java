@@ -15,6 +15,7 @@ import net.dean.jraw.models.CommentNode;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.TraversalMethod;
+import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
 
 import java.util.List;
@@ -37,6 +38,31 @@ public class RedditAPI {
     public static boolean checkAuthentificationReady(){
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
         return state.equals(AuthenticationState.READY);
+    }
+
+    public void getPostsSorted(SubredditPaginator paginator, Context context, Sorting sort){
+        if(checkAuthentificationReady()) {
+            if (paginator != null) {
+                paginator.setSorting(sort);
+                if (paginator.hasNext()) {
+                    Listing<Submission> firstPage = paginator.next();
+                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
+                    for (Submission s : firstPage) {
+                        contentValuesList.add(DataMapper.mapSubmissionToContentValues(s));
+                    }
+                    if (contentValuesList.size() > 0) {
+                        ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
+                        contentValuesList.toArray(cvArray);
+                        context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
+                        context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
+                    }
+                } else {
+                    Log.d(LOG_TAG, "No more pages available");
+                }
+            }
+        }else{
+            Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
+        }
     }
 
     public void getPostsFront(SubredditPaginator paginator, Context context){
@@ -111,8 +137,6 @@ public class RedditAPI {
             return null;
         }
     }
-
-
 
 
 }

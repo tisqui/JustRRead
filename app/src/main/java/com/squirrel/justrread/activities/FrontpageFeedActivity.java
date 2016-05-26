@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.controllers.DrawerController;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.fragments.DetailPostFragment;
@@ -41,6 +42,11 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
 
     private boolean mTwoPane;
     private boolean isFirstLaunch = true; //the flag to define if the app was launched for the first time
+
+    public static final int FRONT_FILTER_HOT = 0;
+    public static final int FRONT_FILTER_NEW = 1;
+    public static final int FRONT_FILTER_TOP = 2;
+    public static final int FRONT_FILTER_CONTROVERSIAL = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +132,10 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerLinearLayout);
-        menu.findItem(R.id.action_all).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_hot).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_top).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_new).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_controversial).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -164,7 +173,20 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_all) {
+        if (id == R.id.action_hot) {
+            Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_HOT);
+            return true;
+        }
+        if (id == R.id.action_top) {
+            Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_TOP);
+            return true;
+        }
+        if (id == R.id.action_new) {
+            Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_NEW);
+            return true;
+        }
+        if (id == R.id.action_controversial) {
+            Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_CONTROVERSIAL);
             return true;
         }
 
@@ -263,6 +285,5 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 .replace(R.id.two_pane_fragment_post_detail, detailsFragment, DETAILFRAGMENT_TAG)
                 .commit();
     }
-
 
 }

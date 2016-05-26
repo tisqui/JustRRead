@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
@@ -32,6 +34,7 @@ import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.auth.AuthenticationManager;
+import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
 
 import java.util.ArrayList;
@@ -287,8 +290,19 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    public void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        //register shared prefs listener
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);
+
         mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
         mSubredditPaginator.setLimit(50);
         if (mCanUpdate){
@@ -357,6 +371,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         if (key.equals(getString(R.string.pref_posts_status_key))) {
             updateEmptyView();
         }
+        if(key.equals(getString(R.string.front_filter_key))){
+            Toast.makeText(getContext(), "Getting the new posts", Toast.LENGTH_SHORT).show();
+            refreshNewSorting();
+        }
     }
 
     @Override
@@ -378,11 +396,38 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     mCanUpdate = true;
                     mPosition = 0;
                     mCurrentPage = 1;
+                    mSwipeContainer.setRefreshing(false);
                 }
             }.execute();
         }
         else{
             Log.d(LOG_TAG, "Previous Update is still in progress");
+        }
+    }
+
+    public void refreshNewSorting(){
+        if(Utils.isNetworkAvailable(getContext())){
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+                    Sorting sort = Utils.getMainFeedSortFromSharedPrefs(getContext());
+                    if(sort!=null){
+                        mRedditAPI.getPostsSorted(mSubredditPaginator, getContext(), sort);
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    mCanUpdate = true;
+                    mPosition = 0;
+                    mCurrentPage = 1;
+                }
+            }.execute();
+        }else {
+            Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
         }
     }
 }

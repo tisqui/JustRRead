@@ -44,5 +44,7 @@
     <string name="empty_comments_list">No comments loaded.</string>
     <string name="action_search">Search</string>
 
+    <!-- Posts filers -->
+    <string name="front_filter_key">front_filter</string>
 
 </resources>

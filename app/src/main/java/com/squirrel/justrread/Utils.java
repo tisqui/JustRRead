@@ -6,7 +6,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
+import com.squirrel.justrread.activities.FrontpageFeedActivity;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
+
+import net.dean.jraw.paginators.Sorting;
 
 import java.util.Date;
 
@@ -57,6 +60,36 @@ public class Utils {
             return date.getTime();
         }
         return null;
+    }
+
+    public static void saveMainFeedSortToSharedPrefs(Context c, int value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.front_filter_key), value);
+        spe.apply();
+    }
+
+    public static Sorting getMainFeedSortFromSharedPrefs(Context c){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
+        int sortInt = sharedPref.getInt(c.getString(R.string.front_filter_key), 0);
+        Sorting res;
+        switch (sortInt){
+            case FrontpageFeedActivity.FRONT_FILTER_HOT:
+                res = Sorting.HOT;
+                break;
+            case FrontpageFeedActivity.FRONT_FILTER_NEW:
+                res=Sorting.NEW;
+                break;
+            case FrontpageFeedActivity.FRONT_FILTER_TOP:
+                res=Sorting.TOP;
+                break;
+            case FrontpageFeedActivity.FRONT_FILTER_CONTROVERSIAL:
+                res=Sorting.CONTROVERSIAL;
+                break;
+            default:
+                res= Sorting.HOT;
+        }
+        return res;
     }
 
 }

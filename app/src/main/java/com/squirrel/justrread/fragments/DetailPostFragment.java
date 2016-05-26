@@ -137,7 +137,6 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                 mDetailThumb.setVisibility(View.VISIBLE);
                 Glide.with(getContext())
                         .load(mPost.getThumbnail())
-                        .centerCrop()
                         .placeholder(R.drawable.ic_duck_white_36dp)
                         .error(R.drawable.ic_duck_white_36dp)
                         .into(mDetailThumb);

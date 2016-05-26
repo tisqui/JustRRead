@@ -1,4 +1,4 @@
-<android.support.v4.widget.NestedScrollView
+<RelativeLayout
     android:id="@+id/post_detail_fragment_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,10 +8,6 @@
     android:layout_below="@+id/application_toolbar"
     tools:context="com.squirrel.justrread.fragments.DetailPostFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
 
         <RelativeLayout
             android:id="@+id/detail_top_block"
@@ -171,7 +167,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/comments_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="800dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/detail_top_block"
             android:drawSelectorOnTop="true"
             android:scrollbars="vertical">
@@ -207,5 +203,4 @@
             app:layout_anchor="@+id/feed_recycler_view"
             app:layout_anchorGravity="fill"/>
 
-    </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
