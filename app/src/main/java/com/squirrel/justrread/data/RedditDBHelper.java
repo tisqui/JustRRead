@@ -44,7 +44,10 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 PostEntry.COLUMN_SELFHTML + " TEXT, " +
                 PostEntry.COLUMN_THUMBNAIL + " TEXT, " +
                 PostEntry.COLUMN_TITLE + " TEXT, " +
-                PostEntry.COLUMN_URL + " TEXT" +
+                PostEntry.COLUMN_URL + " TEXT, " +
+                PostEntry.COLUMN_MEDIA_TYPE + " TEXT, " +
+                PostEntry.COLUMN_MEDIA_LINK + " TEXT, " +
+                PostEntry.COLUMN_MEDIA_THUMBNAIL + " TEXT" +
                 " );";
 
         db.execSQL(SQL_CREATE_POST_TABLE);

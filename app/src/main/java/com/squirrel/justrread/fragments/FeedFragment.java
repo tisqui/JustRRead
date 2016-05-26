@@ -236,7 +236,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                                 mPostsFeedAdapter.notifyDataSetChanged();
                                 mCanUpdate = true;
                                 mCurrentPage++;
-                                mPosition +=51;
+                                mPosition +=50;
                             }
                         }.execute();
                     }

@@ -38,6 +38,9 @@ public class PostsLoader extends AsyncTaskLoader<List<Post>> {
     static final int COL_THUMBNAIL = 14;
     static final int COL_TITLE = 15;
     static final int COL_URL = 16;
+    static final int COL_MEDIA_TYPE = 17;
+    static final int COL_MEDIA_LINK = 18;
+    static final int COL_MEDIA_THUMB = 19;
 
 
     public PostsLoader(Context context) {
@@ -75,8 +78,12 @@ public class PostsLoader extends AsyncTaskLoader<List<Post>> {
                 cursor.getString(COL_SELFHTML),
                 cursor.getString(COL_THUMBNAIL),
                 cursor.getString(COL_TITLE),
-                cursor.getString(COL_URL)
-        );
+                cursor.getString(COL_URL),
+                cursor.getString(COL_MEDIA_TYPE),
+                cursor.getString(COL_MEDIA_LINK),
+                cursor.getString(COL_MEDIA_THUMB)
+
+                );
     }
 
     @Override

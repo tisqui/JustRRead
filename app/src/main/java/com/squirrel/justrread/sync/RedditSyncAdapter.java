@@ -24,6 +24,7 @@ import com.squirrel.justrread.data.RedditContract;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.models.Listing;
+import net.dean.jraw.models.OEmbed;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
 
@@ -118,6 +119,12 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                     postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, s.getThumbnail());
                     postValues.put(RedditContract.PostEntry.COLUMN_TITLE, s.getTitle());
                     postValues.put(RedditContract.PostEntry.COLUMN_URL, s.getUrl());
+
+                    OEmbed oEmbed = s.getOEmbedMedia();
+
+                    postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_TYPE, oEmbed.getMediaType().toString());
+                    postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_LINK, oEmbed.getUrl());
+                    postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_THUMBNAIL, oEmbed.getThumbnail().getUrl().toString());
 
                     contentValuesList.add(postValues);
                 }

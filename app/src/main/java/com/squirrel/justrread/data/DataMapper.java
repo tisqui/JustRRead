@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.squirrel.justrread.Utils;
 
+import net.dean.jraw.models.OEmbed;
 import net.dean.jraw.models.Submission;
 
 import java.text.Format;
@@ -34,6 +35,10 @@ public class DataMapper {
     static final int COL_THUMBNAIL = 14;
     static final int COL_TITLE = 15;
     static final int COL_URL = 16;
+    static final int COL_MEDIA_TYPE = 17;
+    static final int COL_MEDIA_LINK = 18;
+    static final int COL_MEDIA_THUMB = 19;
+
 
     public static ContentValues mapSubmissionToContentValues(Submission s){
         ContentValues postValues = new ContentValues();
@@ -54,6 +59,18 @@ public class DataMapper {
         postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, s.getThumbnail());
         postValues.put(RedditContract.PostEntry.COLUMN_TITLE, s.getTitle());
         postValues.put(RedditContract.PostEntry.COLUMN_URL, s.getUrl());
+
+        OEmbed oEmbed = s.getOEmbedMedia();
+
+        if(oEmbed != null) {
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_TYPE, oEmbed.getMediaType().toString());
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_LINK, oEmbed.getUrl());
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_THUMBNAIL, oEmbed.getThumbnail().getUrl().toString());
+        } else {
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_TYPE, "");
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_LINK, "");
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_THUMBNAIL, "");
+        }
 
 //        s.getOEmbedMedia().getHeight();
 //        s.getOEmbedMedia().getUrl();
@@ -84,7 +101,10 @@ public class DataMapper {
                 cursor.getString(COL_SELFHTML),
                 cursor.getString(COL_THUMBNAIL),
                 cursor.getString(COL_TITLE),
-                cursor.getString(COL_URL)
-        );
+                cursor.getString(COL_URL),
+                cursor.getString(COL_MEDIA_TYPE),
+                cursor.getString(COL_MEDIA_LINK),
+                cursor.getString(COL_MEDIA_THUMB)
+                );
     }
 }

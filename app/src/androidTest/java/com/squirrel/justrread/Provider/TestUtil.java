@@ -41,12 +41,16 @@ public class TestUtil extends AndroidTestCase {
         postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, "link to thumbnail");
         postValues.put(RedditContract.PostEntry.COLUMN_TITLE, "Title");
         postValues.put(RedditContract.PostEntry.COLUMN_URL, "URL");
+        postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_TYPE, "1");
+        postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_LINK, "URL");
+        postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, "URL");
+
         return postValues;
     }
 
     static Post createPost(String id){
         return new Post(id, "Name", 100, 200, 100, new Date(System.currentTimeMillis()), "author", "domain", true, 100, true, "subreddit",
-                "subreddit id", "html", "link", "title", "url");
+                "subreddit id", "html", "link", "title", "url", "url", "url", "url");
     }
 
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {

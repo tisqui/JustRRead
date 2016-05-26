@@ -32,6 +32,9 @@ public class RedditContract {
         String COLUMN_THUMBNAIL="thumbnail";
         String COLUMN_TITLE = "title";
         String COLUMN_URL = "url";
+        String COLUMN_MEDIA_TYPE="media_type";
+        String COLUMN_MEDIA_LINK="media_link";
+        String COLUMN_MEDIA_THUMBNAIL="media_thumbnail";
 
     }
 

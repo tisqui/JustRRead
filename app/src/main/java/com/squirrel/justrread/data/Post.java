@@ -25,6 +25,10 @@ public class Post implements Serializable {
     private String mThumbnail;
     private String mTitle;
     private String mUrl;
+    private String mMediaType;
+    private String mMediaLink;
+    private String mMediaThumb;
+
 
     public Post(){}
     //TODO add the objects media, media_embed https://github.com/reddit/reddit/wiki/JSON
@@ -36,7 +40,8 @@ public class Post implements Serializable {
                 boolean selfPost, int numComments,
                 boolean nsfw, String subreddit,
                 String subredditId, String selfTextHtml,
-                String thumbnail, String title, String url) {
+                String thumbnail, String title, String url,
+                String mediaType, String mediaLink, String mediaThumb) {
         mPostId = postId;
         mName = name;
         mUpVotes = upVotes;
@@ -54,6 +59,9 @@ public class Post implements Serializable {
         mThumbnail = thumbnail;
         mTitle = title;
         mUrl = url;
+        mMediaType = mediaType;
+        mMediaLink = mediaLink;
+        mMediaThumb = mediaThumb;
     }
 
     public String getPosId() {
@@ -192,10 +200,46 @@ public class Post implements Serializable {
         mUrl = url;
     }
 
+    public String getPostId() {
+        return mPostId;
+    }
+
+    public void setPostId(String postId) {
+        mPostId = postId;
+    }
+
+    public int getLikes() {
+        return mLikes;
+    }
+
+    public String getMediaType() {
+        return mMediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        mMediaType = mediaType;
+    }
+
+    public String getMediaLink() {
+        return mMediaLink;
+    }
+
+    public void setMediaLink(String mediaLink) {
+        mMediaLink = mediaLink;
+    }
+
+    public String getMediaThumb() {
+        return mMediaThumb;
+    }
+
+    public void setMediaThumb(String mediaThumb) {
+        mMediaThumb = mediaThumb;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
-                "mId='" + mPostId + '\'' +
+                "mPostId='" + mPostId + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mUpVotes=" + mUpVotes +
                 ", mDownVotes=" + mDownVotes +
@@ -212,6 +256,9 @@ public class Post implements Serializable {
                 ", mThumbnail='" + mThumbnail + '\'' +
                 ", mTitle='" + mTitle + '\'' +
                 ", mUrl='" + mUrl + '\'' +
+                ", mMediaType='" + mMediaType + '\'' +
+                ", mMediaLink='" + mMediaLink + '\'' +
+                ", mMediaThumb='" + mMediaThumb + '\'' +
                 '}';
     }
 }

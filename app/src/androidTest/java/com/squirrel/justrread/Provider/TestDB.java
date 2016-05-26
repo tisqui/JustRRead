@@ -71,6 +71,9 @@ public class TestDB extends AndroidTestCase {
         postsColumnHashSet.add(RedditContract.PostColumns.COLUMN_THUMBNAIL);
         postsColumnHashSet.add(RedditContract.PostColumns.COLUMN_TITLE);
         postsColumnHashSet.add(RedditContract.PostColumns.COLUMN_URL);
+        postsColumnHashSet.add(RedditContract.PostColumns.COLUMN_MEDIA_TYPE);
+        postsColumnHashSet.add(RedditContract.PostColumns.COLUMN_MEDIA_LINK);
+        postsColumnHashSet.add(RedditContract.PostColumns.COLUMN_MEDIA_THUMBNAIL);
 
 
         int columnNameIndex = c.getColumnIndex("name");
