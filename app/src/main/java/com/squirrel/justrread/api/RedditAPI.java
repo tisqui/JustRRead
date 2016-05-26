@@ -5,15 +5,19 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.common.collect.FluentIterable;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.RedditContract;
 
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
+import net.dean.jraw.models.CommentNode;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
+import net.dean.jraw.models.TraversalMethod;
 import net.dean.jraw.paginators.SubredditPaginator;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -56,6 +60,18 @@ public class RedditAPI {
                 Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
             }
         }
+    }
+
+    public List<CommentNode> getTopNodeAllComments(String postId){
+        if(checkAuthentificationReady()){
+            FluentIterable<CommentNode> nodes = AuthenticationManager.get().getRedditClient().
+                    getSubmission(postId).getComments().walkTree(TraversalMethod.PRE_ORDER);
+
+            List<CommentNode> resultList = nodes.toList();
+
+            return resultList;
+        }
+        return null;
     }
 
     public class GetPosts extends AsyncTask<String, Void, Void>{

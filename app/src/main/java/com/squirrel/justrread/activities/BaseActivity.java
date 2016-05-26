@@ -29,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final String POST_DETAIL_KEY = "POST_DETAIL";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,16 +1,17 @@
-<ScrollView
+<android.support.v4.widget.NestedScrollView
     android:id="@+id/post_detail_fragment_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/application_toolbar">
+    android:layout_below="@+id/application_toolbar"
+    tools:context="com.squirrel.justrread.fragments.DetailPostFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context="com.squirrel.justrread.fragments.DetailPostFragment">
+        android:layout_height="match_parent"
+        >
 
         <RelativeLayout
             android:id="@+id/detail_top_block"
@@ -166,19 +167,32 @@
 
         </RelativeLayout>
 
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/comments_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="800dp"
+            android:layout_below="@+id/detail_top_block"
+            android:drawSelectorOnTop="true"
+            android:scrollbars="vertical">
+        </android.support.v7.widget.RecyclerView>
+
+        <ProgressBar
+            android:layout_below="@+id/detail_top_block"
+            android:layout_marginTop="32dp"
+            android:id="@+id/comments_loading_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.ProgressBar.Small.Inverse"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/detail_fragment_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="No data loaded"
             android:visibility="gone"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/feed_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/detail_top_block">
-        </android.support.v7.widget.RecyclerView>
 
         <!-- empty comments -->
         <TextView
@@ -194,4 +208,4 @@
             app:layout_anchorGravity="fill"/>
 
     </RelativeLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
