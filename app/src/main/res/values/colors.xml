@@ -17,6 +17,9 @@
     <color name="postsListDivider">#EEEEEE</color>
     <color name="postsListdateTextColor">#BDBDBD</color>
     <color name="tisteTextColor">#212121</color>
+    <color name="feedItemSelectedBgd">#BBDEFB</color>
+    <color name="feedItemPressedBgd">#EEEEEE</color>
+
 
     <!-- Drawer -->
     <color name="drawerBackground">#FFFFFF</color>

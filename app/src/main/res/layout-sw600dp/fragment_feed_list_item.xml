@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@drawable/feed_item_selector">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:id="@+id/voting_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/fragment_feed_list_item_up_btn"
+                style="@style/ListItemButtons"
+                android:drawableStart="@drawable/ic_chevron_up"/>
+
+            <TextView
+                android:id="@+id/fragment_feed_list_item_votes_num"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="100"
+                android:textColor="@color/buttonsTextColor"/>
+
+            <Button
+                android:id="@+id/fragment_feed_list_item_down_btn"
+                style="@style/ListItemButtons"
+                android:drawableStart="@drawable/ic_chevron_down"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/fragment_feed_list_item_thumbnail"
+            android:layout_width="@dimen/feed_image_thumbnail_size"
+            android:layout_height="@dimen/feed_image_thumbnail_size"
+            android:layout_margin="8dp"
+            android:layout_toRightOf="@+id/voting_block"
+            android:background="@color/imgBg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_duck_white_36dp"/>
+
+        <LinearLayout
+            android:id="@+id/textBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@+id/fragment_feed_list_item_thumbnail"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fragment_feed_list_item_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="1"
+                    android:text="(imgur.net)"
+                    android:textColor="@color/buttonsTextColor"
+                    android:textSize="@dimen/smallTextSize"/>
+
+                <TextView
+                    android:id="@+id/fragment_feed_list_item_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="22 days ago"
+                    android:textColor="@color/postsListdateTextColor"
+                    android:textSize="@dimen/smallTextSize"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/fragment_feed_list_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:maxLines="3"
+                android:textColor="@color/tisteTextColor"
+                android:text="Post title"
+                android:textSize="@dimen/titleTextSize"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/fragment_feed_list_item_comments_btn"
+                    style="@style/ListItemButtons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_comment_outline"
+                    android:text="10"
+                    android:textColor="@color/buttonsTextColor"/>
+
+                <!--<Button-->
+                    <!--android:id="@+id/fragment_feed_list_item_share_btn"-->
+                    <!--style="@style/ListItemButtons"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:drawableLeft="@drawable/ic_share_variant"/>-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--<Button-->
+            <!--android:id="@+id/fragment_feed_list_item_open_btn"-->
+            <!--style="?android:attr/borderlessButtonStyle"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_toRightOf="@+id/textBlock"-->
+            <!--android:background="@drawable/list_item_right_arrow_button_custom"/>-->
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/postsListDivider"/>
+
+</LinearLayout>

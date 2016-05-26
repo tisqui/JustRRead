@@ -86,6 +86,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                         // to, do so now.
                         mRecyclerView.smoothScrollToPosition(position);
                         RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+
+                        mPostsFeedAdapter.onClick(null, position);
+                        ((Callback) getActivity()).onItemSelected(DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor()));
+
 //                        if (null != vh && mAutoSelectView) {
 //                            FeedRecyclerViewAdapter.selectView(vh);
 //                        }
