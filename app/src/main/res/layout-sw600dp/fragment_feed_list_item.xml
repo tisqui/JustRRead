@@ -97,14 +97,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/fragment_feed_list_item_comments_btn"
-                    style="@style/ListItemButtons"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_comment_outline"
+                    android:src="@drawable/ic_comment_grey600_18dp"/>
+
+                <TextView
+                    android:id="@+id/fragment_feed_list_item_comments_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="10"
-                    android:textColor="@color/buttonsTextColor"/>
+                    android:textColor="@color/colorAccent"/>
+
+                <!--<Button-->
+                    <!--android:id="@+id/fragment_feed_list_item_comments_btn"-->
+                    <!--style="@style/ListItemButtons"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:drawableLeft="@drawable/ic_comment_outline"-->
+                    <!--android:text="10"-->
+                    <!--android:textColor="@color/buttonsTextColor"/>-->
 
                 <!--<Button-->
                     <!--android:id="@+id/fragment_feed_list_item_share_btn"-->
@@ -117,13 +130,6 @@
 
         </LinearLayout>
 
-        <!--<Button-->
-            <!--android:id="@+id/fragment_feed_list_item_open_btn"-->
-            <!--style="?android:attr/borderlessButtonStyle"-->
-            <!--android:layout_width="32dp"-->
-            <!--android:layout_height="32dp"-->
-            <!--android:layout_toRightOf="@+id/textBlock"-->
-            <!--android:background="@drawable/list_item_right_arrow_button_custom"/>-->
 
     </RelativeLayout>
 

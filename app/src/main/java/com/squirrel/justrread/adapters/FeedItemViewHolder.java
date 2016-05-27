@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.squirrel.justrread.R;
 
+import org.w3c.dom.Text;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -22,7 +24,7 @@ public class FeedItemViewHolder extends RecyclerView.ViewHolder implements View.
     @Bind(R.id.fragment_feed_list_item_title) TextView titleTextView;
     @Bind(R.id.fragment_feed_list_item_source) TextView sourceTextView;
     @Bind(R.id.fragment_feed_list_item_time) TextView postDateTextView;
-    @Bind(R.id.fragment_feed_list_item_comments_btn) Button commentsBtn;
+    @Bind(R.id.fragment_feed_list_item_comments_btn) TextView commentsBtn;
 //    @Bind(R.id.fragment_feed_list_item_share_btn) Button shareBtn;
 
     public FeedItemViewHolder(View itemView) {
