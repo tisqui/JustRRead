@@ -1,6 +1,7 @@
 package com.squirrel.justrread.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -24,6 +28,8 @@ import android.widget.Toast;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.activities.AboutSubredditActivity;
+import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.adapters.PostClickListener;
 import com.squirrel.justrread.adapters.PostsFeedAdapter;
 import com.squirrel.justrread.api.RedditAPI;
@@ -173,6 +179,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -460,6 +467,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mIsSubreddit = isSubreddit;
     }
 
+    public String getSubredditId() {
+        return mSubredditId;
+    }
+
     public void refreshNewSubreddit(final String subredditId) {
         if (Utils.isNetworkAvailable(getContext())) {
             mIsSubreddit = true;
@@ -487,5 +498,31 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private void cleanAllSettingsOnrefresh() {
         mPosition = 0;
         mCurrentPage = 1;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        if(mIsSubreddit){
+            menu.findItem(R.id.action_subreddit_about).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_subreddit_about).setVisible(false);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_subreddit_about:
+                if(mIsSubreddit){
+                    Intent intent = new Intent(getContext(), AboutSubredditActivity.class);
+                    intent.putExtra(BaseActivity.SUBREDDIT_ID_KEY, mSubredditId);
+                    startActivity(intent);
+                }
+                return false;
+            default:
+                break;
+        }
+        return false;
     }
 }

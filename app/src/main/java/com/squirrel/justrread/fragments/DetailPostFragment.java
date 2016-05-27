@@ -142,7 +142,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                         .into(mDetailThumb);
             }
 
-            mDetailText.setText(Html.fromHtml(mPost.getSelfTextHtml()));
+            mDetailText.setText(mPost.getSelfTextHtml());
             if(mPost.getNumComments() == 0){
                 mDetailNumComments.setText("No comments");
             } else{

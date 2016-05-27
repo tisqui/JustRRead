@@ -4,6 +4,13 @@
       tools:context=".activities.FrontpageFeedActivity">
 
     <item
+        android:id="@+id/action_subreddit_about"
+        android:orderInCategory="200"
+        android:title="@string/action_subreddit_about"
+        android:icon="@drawable/ic_arrow_right_bold_circle_grey600_18dp"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_search"
         android:orderInCategory="150"
         android:title="@string/action_search"

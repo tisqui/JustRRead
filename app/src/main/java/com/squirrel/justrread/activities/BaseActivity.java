@@ -27,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public static final String FRONTPAGE_FEED_KEY = "FRONTPAGE_FEED";
     public static final String POST_DETAIL_KEY = "POST_DETAIL";
+    public static final String SUBREDDIT_ID_KEY = "SUBREDDIT_KEY";
 
 
 

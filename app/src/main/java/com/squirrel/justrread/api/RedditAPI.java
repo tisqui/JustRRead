@@ -14,6 +14,7 @@ import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.models.CommentNode;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
+import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.models.TraversalMethod;
 import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
@@ -132,6 +133,16 @@ public class RedditAPI {
             return resultList;
         }
         return null;
+    }
+
+    public static String getSubredditAbout(String subredditId){
+        if (checkAuthentificationReady()) {
+            Subreddit subreddit = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
+            return subreddit.getSidebar();
+        } else {
+            Log.d(LOG_TAG, "getSubredditAbout: Not Authentificated");
+            return null;
+        }
     }
 
     public class GetPosts extends AsyncTask<String, Void, Void> {

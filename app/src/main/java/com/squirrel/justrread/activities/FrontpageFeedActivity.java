@@ -162,7 +162,16 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
             Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_CONTROVERSIAL);
             return true;
         }
-
+        if(id == R.id.action_subreddit_about){
+            FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.feed_fragment));
+            if(feedFragment.isSubreddit()){
+                Intent intent = new Intent(this, AboutSubredditActivity.class);
+                intent.putExtra(BaseActivity.SUBREDDIT_ID_KEY, feedFragment.getSubredditId());
+                startActivity(intent);
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

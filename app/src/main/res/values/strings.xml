@@ -35,6 +35,7 @@
     <string name="action_hot">Hot</string>
     <string name="action_new">New</string>
     <string name="action_top">Top</string>
+    <string name="action_subreddit_about">Subreddit about</string>
     <string name="action_controversial">Controversial</string>
 
     <!-- Detail Post screen -->
@@ -47,4 +48,7 @@
     <!-- Shared prefs keys -->
     <string name="front_filter_key">front_filter</string>
 
+    <!-- Subreddit about screen -->
+    <string name="subreddit_about_no_connection">No Internet connection. Try later.</string>
+    <string name="subreddit_about_no_data">No data available.</string>
 </resources>

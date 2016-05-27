@@ -45,6 +45,12 @@
             android:parentActivityName=".activities.FrontpageFeedActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".activities.AboutSubredditActivity"
+            android:label=""
+            android:parentActivityName=".activities.DetailedPostActivity"
+            android:theme="@style/AppTheme">
+        </activity>
 
         <provider
             android:name=".data.RedditProvider"
