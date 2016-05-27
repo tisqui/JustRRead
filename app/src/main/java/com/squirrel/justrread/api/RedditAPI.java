@@ -29,21 +29,54 @@ public class RedditAPI {
 
     public interface APICallback<T> {
         void onSuccess(T result);
+
         void onFailure(Throwable t);
     }
 
     public RedditAPI() {
     }
 
-    public static boolean checkAuthentificationReady(){
+    public static boolean checkAuthentificationReady() {
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
         return state.equals(AuthenticationState.READY);
     }
 
-    public void getPostsSorted(SubredditPaginator paginator, Context context, Sorting sort){
-        if(checkAuthentificationReady()) {
+//    public void getPostsSorted(SubredditPaginator paginator, Context context, Sorting sort) {
+//        if (checkAuthentificationReady()) {
+//            if (paginator != null) {
+//                paginator.setSorting(sort);
+//                if (paginator.hasNext()) {
+//                    Listing<Submission> firstPage = paginator.next();
+//                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
+//                    for (Submission s : firstPage) {
+//                        contentValuesList.add(DataMapper.mapSubmissionToContentValues(s));
+//                    }
+//                    if (contentValuesList.size() > 0) {
+//                        ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
+//                        contentValuesList.toArray(cvArray);
+//                        //delete all previous data
+//                        context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
+//                        context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
+//                    }
+//                } else {
+//                    Log.d(LOG_TAG, "No more pages available");
+//                }
+//            }
+//        } else {
+//            Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
+//        }
+//    }
+
+    //get the subreddit feed
+    public void getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) {
+        if (checkAuthentificationReady()) {
             if (paginator != null) {
-                paginator.setSorting(sort);
+                if (sort != null) {
+                    paginator.setSorting(sort);
+                }
+                if (subredditId != null) {
+                    paginator.setSubreddit(subredditId);
+                }
                 if (paginator.hasNext()) {
                     Listing<Submission> firstPage = paginator.next();
                     Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
@@ -53,6 +86,7 @@ public class RedditAPI {
                     if (contentValuesList.size() > 0) {
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
+                        //delete all previous data
                         context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
                     }
@@ -60,13 +94,13 @@ public class RedditAPI {
                     Log.d(LOG_TAG, "No more pages available");
                 }
             }
-        }else{
+        } else {
             Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
         }
     }
 
-    public void getPostsFront(SubredditPaginator paginator, Context context){
-        if(checkAuthentificationReady()) {
+    public void getPostsFront(SubredditPaginator paginator, Context context) {
+        if (checkAuthentificationReady()) {
             if (paginator != null) {
                 if (paginator.hasNext()) {
                     Listing<Submission> firstPage = paginator.next();
@@ -88,8 +122,8 @@ public class RedditAPI {
         }
     }
 
-    public List<CommentNode> getTopNodeAllComments(String postId){
-        if(checkAuthentificationReady()){
+    public List<CommentNode> getTopNodeAllComments(String postId) {
+        if (checkAuthentificationReady()) {
             FluentIterable<CommentNode> nodes = AuthenticationManager.get().getRedditClient().
                     getSubmission(postId).getComments().walkTree(TraversalMethod.PRE_ORDER);
 
@@ -100,7 +134,7 @@ public class RedditAPI {
         return null;
     }
 
-    public class GetPosts extends AsyncTask<String, Void, Void>{
+    public class GetPosts extends AsyncTask<String, Void, Void> {
         SubredditPaginator mSubredditPaginator;
         String page;
         int pageSize;
@@ -115,7 +149,7 @@ public class RedditAPI {
         @Override
         protected Void doInBackground(String... params) {
 
-            if(mSubredditPaginator==null){
+            if (mSubredditPaginator == null) {
                 //getting the first page
                 mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
             }

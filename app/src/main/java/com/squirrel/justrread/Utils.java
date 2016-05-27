@@ -63,10 +63,7 @@ public class Utils {
     }
 
     public static void saveMainFeedSortToSharedPrefs(Context c, int value){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor spe = sp.edit();
-        spe.putInt(c.getString(R.string.front_filter_key), value);
-        spe.apply();
+        saveIntItemToSharedPrefs(c, c.getString(R.string.front_filter_key), value);
     }
 
     public static Sorting getMainFeedSortFromSharedPrefs(Context c){
@@ -90,6 +87,13 @@ public class Utils {
                 res= Sorting.HOT;
         }
         return res;
+    }
+
+    public static void saveIntItemToSharedPrefs(Context c, String key, int value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(key, value);
+        spe.apply();
     }
 
 }

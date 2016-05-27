@@ -1,6 +1,5 @@
 package com.squirrel.justrread.activities;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -30,7 +29,7 @@ import com.squirrel.justrread.fragments.FeedFragment;
 public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener, FeedFragment.Callback, DetailPostFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
-    private static String[] mSubredditsList = {"/WTF", "/aww", "/funny"};
+    private static String[] mSubredditsList = {"/pics", "/gifs", "/videos"};
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private DrawerLayout mDrawerLayout;
@@ -51,21 +50,11 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Init myInit = (Init)getApplicationContext();
+        Init myInit = (Init) getApplicationContext();
         myInit.initializeAuth();
 
         super.onCreate(savedInstanceState);
-
-//        UserAgent myUserAgent = UserAgent.of();
-//
-//        reddit = new RedditClient(myUserAgent);
-//        reddit.setLoggingMode(LoggingMode.ALWAYS);
-//        AuthenticationManager.get().init(reddit, new RefreshTokenHandler(new RedditTokenStore(), reddit));
-
-
         setContentView(R.layout.activity_frontpage_feed);
-        FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.feed_fragment));
         getToolbar();
 
         if (findViewById(R.id.two_pane_fragment_post_detail) != null) {
@@ -89,36 +78,19 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 getToolbar(),
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
-        ){
-            public void onDrawerClosed(View view)
-            {
+        ) {
+            public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 invalidateOptionsMenu();
             }
 
-            public void onDrawerOpened(View drawerView)
-            {
+            public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 invalidateOptionsMenu();
             }
         };
 
-        // Set the drawer toggle as the DrawerListener
-//        mDrawerToggle.setDrawerIndicatorEnabled(false);
-//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_reddit, this.getTheme());
-//        mDrawerToggle.setHomeAsUpIndicator(drawable);
-//        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mDrawerLayout.isDrawerVisible(GravityCompat.START)) {
-//                    mDrawerLayout.closeDrawer(GravityCompat.START);
-//                } else {
-//                    mDrawerLayout.openDrawer(GravityCompat.START);
-//                }
-//            }
-//        });
-
-       mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
         //set all the Drawer actions
@@ -136,6 +108,7 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         menu.findItem(R.id.action_top).setVisible(!drawerOpen);
         menu.findItem(R.id.action_new).setVisible(!drawerOpen);
         menu.findItem(R.id.action_controversial).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -220,43 +193,56 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         }
     }
 
-        /** Swaps fragments in the main content view */
-        private void selectItem(int position) {
-            // Create a new fragment and specify the planet to show based on position
-//            Fragment fragment = new Fragment();
-//            Bundle args = new Bundle();
-            //put arguments
-//        args.putString(SubredditFragment.SubredditId, position);
-//        fragment.setArguments(args);
+    /**
+     * Update the feed fragment content when the new subreddit is selected
+     */
+    private void selectItem(int position) {
 
-//        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.content_frame, fragment)
-//                .commit();
-
-            // Highlight the selected item, update the title, and close the drawer
-//            mDrawerSubredditsList.setItemChecked(position, true);
-//            setTitle(mSubredditsList[position]);
-            Toast.makeText(this, "Item " + position + "clicked", Toast.LENGTH_SHORT).show();
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        // Call the method to refresh the feed for subreddit now
+        FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.feed_fragment));
+        if(feedFragment != null){
+            feedFragment.refreshNewSubreddit(convertPositionToId(position));
         }
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerSubredditsList.setItemChecked(position, true);
+        setTitle(mSubredditsList[position]);
 
-        @Override
-        public void setTitle(CharSequence title) {
-            mTitle = title;
-            getSupportActionBar().setTitle(mTitle);
+        Toast.makeText(this, "Item " + position + "clicked", Toast.LENGTH_SHORT).show();
+        mDrawerLayout.closeDrawer(Gravity.LEFT);
+    }
+
+    private String convertPositionToId(int pos){
+        switch(pos){
+            case 0:
+                return "pics";
+            case 1:
+                return "gifs";
+            case 2:
+                return "videos";
+            default: return "t5_2qh1e";
         }
+    }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+
+    /**
+     * When the new post is clicked in the feed list - update the detailed fragment for the tablet view.
+     * @param post - the post object passed to the detailed view
+     */
     @Override
     public void onItemSelected(Post post) {
 
-        if(isFirstLaunch){
+        if (isFirstLaunch) {
             isFirstLaunch = false;
-            if(mTwoPane){
+            if (mTwoPane) {
                 setDetailsFragmentForTablet(post);
             }
-        }else {
+        } else {
             if (mTwoPane) {
                 setDetailsFragmentForTablet(post);
             } else {
@@ -269,10 +255,14 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
 
     @Override
     public void onWebOpen(String url) {
-
+        //TODO add the logic for opened web page
     }
 
-    private void setDetailsFragmentForTablet(Post post){
+    /**
+     * Set up the post which will be passed to tge detailed fragment
+     * @param post
+     */
+    private void setDetailsFragmentForTablet(Post post) {
         Bundle args = new Bundle();
         args.putSerializable(BaseActivity.POST_DETAIL_KEY, post);
 

@@ -68,7 +68,7 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         }
 
         mCursor.moveToPosition(position);
-        if(mCursor !=null){
+        if(mCursor !=null && position < getItemCount()){
             //        Post postItem = mPostList.get(position);
             Post postItem = DataMapper.mapCursorToPost(mCursor);
             holder.itemView.setSelected(mSelectedPosition == position);

@@ -65,7 +65,7 @@ public class DataMapper {
         if(oEmbed != null) {
             postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_TYPE, oEmbed.getMediaType().toString());
             postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_LINK, oEmbed.getUrl());
-            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_THUMBNAIL, oEmbed.getThumbnail().getUrl().toString());
+            postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_THUMBNAIL, "");
         } else {
             postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_TYPE, "");
             postValues.put(RedditContract.PostEntry.COLUMN_MEDIA_LINK, "");

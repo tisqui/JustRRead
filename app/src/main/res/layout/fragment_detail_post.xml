@@ -91,12 +91,12 @@
             <ImageView
                 android:id="@+id/detail_thumbnail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="160dp"
                 android:layout_below="@+id/detail_info_block"
                 android:layout_marginTop="16dp"
                 android:background="@color/imgBg"
-                android:scaleType="center"
-                android:src="@drawable/ic_duck_white_36dp"/>
+                android:src="@drawable/ic_duck_white_36dp"
+                android:layout_centerHorizontal="true"/>
 
             <TextView
                 android:id="@+id/detail_text"

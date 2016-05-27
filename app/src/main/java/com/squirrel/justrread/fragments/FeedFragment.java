@@ -44,16 +44,20 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeContainer;
-//    private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
+    //    private FeedRecyclerViewAdapter mFeedRecyclerViewAdapter;
     private PostsFeedAdapter mPostsFeedAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private LinearLayoutManager mLinearLayoutManager;
     private static final int POSTS_LOADER = 0;
     private static final String SELECTED_KEY = "selected_position";
+    public static final String SUBREDDIT_KEY = "subreddit_key";
 
     private int mCurrentPage;
     private SubredditPaginator mSubredditPaginator;
     private RedditAPI mRedditAPI;
+
+    private boolean mIsSubreddit;
+    private String mSubredditId;
 
     private boolean mCanUpdate = true;
 
@@ -73,7 +77,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mPostsFeedAdapter.swapCursor(data);
         updateEmptyView();
-        if ( data.getCount() == 0 ) {
+        if (data.getCount() == 0) {
 //            getActivity().supportStartPostponedEnterTransition();
         } else {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -87,11 +91,14 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                         if (position == RecyclerView.NO_POSITION) position = 0;
                         // If we don't need to restart the loader, and there's a desired position to restore
                         // to, do so now.
-                        mRecyclerView.smoothScrollToPosition(position);
-                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
 
-                        mPostsFeedAdapter.onClick(null, position);
-                        ((Callback) getActivity()).onItemSelected(DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor()));
+                        if (position < mPostsFeedAdapter.getCursor().getCount()) {
+                            mRecyclerView.smoothScrollToPosition(position);
+                            RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+
+                            mPostsFeedAdapter.onClick(null, position);
+                            ((Callback) getActivity()).onItemSelected(DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor()));
+                        }
 
 //                        if (null != vh && mAutoSelectView) {
 //                            FeedRecyclerViewAdapter.selectView(vh);
@@ -119,6 +126,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
          * DetailFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(Post post);
+
         public void onWebOpen(String url);
     }
 
@@ -182,6 +190,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mCurrentPage = 1;
+        mIsSubreddit = false;
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
@@ -214,18 +223,22 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if(mCanUpdate){
+                if (mCanUpdate) {
                     Log.d(LOG_TAG, "LOADING MORE");
                     //show the loading
                     mPostsFeedAdapter.showLoading(true);
                     mPostsFeedAdapter.notifyDataSetChanged();
 
-                    if(mSubredditPaginator != null){
-                        new AsyncTask<Void, Void, Void>(){
+                    if (mSubredditPaginator != null) {
+                        new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
                                 mCanUpdate = false;
-                                mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                                if (!mIsSubreddit) {
+                                    mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                                } else {
+                                    mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
+                                }
                                 return null;
                             }
 
@@ -236,11 +249,11 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                                 mPostsFeedAdapter.notifyDataSetChanged();
                                 mCanUpdate = true;
                                 mCurrentPage++;
-                                mPosition +=50;
+                                mPosition += 50;
                             }
                         }.execute();
                     }
-                }else{
+                } else {
                     Log.d(LOG_TAG, "Previous Update is still in progress, can't load more now.");
                 }
             }
@@ -305,12 +318,16 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
         mSubredditPaginator.setLimit(50);
-        if (mCanUpdate){
-            new AsyncTask<Void, Void, Void>(){
+        if (mCanUpdate) {
+            new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     mCanUpdate = false;
-                    mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                    if (!mIsSubreddit) {
+                        mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                    } else {
+                        mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
+                    }
                     return null;
                 }
 
@@ -340,9 +357,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
        use to determine why they aren't seeing weather.
     */
     private void updateEmptyView() {
-        if ( mPostsFeedAdapter.getItemCount() == 0 ) {
+        if (mPostsFeedAdapter.getItemCount() == 0) {
             TextView tv = (TextView) getView().findViewById(R.id.posts_list_emply_message);
-            if ( null != tv ) {
+            if (null != tv) {
                 // if cursor is empty, why?
                 int message = R.string.empty_posts_list;
                 @RedditSyncAdapter.PostsStatus int location = Utils.getPostsStatus(getActivity());
@@ -371,7 +388,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         if (key.equals(getString(R.string.pref_posts_status_key))) {
             updateEmptyView();
         }
-        if(key.equals(getString(R.string.front_filter_key))){
+        if (key.equals(getString(R.string.front_filter_key))) {
             Toast.makeText(getContext(), "Getting the new posts", Toast.LENGTH_SHORT).show();
             refreshNewSorting();
         }
@@ -380,40 +397,16 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onRefresh() {
         Log.d(LOG_TAG, "Refresh of the list started");
-        if(mCanUpdate){
-            new AsyncTask<Void, Void, Void>(){
+        if (mCanUpdate) {
+            new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     mCanUpdate = false;
                     mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-                    mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    mCanUpdate = true;
-                    mPosition = 0;
-                    mCurrentPage = 1;
-                    mSwipeContainer.setRefreshing(false);
-                }
-            }.execute();
-        }
-        else{
-            Log.d(LOG_TAG, "Previous Update is still in progress");
-        }
-    }
-
-    public void refreshNewSorting(){
-        if(Utils.isNetworkAvailable(getContext())){
-            new AsyncTask<Void, Void, Void>(){
-                @Override
-                protected Void doInBackground(Void... params) {
-                    mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-                    Sorting sort = Utils.getMainFeedSortFromSharedPrefs(getContext());
-                    if(sort!=null){
-                        mRedditAPI.getPostsSorted(mSubredditPaginator, getContext(), sort);
+                    if (!mIsSubreddit) {
+                        mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
+                    } else {
+                        mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
                     }
                     return null;
                 }
@@ -422,12 +415,77 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
                     mCanUpdate = true;
-                    mPosition = 0;
-                    mCurrentPage = 1;
+                    cleanAllSettingsOnrefresh();
+                    mSwipeContainer.setRefreshing(false);
                 }
             }.execute();
-        }else {
+        } else {
+            Log.d(LOG_TAG, "Previous Update is still in progress");
+        }
+    }
+
+    public void refreshNewSorting() {
+        if (Utils.isNetworkAvailable(getContext())) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+                    Sorting sort = Utils.getMainFeedSortFromSharedPrefs(getContext());
+                    if (sort != null) {
+                        if (!mIsSubreddit) {
+                            mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), null, sort);
+                        } else {
+                            mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, sort);
+                        }
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    cleanAllSettingsOnrefresh();
+                }
+            }.execute();
+        } else {
             Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public boolean isSubreddit() {
+        return mIsSubreddit;
+    }
+
+    public void setIsSubreddit(boolean isSubreddit) {
+        mIsSubreddit = isSubreddit;
+    }
+
+    public void refreshNewSubreddit(final String subredditId) {
+        if (Utils.isNetworkAvailable(getContext())) {
+            mIsSubreddit = true;
+            mSubredditId = subredditId;
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+                    mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    cleanAllSettingsOnrefresh();
+                    Toast.makeText(getContext(), "Now browsing " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
+                }
+            }.execute();
+        } else {
+            Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void cleanAllSettingsOnrefresh() {
+        mPosition = 0;
+        mCurrentPage = 1;
     }
 }
