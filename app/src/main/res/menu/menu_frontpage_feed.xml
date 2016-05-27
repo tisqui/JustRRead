@@ -7,7 +7,7 @@
         android:id="@+id/action_subreddit_about"
         android:orderInCategory="200"
         android:title="@string/action_subreddit_about"
-        android:icon="@drawable/ic_arrow_right_bold_circle_grey600_18dp"
+        android:icon="@drawable/ic_information"
         app:showAsAction="always"/>
 
     <item

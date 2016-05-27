@@ -11,6 +11,8 @@ import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.paginators.Sorting;
 
+import org.markdownj.MarkdownProcessor;
+
 import java.util.Date;
 
 /**
@@ -94,6 +96,11 @@ public class Utils {
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(key, value);
         spe.apply();
+    }
+
+
+    public static String getHtmlFromMarkdown(String markdown){
+        return new MarkdownProcessor().markdown(markdown);
     }
 
 }

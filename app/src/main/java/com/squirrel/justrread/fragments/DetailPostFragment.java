@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.adapters.CommentsRecyclerViewAdapter;
 import com.squirrel.justrread.api.RedditAPI;
@@ -142,7 +143,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                         .into(mDetailThumb);
             }
 
-            mDetailText.setText(mPost.getSelfTextHtml());
+            mDetailText.setText(Html.fromHtml(Utils.getHtmlFromMarkdown(mPost.getSelfTextHtml())));
             if(mPost.getNumComments() == 0){
                 mDetailNumComments.setText("No comments");
             } else{

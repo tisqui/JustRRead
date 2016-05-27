@@ -2,6 +2,7 @@ package com.squirrel.justrread.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -62,7 +63,7 @@ public class AboutSubredditActivity extends BaseActivity {
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
                         mLoadingProgress.setVisibility(View.GONE);
-                        mSubredditAboutTextView.setText(mContent);
+                        loadMarkdownToTextView();
                     }
                 }.execute();
             } else {
@@ -73,5 +74,10 @@ public class AboutSubredditActivity extends BaseActivity {
             mSubredditAboutEmpty.setText(getString(R.string.subreddit_about_no_connection));
             mSubredditAboutEmpty.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void loadMarkdownToTextView(){
+        String html = Utils.getHtmlFromMarkdown(mContent);
+        mSubredditAboutTextView.setText(Html.fromHtml(html));
     }
 }
