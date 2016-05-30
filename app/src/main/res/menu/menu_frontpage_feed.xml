@@ -8,13 +8,14 @@
         android:orderInCategory="200"
         android:title="@string/action_subreddit_about"
         android:icon="@drawable/ic_information"
-        app:showAsAction="always"/>
+        app:showAsAction="collapseActionView|ifRoom"/>
 
     <item
         android:id="@+id/action_search"
         android:orderInCategory="150"
         android:title="@string/action_search"
         android:icon="@drawable/ic_magnify"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
 
     <item

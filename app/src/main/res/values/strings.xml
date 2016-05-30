@@ -51,4 +51,5 @@
     <!-- Subreddit about screen -->
     <string name="subreddit_about_no_connection">No Internet connection. Try later.</string>
     <string name="subreddit_about_no_data">No data available.</string>
+    <string name="search_hint_text">Enter subreddit name</string>
 </resources>
