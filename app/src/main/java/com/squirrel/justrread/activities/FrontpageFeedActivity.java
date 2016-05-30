@@ -1,6 +1,7 @@
 package com.squirrel.justrread.activities;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -139,8 +140,11 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+
+        ComponentName cn = new ComponentName(this, SubredditSearchResultsActivity.class);
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(cn));
 
         return true;
     }
