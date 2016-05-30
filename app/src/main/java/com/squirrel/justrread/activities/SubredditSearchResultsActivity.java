@@ -2,13 +2,18 @@ package com.squirrel.justrread.activities;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.SearchResultsListAdapter;
+import com.squirrel.justrread.api.RedditAPI;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,9 +25,14 @@ public class SubredditSearchResultsActivity extends BaseActivity {
 
     @Bind(R.id.subreddit_search_results_list)
     ListView mSearchResultsListView;
-    private SearchResultsListAdapter mSearchResultsListAdapter;
 
-    ArrayList<String> listOfResults;
+    @Bind(R.id.search_empty_results)
+    TextView mEmptyView;
+
+    private SearchResultsListAdapter mSearchResultsListAdapter;
+    private boolean mIsNsfw = false;
+
+    List<String> listOfResults;
 
 
     @Override
@@ -50,11 +60,27 @@ public class SubredditSearchResultsActivity extends BaseActivity {
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            final String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
-            listOfResults.add("One");
-            listOfResults.add("Two");
-            mSearchResultsListAdapter.addAll(listOfResults);
+            new AsyncTask<Void, Void, List<String>>() {
+                @Override
+                protected List<String> doInBackground(Void... params) {
+                    return RedditAPI.searchForSubreddit(query, mIsNsfw);
+                }
+
+                @Override
+                protected void onPostExecute(List<String> result) {
+                    super.onPostExecute(result);
+                    listOfResults = result;
+                    if(listOfResults != null){
+                        mSearchResultsListAdapter.addAll(listOfResults);
+                        mEmptyView.setVisibility(View.GONE);
+                    }else {
+                        mEmptyView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }.execute();
         }
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 }

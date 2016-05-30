@@ -3,6 +3,17 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/search_empty_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No subreddits found :("
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
+        android:textSize="@dimen/titleTextSize"
+        android:visibility="gone"/>
+
     <ListView
         android:id="@+id/subreddit_search_results_list"
         android:layout_width="match_parent"

@@ -145,6 +145,15 @@ public class RedditAPI {
         }
     }
 
+    public static List<String> searchForSubreddit(String searchStr, boolean includeNsfw){
+        if(checkAuthentificationReady()){
+            return AuthenticationManager.get().getRedditClient().searchSubreddits(searchStr, includeNsfw);
+        }else {
+            Log.d(LOG_TAG, "getSubredditAbout: Not Authentificated");
+            return null;
+        }
+    }
+
     public class GetPosts extends AsyncTask<String, Void, Void> {
         SubredditPaginator mSubredditPaginator;
         String page;
@@ -182,6 +191,8 @@ public class RedditAPI {
             return null;
         }
     }
+
+
 
 
 }

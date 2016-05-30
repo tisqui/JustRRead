@@ -9,16 +9,16 @@ import android.widget.TextView;
 
 import com.squirrel.justrread.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by squirrel on 5/30/16.
  */
 public class SearchResultsListAdapter extends ArrayAdapter<String> {
 
-    private ArrayList<String> mSubredditsList;
+    private List<String> mSubredditsList;
 
-    public SearchResultsListAdapter(Context context, ArrayList<String> sub) {
+    public SearchResultsListAdapter(Context context, List<String> sub) {
         super(context, 0, sub);
         mSubredditsList = sub;
     }
