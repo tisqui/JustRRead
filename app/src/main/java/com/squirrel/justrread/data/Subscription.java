@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by squirrel on 5/30/16.
  */
-public class LocalSubreddit implements Serializable {
+public class Subscription implements Serializable {
     private String mSubredditId;
     private String mSubredditDisplayName;
     private String mIsNsfw;

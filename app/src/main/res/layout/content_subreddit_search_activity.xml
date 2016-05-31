@@ -4,6 +4,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/search_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.ProgressBar.Small.Inverse"
+        android:layout_marginTop="32dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
+
     <TextView
         android:id="@+id/search_empty_results"
         android:layout_width="match_parent"

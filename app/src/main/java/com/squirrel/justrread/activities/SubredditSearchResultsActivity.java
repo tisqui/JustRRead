@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squirrel.justrread.R;
@@ -29,6 +30,9 @@ public class SubredditSearchResultsActivity extends BaseActivity {
     @Bind(R.id.search_empty_results)
     TextView mEmptyView;
 
+    @Bind(R.id.search_progress_bar)
+    ProgressBar mSearchProgress;
+
     private SearchResultsListAdapter mSearchResultsListAdapter;
     private boolean mIsNsfw = false;
 
@@ -46,6 +50,7 @@ public class SubredditSearchResultsActivity extends BaseActivity {
 
         mSearchResultsListAdapter = new SearchResultsListAdapter(this, listOfResults);
         mSearchResultsListView.setAdapter(mSearchResultsListAdapter);
+        mSearchProgress.setVisibility(View.GONE);
 
         handleIntent(getIntent());
     }
@@ -61,6 +66,7 @@ public class SubredditSearchResultsActivity extends BaseActivity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = intent.getStringExtra(SearchManager.QUERY);
+            mSearchProgress.setVisibility(View.VISIBLE);
             //use the query to search your data somehow
             new AsyncTask<Void, Void, List<String>>() {
                 @Override
@@ -71,6 +77,7 @@ public class SubredditSearchResultsActivity extends BaseActivity {
                 @Override
                 protected void onPostExecute(List<String> result) {
                     super.onPostExecute(result);
+                    mSearchProgress.setVisibility(View.GONE);
                     listOfResults = result;
                     if(listOfResults != null){
                         mSearchResultsListAdapter.addAll(listOfResults);

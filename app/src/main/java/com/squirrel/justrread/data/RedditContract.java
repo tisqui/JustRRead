@@ -13,6 +13,8 @@ public class RedditContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_POST = "post";
+    public static final String PATH_SUBSCRIPTION = "subscription";
+
 
     public interface PostColumns{
         String COLUMN_ID = "id";
@@ -36,6 +38,12 @@ public class RedditContract {
         String COLUMN_MEDIA_LINK="media_link";
         String COLUMN_MEDIA_THUMBNAIL="media_thumbnail";
 
+    }
+
+    public interface SubscriptionColumns{
+        String COLUMN_ID = "id";
+        String COLUMN_DISPLAY_NAME = "display_name";
+        String COLUMN_NSFW = "nsfw";
     }
 
     /* Inner class that defines the table contents of the posts table */
@@ -68,6 +76,25 @@ public class RedditContract {
                 return 0;
         }
     }
+
+        /* Inner class that defines the table contents of the subscriptions table */
+        public static final class SubscriptionEntry implements BaseColumns, SubscriptionColumns {
+            public static final Uri CONTENT_URI =
+                    BASE_CONTENT_URI.buildUpon().appendPath(PATH_SUBSCRIPTION).build();
+
+            public static final String CONTENT_TYPE =
+                    ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SUBSCRIPTION;
+            public static final String CONTENT_ITEM_TYPE =
+                    ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SUBSCRIPTION;
+
+            public static String getSubscriptionId(Uri uri){
+                return uri.getPathSegments().get(1);
+            }
+
+            public static Uri buildSubscriptionUri(String id) {
+                return CONTENT_URI.buildUpon().appendEncodedPath(id).build();
+            }
+        }
 
     public static long normalizeDate(long startDate) {
         // normalize the start date to the beginning of the (UTC) day
