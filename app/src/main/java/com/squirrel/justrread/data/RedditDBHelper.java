@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.squirrel.justrread.data.RedditContract.PostEntry;
+import com.squirrel.justrread.data.RedditContract.SubscriptionEntry;
+
 
 /**
  * Created by squirrel on 5/12/16.
@@ -17,6 +19,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
 
     public interface Tables {
         String POST = "post";
+        String SUBSCRIPTION = "subscription";
     }
 
     public RedditDBHelper(Context context) {
@@ -50,7 +53,15 @@ public class RedditDBHelper extends SQLiteOpenHelper {
                 PostEntry.COLUMN_MEDIA_THUMBNAIL + " TEXT" +
                 " );";
 
+        final String SQL_CREATE_SUNSCRIPTIONS_TABLE = "CREATE TABLE " + Tables.SUBSCRIPTION + " (" +
+                SubscriptionEntry.COLUMN_ID + " TEXT PRIMARY KEY," +
+                SubscriptionEntry.COLUMN_DISPLAY_NAME + " TEXT," +
+                SubscriptionEntry.COLUMN_NSFW + " INTEGER" +
+                " );";
+
         db.execSQL(SQL_CREATE_POST_TABLE);
+        db.execSQL(SQL_CREATE_SUNSCRIPTIONS_TABLE);
+
     }
 
     @Override
@@ -63,6 +74,7 @@ public class RedditDBHelper extends SQLiteOpenHelper {
         if(version != DATABASE_VERSION){
             //worst case scenario
             db.execSQL("DROP TABLE IF EXISTS " + Tables.POST);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.SUBSCRIPTION);
             onCreate(db);
         }
     }

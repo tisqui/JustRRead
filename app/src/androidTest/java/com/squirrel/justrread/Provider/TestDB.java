@@ -25,6 +25,7 @@ public class TestDB extends AndroidTestCase {
 
         final HashSet<String> tableNameHashSet = new HashSet<String>();
         tableNameHashSet.add(RedditDBHelper.Tables.POST);
+        tableNameHashSet.add(RedditDBHelper.Tables.SUBSCRIPTION);
 
         mContext.deleteDatabase(RedditDBHelper.DATABASE_NAME);
 
@@ -82,8 +83,21 @@ public class TestDB extends AndroidTestCase {
             postsColumnHashSet.remove(columnName);
         } while(c.moveToNext());
 
-        assertTrue("Error: The database doesn't contain all of the required movies entry columns",
+        assertTrue("Error: The database doesn't contain all of the required posts entry columns",
                 postsColumnHashSet.isEmpty());
+
+        // checking columns
+        c = db.rawQuery("PRAGMA table_info(" + RedditDBHelper.Tables.SUBSCRIPTION + ")",
+                null);
+
+        assertTrue("Error: This means that we were unable to query the database for table information.",
+                c.moveToFirst());
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> subColumnHashSet = new HashSet<String>();
+        postsColumnHashSet.add(RedditContract.SubscriptionColumns.COLUMN_ID);
+        postsColumnHashSet.add(RedditContract.SubscriptionColumns.COLUMN_DISPLAY_NAME);
+        postsColumnHashSet.add(RedditContract.SubscriptionColumns.COLUMN_NSFW);
+
         db.close();
     }
 
@@ -92,18 +106,39 @@ public class TestDB extends AndroidTestCase {
         RedditDBHelper postsDB = new RedditDBHelper(mContext);
         SQLiteDatabase db = postsDB.getWritableDatabase();
 
-        ContentValues movieValues = TestUtil.createPostTableValues(TestUtil.TEST_POST_ID);
+        ContentValues postValues = TestUtil.createPostTableValues(TestUtil.TEST_POST_ID);
 
         long movie_id;
-        movie_id = db.insert(RedditDBHelper.Tables.POST, null, movieValues);
+        movie_id = db.insert(RedditDBHelper.Tables.POST, null, postValues);
 
         assertTrue(movie_id != -1);
         Cursor cursor = db.query(RedditDBHelper.Tables.POST,
                 null, null, null, null, null, null);
         assertTrue("No records returned, but should to", cursor.moveToFirst());
 
-        TestUtil.validateCurrentRecord("Quesry is not validated", cursor, movieValues);
+        TestUtil.validateCurrentRecord("Quesry is not validated", cursor, postValues);
         cursor.close();
+
+    }
+
+    public void testSubscriptionsTable(){
+        //get writable DB
+        RedditDBHelper postsDB = new RedditDBHelper(mContext);
+        SQLiteDatabase db = postsDB.getWritableDatabase();
+
+        ContentValues subValues = TestUtil.createSubTableValues(TestUtil.TEST_SUBSCRIPTION_ID);
+
+        long sub_id;
+        sub_id = db.insert(RedditDBHelper.Tables.SUBSCRIPTION, null, subValues);
+
+        assertTrue(sub_id != -1);
+        Cursor cursor = db.query(RedditDBHelper.Tables.SUBSCRIPTION,
+                null, null, null, null, null, null);
+        assertTrue("No records returned, but should to", cursor.moveToFirst());
+
+        TestUtil.validateCurrentRecord("Quesry is not validated", cursor, subValues);
+        cursor.close();
+
     }
 
     public void insertPost(){
@@ -124,5 +159,24 @@ public class TestDB extends AndroidTestCase {
         cursor.close();
         db.close();
 
+    }
+
+    public void insertSubscription(){
+        RedditDBHelper redditDB = new RedditDBHelper(mContext);
+        SQLiteDatabase db = redditDB.getWritableDatabase();
+        ContentValues testValues = TestUtil.createSubTableValues(TestUtil.TEST_SUBSCRIPTION_ID);
+
+        long rowId;
+        rowId = db.insert(RedditDBHelper.Tables.SUBSCRIPTION, null, testValues);
+        assertTrue(rowId != -1);
+
+        Cursor cursor = db.query(RedditDBHelper.Tables.SUBSCRIPTION,null, null, null, null, null, null);
+        assertTrue("Error: No Records returned from movies query", cursor.moveToFirst());
+        TestUtil.validateCurrentRecord("Error: Location Query Validation Failed",
+                cursor, testValues);
+        assertFalse("Error: More than one record returned from movies query",
+                cursor.moveToNext());
+        cursor.close();
+        db.close();
     }
 }

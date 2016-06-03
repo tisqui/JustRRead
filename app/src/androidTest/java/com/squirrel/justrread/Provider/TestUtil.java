@@ -21,6 +21,8 @@ import java.util.Set;
 public class TestUtil extends AndroidTestCase {
 
     public static final String TEST_POST_ID = "123";
+    public static final String TEST_SUBSCRIPTION_ID = "qwerty";
+
 
     static ContentValues createPostTableValues(String postId) {
         ContentValues postValues = new ContentValues();
@@ -46,6 +48,14 @@ public class TestUtil extends AndroidTestCase {
         postValues.put(RedditContract.PostEntry.COLUMN_THUMBNAIL, "URL");
 
         return postValues;
+    }
+
+    static ContentValues createSubTableValues(String subId) {
+        ContentValues subValues = new ContentValues();
+        subValues.put(RedditContract.SubscriptionEntry.COLUMN_ID, subId);
+        subValues.put(RedditContract.SubscriptionEntry.COLUMN_DISPLAY_NAME, "name");
+        subValues.put(RedditContract.SubscriptionEntry.COLUMN_NSFW, 1);
+        return subValues;
     }
 
     static Post createPost(String id){

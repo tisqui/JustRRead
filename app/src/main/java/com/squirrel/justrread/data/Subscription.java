@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Subscription implements Serializable {
     private String mSubredditId;
     private String mSubredditDisplayName;
-    private String mIsNsfw;
+    private boolean mIsNsfw;
 
     public String getSubredditId() {
         return mSubredditId;
@@ -26,11 +26,11 @@ public class Subscription implements Serializable {
         mSubredditDisplayName = subredditDisplayName;
     }
 
-    public String getIsNsfw() {
+    public boolean isNsfw() {
         return mIsNsfw;
     }
 
-    public void setIsNsfw(String isNsfw) {
+    public void setIsNsfw(boolean isNsfw) {
         mIsNsfw = isNsfw;
     }
 

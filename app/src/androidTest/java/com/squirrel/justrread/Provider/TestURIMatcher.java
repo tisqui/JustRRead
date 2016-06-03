@@ -12,10 +12,15 @@ import com.squirrel.justrread.data.RedditProvider;
  */
 public class TestURIMatcher extends AndroidTestCase {
     private static final Uri TEST_POST_DIR = RedditContract.PostEntry.CONTENT_URI;
+    private static final Uri TEST_SUBSCRIPTION_DIR = RedditContract.SubscriptionEntry.CONTENT_URI;
+
     public void testUriMatcher() {
         UriMatcher testMatcher = RedditProvider.buildUriMatcher();
 
         assertEquals("Error: The POST URI was matched incorrectly.",
                 testMatcher.match(TEST_POST_DIR), RedditProvider.POST);
+
+        assertEquals("Error: The SUBSCRIPION URI was matched incorrectly.",
+                testMatcher.match(TEST_SUBSCRIPTION_DIR), RedditProvider.SUBSCRIPTION);
     }
 }

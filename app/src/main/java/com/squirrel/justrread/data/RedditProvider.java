@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
  */
 public class RedditProvider extends ContentProvider {
     public static final int POST = 100;
+    public static final int SUBSCRIPTION = 200;
     private RedditDBHelper mRedditDBHelper;
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -40,6 +41,17 @@ public class RedditProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+            case SUBSCRIPTION:
+                retCursor = mRedditDBHelper.getReadableDatabase().query(
+                        RedditDBHelper.Tables.SUBSCRIPTION,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -55,6 +67,8 @@ public class RedditProvider extends ContentProvider {
         switch (match) {
             case POST:
                 return RedditContract.PostEntry.CONTENT_TYPE;
+            case SUBSCRIPTION:
+                return RedditContract.SubscriptionEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -72,6 +86,14 @@ public class RedditProvider extends ContentProvider {
                 long _id = db.insert(RedditDBHelper.Tables.POST, null, values);
                 if ( _id > 0 )
                     returnUri = RedditContract.PostEntry.buildPostUri(String.valueOf(_id));
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case SUBSCRIPTION: {
+                long _id = db.insert(RedditDBHelper.Tables.SUBSCRIPTION, null, values);
+                if ( _id > 0 )
+                    returnUri = RedditContract.SubscriptionEntry.buildSubscriptionUri(String.valueOf(_id));
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -106,6 +128,24 @@ public class RedditProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
             }
+            case SUBSCRIPTION:
+            {
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(RedditDBHelper.Tables.SUBSCRIPTION, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            }
             default:
                 return super.bulkInsert(uri, values);
         }
@@ -119,6 +159,13 @@ public class RedditProvider extends ContentProvider {
         switch(match){
             case POST:{
                 deleted = db.delete(RedditDBHelper.Tables.POST, selection, selectionArgs);
+                if(deleted > 0){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                break;
+            }
+            case SUBSCRIPTION: {
+                deleted = db.delete(RedditDBHelper.Tables.SUBSCRIPTION, selection, selectionArgs);
                 if(deleted > 0){
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
@@ -140,7 +187,10 @@ public class RedditProvider extends ContentProvider {
         switch(match){
             case POST:{
                 updated= db.update(RedditDBHelper.Tables.POST, values, selection, selectionArgs);
-
+                break;
+            }
+            case SUBSCRIPTION: {
+                updated= db.update(RedditDBHelper.Tables.SUBSCRIPTION, values, selection, selectionArgs);
                 break;
             }
             default:
@@ -157,6 +207,7 @@ public class RedditProvider extends ContentProvider {
         final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = RedditContract.CONTENT_AUTHORITY;
         uriMatcher.addURI(authority, RedditContract.PATH_POST, POST);
+        uriMatcher.addURI(authority, RedditContract.PATH_SUBSCRIPTION, SUBSCRIPTION);
         return uriMatcher;
     }
 }
