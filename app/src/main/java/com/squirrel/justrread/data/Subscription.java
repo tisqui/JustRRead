@@ -10,6 +10,12 @@ public class Subscription implements Serializable {
     private String mSubredditDisplayName;
     private boolean mIsNsfw;
 
+    public Subscription(String subredditId, String subredditDisplayName, boolean isNsfw) {
+        mSubredditId = subredditId;
+        mSubredditDisplayName = subredditDisplayName;
+        mIsNsfw = isNsfw;
+    }
+
     public String getSubredditId() {
         return mSubredditId;
     }

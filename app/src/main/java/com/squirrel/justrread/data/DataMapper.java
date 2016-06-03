@@ -7,6 +7,7 @@ import com.squirrel.justrread.Utils;
 
 import net.dean.jraw.models.OEmbed;
 import net.dean.jraw.models.Submission;
+import net.dean.jraw.models.Subreddit;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,11 @@ public class DataMapper {
     static final int COL_MEDIA_TYPE = 17;
     static final int COL_MEDIA_LINK = 18;
     static final int COL_MEDIA_THUMB = 19;
+
+    static final int COL_SUBSCRIPTION_ID = 0;
+    static final int COL_SUBSCRIPTION_DISPLAY_NAME = 1;
+    static final int COL_SUBSCRIPTION_NSFW = 2;
+
 
 
     public static ContentValues mapSubmissionToContentValues(Submission s){
@@ -106,5 +112,21 @@ public class DataMapper {
                 cursor.getString(COL_MEDIA_LINK),
                 cursor.getString(COL_MEDIA_THUMB)
                 );
+    }
+
+    public static ContentValues mapSubredditToContentValues(Subreddit s){
+        ContentValues subValues = new ContentValues();
+        subValues.put(RedditContract.SubscriptionEntry.COLUMN_ID, s.getId());
+        subValues.put(RedditContract.SubscriptionEntry.COLUMN_DISPLAY_NAME, s.getDisplayName());
+        subValues.put(RedditContract.SubscriptionEntry.COLUMN_NSFW, s.isNsfw() ? 1 : 0);
+        return subValues;
+    }
+
+    public static Subscription mapCursorToSubscription(Cursor cursor){
+        return new Subscription(
+                cursor.getString(COL_SUBSCRIPTION_ID),
+                cursor.getString(COL_SUBSCRIPTION_DISPLAY_NAME),
+                cursor.getInt(COL_SUBSCRIPTION_NSFW)==1 ? true:false
+        );
     }
 }
