@@ -137,6 +137,25 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/drawer_empty_subscriptions_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/drawer_empty_subscriptions_list"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/drawersubscriptions_listview_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        style="@android:style/Widget.ProgressBar.Small.Inverse"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
 
     <ListView
         android:id="@+id/drawer_subreddits_listview"
@@ -149,5 +168,7 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp">
     </ListView>
+
+
 
 </LinearLayout>

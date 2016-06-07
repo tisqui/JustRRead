@@ -5,8 +5,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
@@ -18,18 +23,32 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.controllers.DrawerController;
+import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
+import com.squirrel.justrread.data.RedditContract;
+import com.squirrel.justrread.data.Subscription;
 import com.squirrel.justrread.fragments.DetailPostFragment;
 import com.squirrel.justrread.fragments.FeedFragment;
+import com.squirrel.justrread.sync.RedditSyncAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
-public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.OnFragmentInteractionListener, FeedFragment.Callback, DetailPostFragment.OnFragmentInteractionListener {
+public class FrontpageFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        FeedFragment.OnFragmentInteractionListener,
+        FeedFragment.Callback,
+        DetailPostFragment.OnFragmentInteractionListener
+{
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
     private static String[] mSubredditsList = {"/pics", "/gifs", "/videos"};
@@ -39,8 +58,12 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     private DrawerController mDrawerController;
     private LinearLayout mDrawerLinearLayout;
     private ListView mDrawerSubredditsList;
+    private ArrayAdapter<String> mDrawerSubredditsListAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
+
+    private TextView mEmptyListView;
+    private ProgressBar mLoadingListbar;
 
     private boolean mTwoPane;
     private boolean isFirstLaunch = true; //the flag to define if the app was launched for the first time
@@ -49,6 +72,10 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     public static final int FRONT_FILTER_NEW = 1;
     public static final int FRONT_FILTER_TOP = 2;
     public static final int FRONT_FILTER_CONTROVERSIAL = 3;
+
+    private static final int SUBSCRIPTIONS_LOADER = 1;
+    private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +98,15 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         mDrawerSubredditsList = (ListView) findViewById(R.id.drawer_subreddits_listview);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerSubredditsList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mSubredditsList));
+
+        mDrawerSubredditsListAdapter = new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, new ArrayList<String>(Arrays.asList(mSubredditsList)));
+        mDrawerSubredditsList.setAdapter(mDrawerSubredditsListAdapter);
         mDrawerSubredditsList.setOnItemClickListener(new DrawerItemClickListener());
+        mEmptyListView = (TextView) findViewById(R.id.drawer_empty_subscriptions_listview);
+        mLoadingListbar = (ProgressBar) findViewById(R.id.drawersubscriptions_listview_progress);
+        mEmptyListView.setVisibility(View.GONE);
+        mLoadingListbar.setVisibility(View.VISIBLE);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -100,7 +133,12 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
         mDrawerController = new DrawerController(mDrawerLayout);
         mDrawerController.initDrawerActions(this);
 
+        mCallbacks = this;
+        getSupportLoaderManager().initLoader(SUBSCRIPTIONS_LOADER, null, mCallbacks);
+
     }
+
+
 
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
@@ -202,6 +240,26 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
     @Override
     protected void onResume() {
         super.onResume();
+
+        //load the subscriptions data, if user logged in
+        if(Utils.checkUserLoggedIn()){
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    RedditAPI.getUserSubscriptions(getApplicationContext());
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                }
+            }.execute();
+        } else {
+            mEmptyListView.setVisibility(View.VISIBLE);
+            mEmptyListView.setText("No subscriptions available for the not logged in user.");
+            mLoadingListbar.setVisibility(View.GONE);
+        }
     }
 
 
@@ -300,4 +358,64 @@ public class FrontpageFeedActivity extends BaseActivity implements FeedFragment.
                 .commit();
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri subUri = RedditContract.SubscriptionEntry.CONTENT_URI;
+
+        return new CursorLoader(this,
+                subUri,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mLoadingListbar.setVisibility(View.GONE);
+        mDrawerSubredditsListAdapter.clear();
+        int size = data.getCount();
+        if (size > 0) {
+            for(int i = 0; i< size; i++){
+                data.moveToPosition(i);
+                Subscription s = DataMapper.mapCursorToSubscription(data);
+                mDrawerSubredditsListAdapter.insert(s.getSubredditId(), i);
+            }
+        } else {
+            mEmptyListView.setText("No subscriptions yet :(");
+           mEmptyListView.setVisibility(View.VISIBLE);
+            }
+        }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mDrawerSubredditsListAdapter.clear();
+    }
+
+    private void updateEmptyView() {
+        if (mDrawerSubredditsList.getCount() == 0) {
+            TextView tv = (TextView) findViewById(R.id.drawer_empty_subscriptions_listview);
+            if (null != tv) {
+                // if cursor is empty, why?
+                int message = R.string.empty_posts_list;
+                @RedditSyncAdapter.PostsStatus int location = Utils.getSubscriptionsStatus(this);
+                switch (location) {
+                    case RedditSyncAdapter.SUB_STATUS_SERVER_DOWN:
+                        message = R.string.list_posts_server_is_down;
+                        break;
+                    case RedditSyncAdapter.SUB_STATUS_SERVER_INVALID:
+                        message = R.string.list_posts_server_is_invalid;
+                        break;
+                    case RedditSyncAdapter.SUB_STATUS_INVALID:
+                        message = R.string.list_posts_posts_invalid;
+                        break;
+                    default:
+                        if (!Utils.isNetworkAvailable(this)) {
+                            message = R.string.no_network_available;
+                        }
+                }
+                tv.setText(message);
+            }
+        }
+    }
 }

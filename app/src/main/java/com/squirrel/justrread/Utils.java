@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.squirrel.justrread.activities.FrontpageFeedActivity;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
+import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.paginators.Sorting;
 
 import org.markdownj.MarkdownProcessor;
@@ -44,6 +46,13 @@ public class Utils {
     int getPostsStatus(Context c){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getInt(c.getString(R.string.pref_posts_status_key), RedditSyncAdapter.POSTS_STATUS_UNKNOWN);
+    }
+
+    @SuppressWarnings("ResourceType")
+    static public @RedditSyncAdapter.PostsStatus
+    int getSubscriptionsStatus(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getInt(c.getString(R.string.pref_subscriptions_status_key), RedditSyncAdapter.SUB_STATUS_UNKNOWN);
     }
 
     /**
@@ -101,6 +110,16 @@ public class Utils {
 
     public static String getHtmlFromMarkdown(String markdown){
         return new MarkdownProcessor().markdown(markdown);
+    }
+
+    public static boolean checkUserLoggedIn(){
+        try{
+           return AuthenticationManager.get().getRedditClient().getAuthenticatedUser() != null;
+        }
+        catch (IllegalStateException e){
+            Log.d("Check log is status", "Uset not logged in");
+            return false;
+        }
     }
 
 }

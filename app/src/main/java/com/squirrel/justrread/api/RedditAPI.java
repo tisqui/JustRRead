@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.common.collect.FluentIterable;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.RedditContract;
 
@@ -18,6 +19,7 @@ import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.models.TraversalMethod;
 import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
+import net.dean.jraw.paginators.UserSubredditsPaginator;
 
 import java.util.List;
 import java.util.Vector;
@@ -151,6 +153,30 @@ public class RedditAPI {
         }else {
             Log.d(LOG_TAG, "getSubredditAbout: Not Authentificated");
             return null;
+        }
+    }
+
+    public static void getUserSubscriptions(Context context){
+        if(checkAuthentificationReady()){
+            if(Utils.checkUserLoggedIn()){
+                UserSubredditsPaginator userSubredditsPaginator =
+                        new UserSubredditsPaginator(AuthenticationManager.get().getRedditClient(), "subscriber");
+                if(userSubredditsPaginator != null && userSubredditsPaginator.hasNext()){
+                    Listing<Subreddit> subscriptions = userSubredditsPaginator.next();
+                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(subscriptions.size());
+                    for (Subreddit s : subscriptions) {
+                        contentValuesList.add(DataMapper.mapSubredditToContentValues(s));
+                    }
+                    if (contentValuesList.size() > 0) {
+                        ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
+                        contentValuesList.toArray(cvArray);
+                        context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI, null, null);
+                        context.getContentResolver().bulkInsert(RedditContract.SubscriptionEntry.CONTENT_URI, cvArray);
+                    }
+                }
+            } else {
+                Log.d(LOG_TAG, "getUserSubscriptions: User not logged in");
+            }
         }
     }
 

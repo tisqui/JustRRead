@@ -55,11 +55,20 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
     @IntDef({POSTS_STATUS_OK, POSTS_STATUS_SERVER_DOWN, POSTS_STATUS_SERVER_INVALID,  POSTS_STATUS_UNKNOWN, POSTS_STATUS_INVALID})
     public @interface PostsStatus {}
 
+    @IntDef({SUB_STATUS_OK, SUB_STATUS_SERVER_DOWN, SUB_STATUS_SERVER_INVALID, SUB_STATUS_UNKNOWN, SUB_STATUS_INVALID})
+    public @interface SubscriptiosnStatus{}
+
     public static final int POSTS_STATUS_OK = 0;
     public static final int POSTS_STATUS_SERVER_DOWN = 1;
     public static final int POSTS_STATUS_SERVER_INVALID = 2;
     public static final int POSTS_STATUS_UNKNOWN = 3;
     public static final int POSTS_STATUS_INVALID = 4;
+
+    public static final int SUB_STATUS_OK = 5;
+    public static final int SUB_STATUS_SERVER_DOWN = 6;
+    public static final int SUB_STATUS_SERVER_INVALID = 7;
+    public static final int SUB_STATUS_UNKNOWN = 8;
+    public static final int SUB_STATUS_INVALID = 9;
 
 
     public RedditSyncAdapter(Context context, boolean autoInitialize) {
@@ -239,11 +248,17 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.content_authority), bundle);
     }
 
-    static private void setPostsStatus(Context c, @PostsStatus int locationStatus){
+    static private void setPostsStatus(Context c, @PostsStatus int postsStatus){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
-        spe.putInt(c.getString(R.string.pref_posts_status_key), locationStatus);
+        spe.putInt(c.getString(R.string.pref_posts_status_key), postsStatus);
         spe.commit();
     }
 
+    static private void setSubStatus(Context c, @SubscriptiosnStatus int subStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_subscriptions_status_key), subStatus);
+        spe.commit();
+    }
 }

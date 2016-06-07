@@ -46,7 +46,9 @@ import net.dean.jraw.paginators.SubredditPaginator;
 import java.util.ArrayList;
 
 
-public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener, SwipeRefreshLayout.OnRefreshListener {
+public class FeedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        SwipeRefreshLayout.OnRefreshListener {
     private static String LOG_TAG = FeedFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeContainer;
@@ -361,7 +363,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /*
        Updates the empty list view with contextually relevant information that the user can
-       use to determine why they aren't seeing weather.
+       use to determine why they aren't seeing data.
     */
     private void updateEmptyView() {
         if (mPostsFeedAdapter.getItemCount() == 0) {
