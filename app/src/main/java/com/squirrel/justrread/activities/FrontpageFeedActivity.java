@@ -259,6 +259,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             mEmptyListView.setVisibility(View.VISIBLE);
             mEmptyListView.setText("No subscriptions available for the not logged in user.");
             mLoadingListbar.setVisibility(View.GONE);
+            mDrawerSubredditsList.setVisibility(View.GONE);
         }
     }
 
@@ -376,6 +377,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerSubredditsListAdapter.clear();
         int size = data.getCount();
         if (size > 0) {
+            mDrawerSubredditsList.setVisibility(View.VISIBLE);
             for(int i = 0; i< size; i++){
                 data.moveToPosition(i);
                 Subscription s = DataMapper.mapCursorToSubscription(data);
@@ -384,6 +386,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         } else {
             mEmptyListView.setText("No subscriptions yet :(");
            mEmptyListView.setVisibility(View.VISIBLE);
+            mDrawerSubredditsList.setVisibility(View.GONE);
             }
         }
 

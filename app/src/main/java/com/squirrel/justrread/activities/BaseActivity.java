@@ -1,5 +1,8 @@
 package com.squirrel.justrread.activities;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +32,6 @@ public class BaseActivity extends AppCompatActivity {
     public static final String FRONTPAGE_FEED_KEY = "FRONTPAGE_FEED";
     public static final String POST_DETAIL_KEY = "POST_DETAIL";
     public static final String SUBREDDIT_ID_KEY = "SUBREDDIT_KEY";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,5 +136,24 @@ public class BaseActivity extends AppCompatActivity {
         getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
         int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
         return actionBarHeight;
+    }
+
+    public static void showLoginAlert(final Context context){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Login");
+        dialog.setMessage("You need to login to proceed. Do you want to login?");
+        dialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Navigator.navigateToLogin(context);
+            }
+        });
+
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }

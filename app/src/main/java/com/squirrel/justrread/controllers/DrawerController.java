@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.activities.Navigator;
 
 /**
@@ -43,7 +45,12 @@ public class DrawerController {
         mEditSubreddits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigator.navigateToSubredditsSettings(context);
+                if(Utils.checkUserLoggedIn()){
+                    Navigator.navigateToSubredditsSettings(context);
+                } else {
+                    BaseActivity.showLoginAlert(context);
+                }
+
             }
         });
     }
