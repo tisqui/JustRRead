@@ -34,4 +34,11 @@ public class Navigator {
         }
     }
 
+    public static void navigateToSubredditsSettings(Context context){
+        if(context!=null){
+            Intent intentToLaunch = new Intent(context, SubscriptionsActivity.class);
+            context.startActivity(intentToLaunch);
+        }
+    }
+
 }

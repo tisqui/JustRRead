@@ -18,6 +18,7 @@ public class DrawerController {
 
     //Drawer CTAs
     private Button mLogin;
+    private Button mEditSubreddits;
 
 
     public DrawerController(DrawerLayout drawerLayout) {
@@ -35,6 +36,14 @@ public class DrawerController {
             @Override
             public void onClick(View v) {
                 onLoginClick(context);
+            }
+        });
+
+        mEditSubreddits = (Button) mDrawerLayout.findViewById(R.id.drawer_edit_subreddits_button);
+        mEditSubreddits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigator.navigateToSubredditsSettings(context);
             }
         });
     }

@@ -7,7 +7,6 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
 
 
-
     <!-- Posts list -->
     <dimen name="smallTextSize">12dp</dimen>
     <dimen name="contentTextSize">14dp</dimen>
@@ -28,7 +27,6 @@
 
     <!-- Post detail -->
     <dimen name="detail_image_thumbnail_size">160dp</dimen>
-
 
 
 </resources>
