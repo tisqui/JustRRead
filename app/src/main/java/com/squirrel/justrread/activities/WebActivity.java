@@ -26,19 +26,21 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
-        activateToolbarWithHomeEnabled();
-        mWebView = (WebView) findViewById(R.id.webview_container);
-        mUrl = getIntent().getExtras().getString(EXTRA_URL, "");
-        getSupportActionBar().setSubtitle(getDomainName(mUrl));
+            setContentView(R.layout.activity_web);
+            activateToolbarWithHomeEnabled();
+            mWebView = (WebView) findViewById(R.id.webview_container);
+            mUrl = getIntent().getExtras().getString(EXTRA_URL, "");
+            getSupportActionBar().setSubtitle(getDomainName(mUrl));
 
-        mWebChromeClient = new WebChromeClient();
-        mWebView.setWebChromeClient(mWebChromeClient);
-        mWebView.setWebViewClient(new WebViewClient());
-        mWebView.getSettings().setBuiltInZoomControls(true);
-        mWebView.getSettings().setDisplayZoomControls(false);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl(mUrl);
+            mWebChromeClient = new WebChromeClient();
+            mWebView.setWebChromeClient(mWebChromeClient);
+            mWebView.setWebViewClient(new WebViewClient());
+            mWebView.getSettings().setBuiltInZoomControls(true);
+            mWebView.getSettings().setDisplayZoomControls(false);
+            mWebView.getSettings().setJavaScriptEnabled(true);
+        if (savedInstanceState == null) {
+            mWebView.loadUrl(mUrl);
+        }
     }
 
     @Override
@@ -78,5 +80,17 @@ public class WebActivity extends BaseActivity {
             e.printStackTrace();
         }
         return url;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        mWebView.saveState(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mWebView.restoreState(savedInstanceState);
     }
 }
