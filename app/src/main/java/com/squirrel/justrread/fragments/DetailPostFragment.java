@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.BaseActivity;
+import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.adapters.CommentsRecyclerViewAdapter;
 import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.data.Post;
@@ -162,6 +163,18 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             mCommentsRecyclerViewAdapter = new CommentsRecyclerViewAdapter(new ArrayList<CommentNode>(), mEmptyCommentsView);
             mCommentsRecyclerView.setAdapter(mCommentsRecyclerViewAdapter);
 
+            //set the source and on click go to web view
+            if(mPost.getUrl()!= null && !mPost.getUrl().isEmpty()){
+                mDetailSource.setText(mPost.getDomain());
+                mDetailSource.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Navigator.navigateToWebview(getContext(), mPost.getUrl());
+                    }
+                });
+            } else {
+                mDetailSource.setVisibility(View.GONE);
+            }
         }
         else{
             Toast.makeText(getContext(), "Post information was not properly passed to the fragment", Toast.LENGTH_SHORT).show();

@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 
@@ -25,7 +26,7 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
 
         if(vholder instanceof FeedItemViewHolder){
             FeedItemViewHolder holder = (FeedItemViewHolder) vholder;
-            Post postItem = DataMapper.mapCursorToPost(mCursor);
+            final Post postItem = DataMapper.mapCursorToPost(mCursor);
             holder.itemView.setSelected(mSelectedPosition == position);
 
             //set all the data to the UI elements
@@ -46,7 +47,19 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
             holder.sourceTextView.setText(postItem.getDomain());
             holder.postDateTextView.setText(String.valueOf(postItem.getCreated()));
             holder.commentsBtn.setText(postItem.getNumComments()+"");
-            holder.numberOfVotesTextView.setText(postItem.getUpVotes()+ "");
+            holder.numberOfVotesTextView.setText(postItem.getUpVotes() + "");
+
+            holder.thumbnailImageView.setClickable(true);
+            //if there is a link for the post - make the image clickable
+            if(postItem.getUrl() != null && !postItem.getUrl().isEmpty()){
+                holder.thumbnailImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Navigator.navigateToWebview(mContext, postItem.getUrl());
+
+                    }
+                });
+            }
         }
     }
 }

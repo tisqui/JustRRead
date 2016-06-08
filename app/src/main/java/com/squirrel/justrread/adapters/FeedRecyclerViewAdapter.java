@@ -96,6 +96,7 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 //        holder.numberOfVotesTextView.setText(postItem.getUpVotes()+ "");
 
             //TODO add callbacks for all the buttons
+
         }
     }
 
