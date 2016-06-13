@@ -53,7 +53,8 @@
     <string name="subreddit_about_no_connection">No Internet connection. Try later.</string>
     <string name="subreddit_about_no_data">No data available.</string>
     <string name="search_hint_text">Enter subreddit name</string>
-    <string name="drawer_empty_subscriptions_list">No subscriptions available for logged off user.</string>
+    <string name="drawer_empty_subscriptions_list">No subscriptions yet :(</string>
+    <string name="drawer_empty_subscriptions_list_for_logged_off">No subscriptions available for logged off user.</string>
     <string name="subsctions_empty_text">No subscriptions available.</string>
 
     <!-- Date Util -->

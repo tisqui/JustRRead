@@ -7,6 +7,7 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
@@ -61,6 +62,28 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
                     }
                 });
             }
+
+            holder.upBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Utils.checkUserLoggedIn()){
+                        //TODO upvote and update num of votes
+                    }else{
+                        BaseActivity.showLoginAlert(mContext);
+                    }
+                }
+            });
+
+            holder.downBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Utils.checkUserLoggedIn()){
+                        //TODO downvote and update num of votes
+                    }else{
+                        BaseActivity.showLoginAlert(mContext);
+                    }
+                }
+            });
         }
     }
 }

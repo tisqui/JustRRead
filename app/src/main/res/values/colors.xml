@@ -9,7 +9,8 @@
     <color name="popupBackground">#FFFFFF</color>
     <color name="mainBackground">#FFFFFF</color>
     <color name="mainDividerColor">#EEEEEE</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#EEEEEE</color>
 
     <!-- Posts list item -->
     <color name="buttonsTextColor">#039BE5</color>

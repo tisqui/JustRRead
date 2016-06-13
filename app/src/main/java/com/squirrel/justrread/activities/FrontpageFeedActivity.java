@@ -47,8 +47,7 @@ import java.util.Arrays;
 public class FrontpageFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         FeedFragment.OnFragmentInteractionListener,
         FeedFragment.Callback,
-        DetailPostFragment.OnFragmentInteractionListener
-{
+        DetailPostFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
     private static String[] mSubredditsList = {"/pics", "/gifs", "/videos"};
@@ -132,12 +131,13 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         //set all the Drawer actions
         mDrawerController = new DrawerController(mDrawerLayout);
         mDrawerController.initDrawerActions(this);
+        mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.feed_fragment)));
 
         mCallbacks = this;
         getSupportLoaderManager().initLoader(SUBSCRIPTIONS_LOADER, null, mCallbacks);
 
     }
-
 
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -215,10 +215,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_CONTROVERSIAL);
             return true;
         }
-        if(id == R.id.action_subreddit_about){
+        if (id == R.id.action_subreddit_about) {
             FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.feed_fragment));
-            if(feedFragment.isSubreddit()){
+            if (feedFragment.isSubreddit()) {
                 Intent intent = new Intent(this, AboutSubredditActivity.class);
                 intent.putExtra(BaseActivity.SUBREDDIT_ID_KEY, feedFragment.getSubredditId());
                 startActivity(intent);
@@ -242,7 +242,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         super.onResume();
 
         //load the subscriptions data, if user logged in
-        if(Utils.checkUserLoggedIn()){
+        if (Utils.checkUserLoggedIn()) {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -284,7 +284,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         // Call the method to refresh the feed for subreddit now
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment));
-        if(feedFragment != null){
+        if (feedFragment != null) {
             feedFragment.refreshNewSubreddit(convertPositionToId(position));
         }
         // Highlight the selected item, update the title, and close the drawer
@@ -295,15 +295,16 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
-    private String convertPositionToId(int pos){
-        switch(pos){
+    private String convertPositionToId(int pos) {
+        switch (pos) {
             case 0:
                 return "pics";
             case 1:
                 return "gifs";
             case 2:
                 return "videos";
-            default: return "t5_2qh1e";
+            default:
+                return "t5_2qh1e";
         }
     }
 
@@ -315,6 +316,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
     /**
      * When the new post is clicked in the feed list - update the detailed fragment for the tablet view.
+     *
      * @param post - the post object passed to the detailed view
      */
     @Override
@@ -343,6 +345,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
     /**
      * Set up the post which will be passed to tge detailed fragment
+     *
      * @param post
      */
     private void setDetailsFragmentForTablet(Post post) {
@@ -376,19 +379,25 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mLoadingListbar.setVisibility(View.GONE);
         mDrawerSubredditsListAdapter.clear();
         int size = data.getCount();
-        if (size > 0) {
-            mDrawerSubredditsList.setVisibility(View.VISIBLE);
-            for(int i = 0; i< size; i++){
-                data.moveToPosition(i);
-                Subscription s = DataMapper.mapCursorToSubscription(data);
-                mDrawerSubredditsListAdapter.insert(s.getSubredditId(), i);
+        if (Utils.checkUserLoggedIn()) {
+            if (size > 1) {
+                mDrawerSubredditsList.setVisibility(View.VISIBLE);
+                for (int i = 0; i < size; i++) {
+                    data.moveToPosition(i);
+                    Subscription s = DataMapper.mapCursorToSubscription(data);
+                    mDrawerSubredditsListAdapter.insert(s.getSubredditId(), i);
+                }
+            } else {
+                mEmptyListView.setText(R.string.drawer_empty_subscriptions_list);
+                mEmptyListView.setVisibility(View.VISIBLE);
+                mDrawerSubredditsList.setVisibility(View.GONE);
             }
         } else {
-            mEmptyListView.setText("No subscriptions yet :(");
-           mEmptyListView.setVisibility(View.VISIBLE);
+            mEmptyListView.setText(R.string.drawer_empty_subscriptions_list_for_logged_off);
+            mEmptyListView.setVisibility(View.VISIBLE);
             mDrawerSubredditsList.setVisibility(View.GONE);
-            }
         }
+    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {

@@ -4,8 +4,8 @@
     android:layout_width="@dimen/drawer_width"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:orientation="vertical"
-    android:background="@color/drawerBackground">
+    android:background="@color/drawerBackground"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/drawer_header"
@@ -24,25 +24,28 @@
         android:id="@+id/drawer_all_item"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginLeft="@dimen/drawer_item_margin_left"
-        android:layout_marginRight="@dimen/drawer_item_margin_right">
+        android:background="@drawable/item_drawer_selector"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/drawer_item_margin_left"
             android:gravity="center_vertical"
-            android:src="@drawable/ic_reddit"/>
+            android:src="@drawable/ic_reddit_grey600_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
+            android:layout_marginRight="@dimen/drawer_item_margin_right"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/drawer_all_item"
             android:textColor="@drawable/text_drawer_color_selector"
-            android:fontFamily="sans-serif-medium"
             android:textSize="@dimen/drawer_list_item_text_size"/>
     </RelativeLayout>
 
@@ -50,14 +53,17 @@
         android:id="@+id/drawer_frontpage_item"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginLeft="@dimen/drawer_item_margin_left">
+        android:background="@drawable/item_drawer_selector"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_poll"/>
+            android:layout_marginLeft="@dimen/drawer_item_margin_left"
+            android:src="@drawable/ic_poll_grey600_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,14 +81,17 @@
         android:id="@+id/drawer_random_item"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginLeft="@dimen/drawer_item_margin_left">
+        android:background="@drawable/item_drawer_selector"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_dice_5"/>
+            android:layout_marginLeft="@dimen/drawer_item_margin_left"
+            android:src="@drawable/ic_puzzle_grey600_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -115,8 +124,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:gravity="center_vertical"
             android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
             android:text="@string/drawer_subreddits_title"
             android:textColor="@color/drawerTextColorHighlight"
             android:textSize="@dimen/drawer_title_text_size"
@@ -124,16 +133,12 @@
 
         <Button
             android:id="@+id/drawer_edit_subreddits_button"
-            style="@style/DrawerButtons"
-            android:background="@drawable/button_drawer_selector"
-            android:textColor="@drawable/button_drawer_text_color_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/drawer_item_margin_left"
-            android:layout_marginRight="@dimen/drawer_item_margin_right"
-            android:drawableRight="@drawable/ic_pencil"/>
+            android:text="Edit"/>
 
     </RelativeLayout>
 
@@ -142,18 +147,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="@string/drawer_empty_subscriptions_list"
         android:gravity="center_horizontal"
+        android:text="@string/drawer_empty_subscriptions_list"
         android:visibility="gone"
         />
 
     <ProgressBar
         android:id="@+id/drawersubscriptions_listview_progress"
+        style="@android:style/Widget.ProgressBar.Small.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        style="@android:style/Widget.ProgressBar.Small.Inverse"
         android:layout_gravity="center"
+        android:layout_margin="16dp"
         android:visibility="gone"
         />
 
@@ -168,7 +173,6 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp">
     </ListView>
-
 
 
 </LinearLayout>
