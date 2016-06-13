@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/ic_arrow_right_bold_circle_grey600_18dp"/>
+            android:src="@drawable/ic_comment_grey600_18dp"/>
 
         <TextView
             android:id="@+id/comment_rating"

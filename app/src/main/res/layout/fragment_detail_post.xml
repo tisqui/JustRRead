@@ -161,12 +161,12 @@
                 <Button
                     android:id="@+id/detail_up_btn"
                     style="@style/ListItemButtons"
-                    android:drawableStart="@drawable/ic_arrow_right_bold_circle_grey600_18dp"/>
+                    android:drawableStart="@drawable/up_vote_selector"/>
 
                 <Button
                     android:id="@+id/detail_down_btn"
                     style="@style/ListItemButtons"
-                    android:drawableStart="@drawable/ic_arrow_right_bold_circle_grey600_18dp"/>
+                    android:drawableStart="@drawable/down_vote_selector"/>
 
             </LinearLayout>
 

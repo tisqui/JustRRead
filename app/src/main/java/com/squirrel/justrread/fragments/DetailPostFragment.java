@@ -133,7 +133,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
 
             //set all the UI elements
             if(mPost.getSubreddit() != null){
-                mDetailSubreddit.setText(mPost.getSubreddit());
+                mDetailSubreddit.setText("/" + mPost.getSubreddit());
             }
             mDetailAuthor.setText(mPost.getAuthor());
             mDetailTitle.setText(mPost.getTitle());
@@ -150,7 +150,11 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                         .into(mDetailThumb);
             }
 
-            mDetailText.setText(Html.fromHtml(Utils.getHtmlFromMarkdown(mPost.getSelfTextHtml())));
+            if(mPost.getSelfTextHtml() == null || mPost.getSelfTextHtml().isEmpty()){
+                mDetailText.setVisibility(View.GONE);
+            } else{
+                mDetailText.setText(Html.fromHtml(Utils.getHtmlFromMarkdown(mPost.getSelfTextHtml())));
+            }
             if(mPost.getNumComments() == 0){
                 mDetailNumComments.setText("No comments");
             } else{
@@ -207,6 +211,28 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                     });
 
                     popup.show(); //showing popup menu
+                }
+            });
+
+            mUpBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Utils.checkUserLoggedIn()){
+                        //TODO upvote
+                    }else{
+                        BaseActivity.showLoginAlert(getContext());
+                    }
+                }
+            });
+
+            mDownBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Utils.checkUserLoggedIn()){
+                        //TODO downvote
+                    }else{
+                        BaseActivity.showLoginAlert(getContext());
+                    }
                 }
             });
         }
