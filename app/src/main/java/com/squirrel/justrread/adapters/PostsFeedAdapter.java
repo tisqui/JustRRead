@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
@@ -45,7 +46,7 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
 
             holder.titleTextView.setText(postItem.getTitle());
             holder.sourceTextView.setText(postItem.getDomain());
-            holder.postDateTextView.setText(String.valueOf(postItem.getCreated()));
+            holder.postDateTextView.setText(Utils.getPostedTimeAgo(postItem.getCreated(), mContext));
             holder.commentsBtn.setText(postItem.getNumComments()+"");
             holder.numberOfVotesTextView.setText(postItem.getUpVotes() + "");
 

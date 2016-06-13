@@ -137,6 +137,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             }
             mDetailAuthor.setText(mPost.getAuthor());
             mDetailTitle.setText(mPost.getTitle());
+            mDetailTime.setText(Utils.getPostedTimeAgo(mPost.getCreated(), getContext()));
 
             if(mPost.getThumbnail() == null){
                 mDetailThumb.setVisibility(View.GONE);
