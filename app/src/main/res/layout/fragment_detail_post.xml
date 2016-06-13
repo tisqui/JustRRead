@@ -68,14 +68,12 @@
                 android:layout_below="@+id/detail_title"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/detail_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
                     android:text="22 days ago"
                     android:textColor="@color/postsListdateTextColor"
                     android:textSize="@dimen/smallTextSize"/>
@@ -148,7 +146,8 @@
                 android:layout_below="@+id/detail_text"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:gravity="end">
+                android:gravity="end"
+                android:id="@+id/linearLayout">
 
                 <TextView
                     android:id="@+id/detail_votes_num"
@@ -177,6 +176,17 @@
                 android:layout_height="match_parent"
                 android:text="No data loaded"
                 android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/detail_share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_share_variant_grey600_24dp"
+                android:layout_below="@+id/detail_fragment_empty"
+                android:layout_alignParentEnd="true"
+                android:clickable="true"/>
 
         </RelativeLayout>
 

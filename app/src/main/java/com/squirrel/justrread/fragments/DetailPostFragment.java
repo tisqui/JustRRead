@@ -12,10 +12,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -89,6 +91,9 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
 
     @Bind(R.id.comments_loading_progress)
     ProgressBar mCommentsProgressbar;
+
+    @Bind(R.id.detail_share_button)
+    ImageView mShareButton;
 
     private RecyclerView mCommentsRecyclerView;
     private LinearLayoutManager mCommentsLinearLayoutManager;
@@ -175,6 +180,34 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             } else {
                 mDetailSource.setVisibility(View.GONE);
             }
+
+            mShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Creating the instance of PopupMenu
+                    PopupMenu popup = new PopupMenu(getContext(), mShareButton);
+                    popup.getMenuInflater()
+                            .inflate(R.menu.menu_share, popup.getMenu());
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int id = item.getItemId();
+                            if (id == R.id.action_share_facebook) {
+                                Navigator.sharePostUrlFacebook(mPost.getUrl(), getContext());
+                            }
+                            if (id == R.id.action_share_twitter) {
+                                Navigator.sharePostTwitter(mPost.getTitle() + " " + mPost.getUrl(), getContext());
+                            }
+                            if( id == R.id.action_share_other){
+                                Navigator.shareWebUrl(getContext(), mPost.getUrl());
+                            }
+                            return true;
+                        }
+                    });
+
+                    popup.show(); //showing popup menu
+                }
+            });
         }
         else{
             Toast.makeText(getContext(), "Post information was not properly passed to the fragment", Toast.LENGTH_SHORT).show();
@@ -271,6 +304,6 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
     }
+
 }

@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.squirrel.justrread.R;
 
@@ -53,12 +54,15 @@ public class WebActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.refresh:
                 mWebView.reload();
                 return true;
             case R.id.share:
-                //TODO share intent
+                if(mUrl != null && !mUrl.isEmpty()){
+                    Navigator.shareWebUrl(this, mUrl);
+                } else {
+                    Toast.makeText(this, "No url to share", Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return false;
