@@ -32,7 +32,6 @@ public class DrawerController {
     private RelativeLayout mDrawerRandomItem;
 
 
-
     public DrawerController(DrawerLayout drawerLayout, Context context) {
         mDrawerLayout = drawerLayout;
         mContext = context;

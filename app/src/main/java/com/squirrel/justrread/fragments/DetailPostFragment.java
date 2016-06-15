@@ -54,7 +54,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
     TextView mEmptyView;
 
     @Bind(R.id.detail_comments_list_emply_message)
-    View mEmptyCommentsView;
+    TextView mEmptyCommentsView;
 
     @Bind(R.id.detail_subreddit)
     TextView mDetailSubreddit;
@@ -257,7 +257,13 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
     public void onResume() {
         super.onResume();
         //load comments
-        getComments();
+        if(Utils.isNetworkAvailable(getContext())){
+            getComments();
+        }
+        else{
+            mCommentsRecyclerView.setVisibility(View.GONE);
+            mEmptyCommentsView.setText(R.string.no_connection_detailed_comments_message);
+        }
     }
 
     private void getComments(){

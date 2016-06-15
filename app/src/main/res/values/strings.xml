@@ -82,5 +82,6 @@
     <string name="prefs_night_mode_summary">Switch on the night mode for UI</string>
     <string name="prefs_nsfw_key">pref_nsfw</string>
     <string name="prefs_nightmode_key">pref_night_mode</string>
+    <string name="no_connection_detailed_comments_message">No Internet connection. Please try later.</string>
 
 </resources>
