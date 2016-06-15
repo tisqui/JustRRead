@@ -101,4 +101,11 @@ public class Navigator {
         sharingIntent.putExtra(Intent.EXTRA_TEXT, url);
         context.startActivity(Intent.createChooser(sharingIntent, "Share post link via:"));
     }
+
+    public static void navigateToSettings(Context context){
+        if(context!= null){
+            Intent intentToLaunch = new Intent(context, SettingsActivity.class);
+            context.startActivity(intentToLaunch);
+        }
+    }
 }

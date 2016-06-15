@@ -78,5 +78,9 @@
     <string name="date_util_prefix_over">over</string>
     <string name="date_util_prefix_almost">almost</string>
     <string name="date_util_suffix">ago</string>
+    <string name="prefs_night_mode_title">Night mode</string>
+    <string name="prefs_night_mode_summary">Switch on the night mode for UI</string>
+    <string name="prefs_nsfw_key">pref_nsfw</string>
+    <string name="prefs_nightmode_key">pref_night_mode</string>
 
 </resources>

@@ -76,7 +76,15 @@
             android:parentActivityName=".activities.FrontpageFeedActivity"
             android:theme="@style/AppTheme">
         </activity>
-
+        <activity android:name=".activities.SettingsActivity"
+                  android:label="Settings"
+                  android:parentActivityName=".activities.FrontpageFeedActivity"
+                  android:theme="@style/SettingsTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.FrontpageFeedActivity">
+            </meta-data>
+        </activity>
         <provider
             android:name=".data.RedditProvider"
             android:authorities="@string/content_authority"

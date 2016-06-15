@@ -162,4 +162,10 @@ public class Authentification {
         }.execute();
 
     }
+
+    public static void logout() {
+        //need to revoke access token first
+        AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
+        AuthenticationManager.get().getRedditClient().deauthenticate(); //do I need to deauthentificate manually here?
+    }
 }

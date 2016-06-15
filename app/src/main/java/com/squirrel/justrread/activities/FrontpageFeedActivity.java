@@ -129,8 +129,8 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
         //set all the Drawer actions
-        mDrawerController = new DrawerController(mDrawerLayout);
-        mDrawerController.initDrawerActions(this);
+        mDrawerController = new DrawerController(mDrawerLayout, this);
+        mDrawerController.initDrawerActions();
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment)));
 
