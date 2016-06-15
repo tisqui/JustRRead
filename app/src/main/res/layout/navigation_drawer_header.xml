@@ -7,10 +7,10 @@
               android:orientation="vertical">
 
     <TextView
+        android:id="@+id/drawer_hello_user_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="Hello, USERNAME!"
         android:background="@color/white"
         android:textColor="@color/drawerTextColor"
         android:textSize="@dimen/drawer_title_text_size"/>
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:text="Settings"
+            android:text="@string/drawer_setting_button"
             android:theme="@style/AppTheme.Button"
             />
 
@@ -37,7 +37,7 @@
             android:id="@+id/drawer_btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/drawer_login_button"
             style="@style/Widget.AppCompat.Button.Colored"
             />
     </LinearLayout>

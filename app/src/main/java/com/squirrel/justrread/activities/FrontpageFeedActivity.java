@@ -131,6 +131,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         //set all the Drawer actions
         mDrawerController = new DrawerController(mDrawerLayout, this);
         mDrawerController.initDrawerActions();
+        mDrawerController.setUserName();
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment)));
 

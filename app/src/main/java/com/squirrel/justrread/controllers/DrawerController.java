@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
@@ -14,6 +15,8 @@ import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.fragments.FeedFragment;
+
+import net.dean.jraw.auth.AuthenticationManager;
 
 /**
  * Created by squirrel on 5/22/16.
@@ -30,6 +33,7 @@ public class DrawerController {
     private RelativeLayout mDrawerAllItem;
     private RelativeLayout mDrawerFrontpageItem;
     private RelativeLayout mDrawerRandomItem;
+    private TextView mHelloUserText;
 
 
     public DrawerController(DrawerLayout drawerLayout, Context context) {
@@ -94,7 +98,6 @@ public class DrawerController {
                 } else {
                     BaseActivity.showLoginAlert(mContext);
                 }
-
             }
         });
 
@@ -128,6 +131,16 @@ public class DrawerController {
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                 }
             });
+        }
+    }
+
+    public void setUserName(){
+        mHelloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
+        if(Utils.checkUserLoggedIn()){
+            String username = AuthenticationManager.get().getRedditClient().me().getFullName();
+            mHelloUserText.setText("Hello," + username);
+        }else{
+            mHelloUserText.setText(R.string.hello_sername_default_text);
         }
     }
 
