@@ -13,9 +13,9 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
         <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
-
         <item name="textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
         <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
     </style>
 
     <style name="Theme.JustRReadApp" parent="AppTheme"/>
@@ -58,9 +58,10 @@
         <item name="android:padding">0dp</item>
     </style>
 
-    <style name="DrawerButtons" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/drawerButtonTextColor</item>
-        <item name="android:background">@android:color/transparent</item>
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:colorPressedHighlight">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="myPopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
@@ -71,5 +72,10 @@
         <item name="android:textColor">@color/primaryTextColorPopup</item>
     </style>
 
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/primaryTextColorPopup</item>
+        <item name="android:background">@color/popupBackground</item>
+    </style>
 
 </resources>

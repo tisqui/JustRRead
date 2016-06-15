@@ -138,6 +138,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/drawer_item_margin_left"
+            android:theme="@style/AppTheme.Button"
             android:text="Edit"/>
 
     </RelativeLayout>

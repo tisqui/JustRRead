@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Hello, USERNAME!"
         android:background="@color/white"
         android:textColor="@color/drawerTextColor"
@@ -27,23 +26,19 @@
 
         <Button
             android:id="@+id/drawer_btn_settings"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:text="Settings"
-            android:background="@drawable/button_drawer_selector"
-            android:textColor="@drawable/button_drawer_text_color_selector"
+            android:theme="@style/AppTheme.Button"
             />
 
         <Button
             android:id="@+id/drawer_btn_login"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:background="@drawable/button_drawer_selector"
-            android:textColor="@drawable/button_drawer_text_color_selector"
+            style="@style/Widget.AppCompat.Button.Colored"
             />
     </LinearLayout>
 
