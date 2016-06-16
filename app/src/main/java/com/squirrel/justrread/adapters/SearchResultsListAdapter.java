@@ -1,13 +1,19 @@
 package com.squirrel.justrread.adapters;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
+import com.squirrel.justrread.activities.BaseActivity;
+import com.squirrel.justrread.api.RedditAPI;
 
 import java.util.List;
 
@@ -17,6 +23,7 @@ import java.util.List;
 public class SearchResultsListAdapter extends ArrayAdapter<String> {
 
     private List<String> mSubredditsList;
+    private Button mSubredditSubscribe;
 
     public SearchResultsListAdapter(Context context, List<String> sub) {
         super(context, 0, sub);
@@ -34,10 +41,86 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
         // Lookup view for data population
         TextView subredditName = (TextView) convertView.findViewById(R.id.search_res_subreddit_title);
         // Populate the data into the template view using the data object
-        subredditName.setText(sub);
+        subredditName.setText("/" + sub);
         // Return the completed view to render on screen
 
+        mSubredditSubscribe = (Button) convertView.findViewById(R.id.search_res_subscribe);
+
+        //check the subscription
+        if(RedditAPI.checkIfSubscribed(sub, getContext())){
+            //user is subscribed to this subreddit
+            setUnsubscribeButton(sub);
+        } else {
+            //not subscribed
+            setSubscribeButton(sub);
+        }
         return convertView;
+    }
+
+    private void setSubscribeButton(final String subredditId){
+        mSubredditSubscribe.setText("Subscribe");
+        mSubredditSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.checkUserLoggedIn()) {
+                    Toast.makeText(getContext(), "Subscribing", Toast.LENGTH_SHORT).show();
+                    new AsyncTask<Void, Void, Boolean>() {
+                        @Override
+                        protected Boolean doInBackground(Void... params) {
+                            return RedditAPI.subscribeSubreddit(subredditId, getContext());
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean res) {
+                            super.onPostExecute(res);
+                            if(res){
+                                setUnsubscribeButton(subredditId);
+                                Toast.makeText(getContext(), "You subscribed to /" + subredditId,
+                                        Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getContext(), "Subscription error: " + subredditId,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }.execute();
+                } else {
+                    BaseActivity.showLoginAlert(getContext());
+                }
+            }
+        });
+    }
+
+    private void setUnsubscribeButton(final String subredditId){
+        mSubredditSubscribe.setText("Unsubscribe");
+        mSubredditSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.checkUserLoggedIn()) {
+                    Toast.makeText(getContext(), "Unsubscribing", Toast.LENGTH_SHORT).show();
+                    new AsyncTask<Void, Void, Boolean>() {
+                        @Override
+                        protected Boolean doInBackground(Void... params) {
+                            return RedditAPI.unsubscribeSubreddit(subredditId, getContext());
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean res) {
+                            super.onPostExecute(res);
+                            if(res){
+                                setSubscribeButton(subredditId);
+                                Toast.makeText(getContext(), "You unsubscribed from /" + subredditId,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Unsubscription error: " + subredditId,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }.execute();
+                } else {
+                    BaseActivity.showLoginAlert(getContext());
+                }
+            }
+        });
     }
 
     public String getSubredditByPosition(int position){

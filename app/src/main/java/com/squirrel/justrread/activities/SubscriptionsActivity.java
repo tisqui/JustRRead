@@ -96,6 +96,5 @@ public class SubscriptionsActivity extends BaseActivity {
         list.add(s3);list.add(s4);
         return list;
 
-
     }
 }

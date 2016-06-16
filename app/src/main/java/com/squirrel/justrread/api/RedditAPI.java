@@ -2,6 +2,7 @@ package com.squirrel.justrread.api;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -177,6 +178,44 @@ public class RedditAPI {
             } else {
                 Log.d(LOG_TAG, "getUserSubscriptions: User not logged in");
             }
+        }
+    }
+
+    public static boolean subscribeSubreddit(String subredditId, Context context){
+        Subreddit subredditToSubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
+        if(subredditToSubscribe != null){
+            //save the subreddit locally
+            context.getContentResolver().insert(RedditContract.SubscriptionEntry.CONTENT_URI,
+                    DataMapper.mapSubredditToContentValues(subredditToSubscribe));
+            //TODO call sync adapter to sync the subscriptions
+            return true;
+        }else {
+            Log.d(LOG_TAG, "Can't find subreddit to Subscribe");
+            return false;
+        }
+    }
+
+    public static boolean unsubscribeSubreddit(String subredditId, Context context){
+        //delete the subscription from local
+        int deleted = context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI,
+                RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId +"'", null);
+        if(deleted > 0){
+            Log.d(LOG_TAG, "Unsubscribed succesfully");
+            //TODO call sync adapter to sync the subscriptions
+            return true;
+        } else {
+            Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
+            return false;
+        }
+    }
+
+    public static boolean checkIfSubscribed(String subredditId, Context context){
+        Cursor cursor = context.getContentResolver().query(RedditContract.SubscriptionEntry.CONTENT_URI, null,
+                RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId +"'", null, null );
+        if((cursor != null) && (cursor.getCount() > 0)){
+            return true;
+        } else {
+            return false;
         }
     }
 

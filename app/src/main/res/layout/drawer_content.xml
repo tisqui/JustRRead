@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@color/drawerBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/drawer_header"

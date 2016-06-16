@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:layout_below="@+id/application_toolbar"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/search_progress_bar"
+        style="@android:style/Widget.ProgressBar.Small.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.ProgressBar.Small.Inverse"
-        android:layout_marginTop="32dp"
         android:layout_gravity="center"
+        android:layout_marginTop="32dp"
         android:visibility="gone"
         />
 
@@ -18,9 +20,9 @@
         android:id="@+id/search_empty_results"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:text="No subreddits found :("
         android:textColor="@color/colorPrimary"
-        android:gravity="center"
         android:textSize="@dimen/titleTextSize"
         android:visibility="gone"/>
 
