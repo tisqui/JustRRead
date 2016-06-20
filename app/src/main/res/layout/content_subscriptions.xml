@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_below="@+id/application_toolbar"
                 tools:context=".activities.SubscriptionsActivity"
                 tools:showIn="@layout/activity_subscriptions">
 
@@ -15,11 +16,20 @@
         android:text="@string/subsctions_empty_text"
         android:visibility="gone"/>
 
+    <ProgressBar
+        android:id="@+id/subscriptions_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        style="@android:style/Widget.ProgressBar.Small.Inverse"
+        android:visibility="gone"
+        android:layout_gravity="center"
+/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/subscriptions_recycler_view"
-        android:layout_below="@+id/application_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
     </android.support.v7.widget.RecyclerView>
 
-</RelativeLayout>
+</LinearLayout>

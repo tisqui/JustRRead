@@ -149,7 +149,7 @@ public class DrawerController {
                 @Override
                 protected void onPostExecute(String name) {
                     super.onPostExecute(name);
-                    mHelloUserText.setText("Hello," + name);
+                    mHelloUserText.setText("Hello, " + name + " !");
                 }
             }.execute();
         }else{

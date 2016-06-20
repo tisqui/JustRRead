@@ -1,7 +1,12 @@
 package com.squirrel.justrread.activities;
 
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -11,6 +16,8 @@ import android.widget.TextView;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.SubscriptionsRecyclerViewAdapter;
 import com.squirrel.justrread.adapters.SubscriptionsTouchHelper;
+import com.squirrel.justrread.data.DataMapper;
+import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.data.Subscription;
 
 import java.util.ArrayList;
@@ -19,13 +26,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SubscriptionsActivity extends BaseActivity {
+public class SubscriptionsActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static String LOG_TAG = SubscriptionsActivity.class.getSimpleName();
     private RecyclerView mSubscriptionsRecyclerView;
     private SubscriptionsRecyclerViewAdapter mSubscriptionsRecyclerViewAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
+    private static final int SUBSCRIPTIONS_LOADER = 1;
 
     @Bind(R.id.subscriptions_empty_text)
     TextView mEmptyText;
@@ -43,12 +51,14 @@ public class SubscriptionsActivity extends BaseActivity {
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mSubscriptionsRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mSubscriptionsRecyclerViewAdapter = new SubscriptionsRecyclerViewAdapter(mEmptyText, getDummyData());
+        mSubscriptionsRecyclerViewAdapter = new SubscriptionsRecyclerViewAdapter(mEmptyText, new ArrayList<Subscription>());
         mSubscriptionsRecyclerView.setAdapter(mSubscriptionsRecyclerViewAdapter);
 
         ItemTouchHelper.Callback callback = new SubscriptionsTouchHelper(mSubscriptionsRecyclerViewAdapter);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(mSubscriptionsRecyclerView);
+
+        getSupportLoaderManager().initLoader(SUBSCRIPTIONS_LOADER, null, this);
 
     }
 
@@ -84,17 +94,29 @@ public class SubscriptionsActivity extends BaseActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private List<Subscription> getDummyData() {
-        List<Subscription> list = new ArrayList<Subscription>();
-        Subscription s1 = new Subscription("gifs", "/gifs", true);
-        Subscription s2 = new Subscription("wtf", "/WTF", true);
-        Subscription s3 = new Subscription("awww", "/awww", true);
-        Subscription s4 = new Subscription("videos", "/videos", true);
-        list.add(s1);
-        list.add(s1);
-        list.add(s2);
-        list.add(s3);list.add(s4);
-        return list;
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri subUri = RedditContract.SubscriptionEntry.CONTENT_URI;
 
+        return new CursorLoader(this,
+                subUri,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        List<Subscription> savedSubscriptions = new ArrayList<Subscription>();
+        while(data.moveToNext()){
+            savedSubscriptions.add(DataMapper.mapCursorToSubscription(data));
+        }
+        mSubscriptionsRecyclerViewAdapter.swapSubscriptionsList(savedSubscriptions);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mSubscriptionsRecyclerViewAdapter.swapSubscriptionsList(null);
     }
 }
