@@ -118,7 +118,7 @@ public class Utils {
            return AuthenticationManager.get().getRedditClient().getAuthenticatedUser() != null;
         }
         catch (IllegalStateException e){
-            Log.d("Check log is status", "Uset not logged in");
+            Log.d("Check log is status", "IllegalStateException " + e);
             return false;
         }
     }

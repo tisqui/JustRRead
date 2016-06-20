@@ -1,5 +1,7 @@
 package com.squirrel.justrread.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +48,7 @@ public class LoginActivity extends BaseActivity {
         final OAuthHelper helper = AuthenticationManager.get().getRedditClient().getOAuthHelper();
 
         // OAuth2 scopes to request. See https://www.reddit.com/dev/api/oauth for a full list
-        String[] scopes = {"identity", "read"};
+        String[] scopes = {"identity", "read", "mysubreddits", "subscribe", "vote"};
 
         final URL authorizationUrl = helper.getAuthorizationUrl(CREDENTIALS, true, true, scopes);
 //        final WebView webView = ((WebView) findViewById(R.id.login_webview));
@@ -73,6 +75,7 @@ public class LoginActivity extends BaseActivity {
                 try {
                     OAuthData data = AuthenticationManager.get().getRedditClient().getOAuthHelper().onUserChallenge(params[0], creds);
                     AuthenticationManager.get().getRedditClient().authenticate(data);
+                    Log.d("LOGIN", "Logged in user" + AuthenticationManager.get().getRedditClient().me().toString());
                     return AuthenticationManager.get().getRedditClient().getAuthenticatedUser();
                 } catch (NetworkException | OAuthException e) {
                     Log.e(LOG_TAG, "Could not log in", e);
@@ -82,7 +85,10 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(String s) {
-                Log.i(LOG_TAG, s);
+                Log.i(LOG_TAG, s + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",s.toString());
+                setResult(Activity.RESULT_OK, returnIntent);
                 LoginActivity.this.finish();
             }
         }.execute(url);

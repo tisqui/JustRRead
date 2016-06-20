@@ -165,7 +165,11 @@ public class Authentification {
 
     public static void logout() {
         //need to revoke access token first
-        AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
-        AuthenticationManager.get().getRedditClient().deauthenticate(); //do I need to deauthentificate manually here?
+        if(Utils.checkUserLoggedIn()){
+            AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
+        } else {
+            Log.d(LOG_TAG, "Can't logout, because OAUthStatus is: " +
+                    AuthenticationManager.get().getRedditClient().getOAuthHelper().getAuthStatus());
+        }
     }
 }

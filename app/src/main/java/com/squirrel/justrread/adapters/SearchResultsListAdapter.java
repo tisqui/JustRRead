@@ -23,7 +23,6 @@ import java.util.List;
 public class SearchResultsListAdapter extends ArrayAdapter<String> {
 
     private List<String> mSubredditsList;
-    private Button mSubredditSubscribe;
 
     public SearchResultsListAdapter(Context context, List<String> sub) {
         super(context, 0, sub);
@@ -44,22 +43,22 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
         subredditName.setText("/" + sub);
         // Return the completed view to render on screen
 
-        mSubredditSubscribe = (Button) convertView.findViewById(R.id.search_res_subscribe);
+        Button subredditSubscribe = (Button) convertView.findViewById(R.id.search_res_subscribe);
 
         //check the subscription
         if(RedditAPI.checkIfSubscribed(sub, getContext())){
             //user is subscribed to this subreddit
-            setUnsubscribeButton(sub);
+            setUnsubscribeButton(sub, subredditSubscribe);
         } else {
             //not subscribed
-            setSubscribeButton(sub);
+            setSubscribeButton(sub, subredditSubscribe);
         }
         return convertView;
     }
 
-    private void setSubscribeButton(final String subredditId){
-        mSubredditSubscribe.setText("Subscribe");
-        mSubredditSubscribe.setOnClickListener(new View.OnClickListener() {
+    private void setSubscribeButton(final String subredditId, final Button subButton){
+        subButton.setText("Subscribe");
+        subButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Utils.checkUserLoggedIn()) {
@@ -74,7 +73,7 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
                         protected void onPostExecute(Boolean res) {
                             super.onPostExecute(res);
                             if(res){
-                                setUnsubscribeButton(subredditId);
+                                setUnsubscribeButton(subredditId, subButton);
                                 Toast.makeText(getContext(), "You subscribed to /" + subredditId,
                                         Toast.LENGTH_SHORT).show();
                             }else {
@@ -88,11 +87,12 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
                 }
             }
         });
+
     }
 
-    private void setUnsubscribeButton(final String subredditId){
-        mSubredditSubscribe.setText("Unsubscribe");
-        mSubredditSubscribe.setOnClickListener(new View.OnClickListener() {
+    private void setUnsubscribeButton(final String subredditId, final Button subButton){
+        subButton.setText("Unsubscribe");
+        subButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Utils.checkUserLoggedIn()) {
@@ -107,7 +107,7 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
                         protected void onPostExecute(Boolean res) {
                             super.onPostExecute(res);
                             if(res){
-                                setSubscribeButton(subredditId);
+                                setSubscribeButton(subredditId, subButton);
                                 Toast.makeText(getContext(), "You unsubscribed from /" + subredditId,
                                         Toast.LENGTH_SHORT).show();
                             } else {

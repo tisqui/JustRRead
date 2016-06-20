@@ -99,25 +99,25 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void checkAuthentification(){
-        AuthenticationState state = AuthenticationManager.get().checkAuthState();
+            AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
-        if(Utils.isNetworkAvailable(getApplicationContext())){
-            switch (state) {
-                case READY:
-                    break;
-                case NONE:
-                    Log.d(LOG_TAG, "Authentification without login");
-                    mAuthentification.authentificateWithoutLoginAsync();
-                    break;
-                case NEED_REFRESH:
-                    Log.d(LOG_TAG, "Refreshing access token");
-                    mAuthentification.refreshAccessTokenAsync();
-                    break;
+            if(Utils.isNetworkAvailable(getApplicationContext())){
+                switch (state) {
+                    case READY:
+                        break;
+                    case NONE:
+                        Log.d(LOG_TAG, "Authentification without login");
+                        mAuthentification.authentificateWithoutLoginAsync();
+                        break;
+                    case NEED_REFRESH:
+                        Log.d(LOG_TAG, "Refreshing access token");
+                        mAuthentification.refreshAccessTokenAsync();
+                        break;
+                }
             }
-        }
-        else{
-            Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
-        }
+            else{
+                Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
+            }
     }
 
     @Override

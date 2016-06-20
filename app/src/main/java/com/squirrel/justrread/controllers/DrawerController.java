@@ -76,11 +76,13 @@ public class DrawerController {
 
     public void initDrawerActions(){
         mLogin = (Button) mDrawerLayout.findViewById(R.id.drawer_btn_login);
-        if(!Utils.checkUserLoggedIn()){
-           setLoginButton();
-        } else {
-            setLogoutButton();
-        }
+//        if(!Utils.checkUserLoggedIn()){
+//            Log.d("DrawerController", "User not logged in ******************************");
+//           setLoginButton();
+//        } else {
+//            Log.d("DrawerController", "User logged in ******************************");
+//            setLogoutButton();
+//        }
 
         mSettings = (Button) mDrawerLayout.findViewById(R.id.drawer_btn_settings);
         mSettings.setOnClickListener(new View.OnClickListener() {

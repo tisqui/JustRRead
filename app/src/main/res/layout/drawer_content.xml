@@ -7,7 +7,8 @@
     android:layout_gravity="start"
     android:background="@color/drawerBackground"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:weightSum="1">
 
     <include
         android:id="@+id/drawer_header"
@@ -168,13 +169,14 @@
     <ListView
         android:id="@+id/drawer_subreddits_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
         android:layout_marginBottom="@dimen/drawer_items_margin_bottom"
         android:layout_marginTop="@dimen/drawer_item_margin_top"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp">
+        android:dividerHeight="0dp"
+        android:layout_weight="0.50">
     </ListView>
 
 

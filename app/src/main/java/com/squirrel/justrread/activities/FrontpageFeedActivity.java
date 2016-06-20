@@ -1,5 +1,6 @@
 package com.squirrel.justrread.activities;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,18 +16,21 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
@@ -75,6 +79,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     private static final int SUBSCRIPTIONS_LOADER = 1;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
 
+    private Button mLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +131,9 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mLogin = (Button) mDrawerLayout.findViewById(R.id.drawer_btn_login);
+        setLoginButton();
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
         //set all the Drawer actions
@@ -139,6 +147,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mCallbacks = this;
         getSupportLoaderManager().initLoader(SUBSCRIPTIONS_LOADER, null, mCallbacks);
 
+    }
+
+    public void reloadActivity(){
+        this.recreate();
     }
 
 
@@ -217,6 +229,9 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_CONTROVERSIAL);
             return true;
         }
+        if(id == R.id.logout){
+            Authentification.logout();
+        }
         if (id == R.id.action_subreddit_about) {
             FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.feed_fragment));
@@ -286,29 +301,17 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         // Call the method to refresh the feed for subreddit now
         FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment));
-        if (feedFragment != null) {
-            feedFragment.refreshNewSubreddit(convertPositionToId(position));
+        if (feedFragment != null && mDrawerSubredditsList.getCount() >0) {
+            feedFragment.refreshNewSubreddit(mDrawerSubredditsListAdapter.getItem(position));
         }
         // Highlight the selected item, update the title, and close the drawer
         mDrawerSubredditsList.setItemChecked(position, true);
-        setTitle(mSubredditsList[position]);
+        setTitle(mDrawerSubredditsListAdapter.getItem(position));
 
         Toast.makeText(this, "Item " + position + "clicked", Toast.LENGTH_SHORT).show();
         mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
-    private String convertPositionToId(int pos) {
-        switch (pos) {
-            case 0:
-                return "pics";
-            case 1:
-                return "gifs";
-            case 2:
-                return "videos";
-            default:
-                return "t5_2qh1e";
-        }
-    }
 
     @Override
     public void setTitle(CharSequence title) {
@@ -383,11 +386,12 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         int size = data.getCount();
         if (Utils.checkUserLoggedIn()) {
             if (size > 1) {
+                mEmptyListView.setVisibility(View.GONE);
                 mDrawerSubredditsList.setVisibility(View.VISIBLE);
                 for (int i = 0; i < size; i++) {
                     data.moveToPosition(i);
                     Subscription s = DataMapper.mapCursorToSubscription(data);
-                    mDrawerSubredditsListAdapter.insert(s.getSubredditId(), i);
+                    mDrawerSubredditsListAdapter.insert(s.getSubredditDisplayName(), i);
                 }
             } else {
                 mEmptyListView.setText(R.string.drawer_empty_subscriptions_list);
@@ -429,6 +433,54 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                         }
                 }
                 tv.setText(message);
+            }
+        }
+    }
+
+    private void setLoginButton(){
+        if(!Utils.checkUserLoggedIn()){
+            Log.d("DrawerController", "User not logged in ******************************");
+            mLogin.setText("Login");
+            mLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivityForResult(loginIntent, 1);
+                }
+            });
+        } else {
+            Log.d("DrawerController", "User logged in ******************************");
+            mLogin.setText("Logout");
+            mLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            Authentification.logout();
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            reloadActivity();
+                        }
+                    }.execute();
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                TextView helloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
+                String result = data.getStringExtra("result");
+                helloUserText.setText("Hello, " + result + " !");
+                setLoginButton();
+                Toast.makeText(this, "Logged in as: " + result, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -35,8 +35,8 @@ public class SubscriptionsRecyclerViewAdapter extends RecyclerView.Adapter<Subsc
         if(!mSubscriptionsList.isEmpty()){
             Subscription s = mSubscriptionsList.get(position);
             if(s!=null){
-                if(s.getSubredditDisplayName()!=null){
-                    holder.mSubscriptionIdTextView.setText(s.getSubredditDisplayName());
+                if(s.getSubredditId()!=null){
+                    holder.mSubscriptionIdTextView.setText(s.getSubredditId());
                 }
                 else {
                     holder.mSubscriptionIdTextView.setText("No name available");
