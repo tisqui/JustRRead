@@ -42,15 +42,9 @@ public class Utils {
      * @param c Context used to get the SharedPreferences
      * @return the posts status integer type
      */
-    @SuppressWarnings("ResourceType")
-    static public @RedditSyncAdapter.PostsStatus
-    int getPostsStatus(Context c){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        return sp.getInt(c.getString(R.string.pref_posts_status_key), RedditSyncAdapter.POSTS_STATUS_UNKNOWN);
-    }
 
     @SuppressWarnings("ResourceType")
-    static public @RedditSyncAdapter.PostsStatus
+    static public @RedditSyncAdapter.SubscriptiosnStatus
     int getSubscriptionsStatus(Context c){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getInt(c.getString(R.string.pref_subscriptions_status_key), RedditSyncAdapter.SUB_STATUS_UNKNOWN);
@@ -60,10 +54,10 @@ public class Utils {
      * Resets the posts status.
      * @param c Context used to get the SharedPreferences
      */
-    static public void resetPostsStatus(Context c){
+    static public void resetSubscriptionsStatus(Context c){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
-        spe.putInt(c.getString(R.string.pref_posts_status_key), RedditSyncAdapter.POSTS_STATUS_UNKNOWN);
+        spe.putInt(c.getString(R.string.pref_subscriptions_status_key), RedditSyncAdapter.SUB_STATUS_UNKNOWN);
         spe.apply();
     }
 

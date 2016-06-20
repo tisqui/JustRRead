@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
-import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.controllers.DrawerController;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
@@ -259,18 +258,18 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
         //load the subscriptions data, if user logged in
         if (Utils.checkUserLoggedIn()) {
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    RedditAPI.getUserSubscriptions(getApplicationContext());
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                }
-            }.execute();
+//            new AsyncTask<Void, Void, Void>() {
+//                @Override
+//                protected Void doInBackground(Void... params) {
+//                    RedditAPI.getUserSubscriptions(getApplicationContext());
+//                    return null;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Void aVoid) {
+//                    super.onPostExecute(aVoid);
+//                }
+//            }.execute();
         } else {
             mEmptyListView.setVisibility(View.VISIBLE);
             mEmptyListView.setText("No subscriptions available for the not logged in user.");
@@ -415,7 +414,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             if (null != tv) {
                 // if cursor is empty, why?
                 int message = R.string.empty_posts_list;
-                @RedditSyncAdapter.PostsStatus int location = Utils.getSubscriptionsStatus(this);
+                @RedditSyncAdapter.SubscriptiosnStatus int location = Utils.getSubscriptionsStatus(this);
                 switch (location) {
                     case RedditSyncAdapter.SUB_STATUS_SERVER_DOWN:
                         message = R.string.list_posts_server_is_down;
@@ -475,6 +474,9 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
+                //need to sync subscriptions after user logged in
+                RedditSyncAdapter.syncImmediately(this);
+
                 TextView helloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
                 String result = data.getStringExtra("result");
                 helloUserText.setText("Hello, " + result + " !");
