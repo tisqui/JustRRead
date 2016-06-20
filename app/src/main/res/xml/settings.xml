@@ -10,5 +10,6 @@
         android:defaultValue="false"
         android:key="@string/prefs_nsfw_key"
         android:summary="Show NSFW content"
-        android:title="NSFW"/>
+        android:title="NSFW"
+        />
 </PreferenceScreen>

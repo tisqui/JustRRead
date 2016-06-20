@@ -32,13 +32,12 @@ public class SubscriptionsRecyclerViewAdapter extends RecyclerView.Adapter<Subsc
 
     @Override
     public void onBindViewHolder(SubscriptionItemViewHolder holder, int position) {
-        if(!mSubscriptionsList.isEmpty()){
+        if (!mSubscriptionsList.isEmpty()) {
             Subscription s = mSubscriptionsList.get(position);
-            if(s!=null){
-                if(s.getSubredditDisplayName()!=null){
+            if (s != null) {
+                if (s.getSubredditDisplayName() != null) {
                     holder.mSubscriptionIdTextView.setText(s.getSubredditDisplayName());
-                }
-                else {
+                } else {
                     holder.mSubscriptionIdTextView.setText("No name available");
                 }
             }
@@ -47,15 +46,19 @@ public class SubscriptionsRecyclerViewAdapter extends RecyclerView.Adapter<Subsc
 
     @Override
     public int getItemCount() {
-        return mSubscriptionsList.size();
+        if (mSubscriptionsList == null) {
+            return 0;
+        } else {
+            return mSubscriptionsList.size();
+        }
     }
 
-    public void swap(int firstPosition, int secondPosition){
+    public void swap(int firstPosition, int secondPosition) {
         Collections.swap(mSubscriptionsList, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
     }
 
-    public void swapSubscriptionsList(List<Subscription> newList){
+    public void swapSubscriptionsList(List<Subscription> newList) {
         mSubscriptionsList = newList;
         notifyDataSetChanged();
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);

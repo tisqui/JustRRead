@@ -13,6 +13,8 @@ import com.squirrel.justrread.data.RedditContract;
 
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
+import net.dean.jraw.http.NetworkException;
+import net.dean.jraw.managers.AccountManager;
 import net.dean.jraw.models.CommentNode;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
@@ -162,11 +164,13 @@ public class RedditAPI {
             if(Utils.checkUserLoggedIn()){
                 UserSubredditsPaginator userSubredditsPaginator =
                         new UserSubredditsPaginator(AuthenticationManager.get().getRedditClient(), "subscriber");
-                if(userSubredditsPaginator != null && userSubredditsPaginator.hasNext()){
-                    Listing<Subreddit> subscriptions = userSubredditsPaginator.next();
-                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(subscriptions.size());
-                    for (Subreddit s : subscriptions) {
-                        contentValuesList.add(DataMapper.mapSubredditToContentValues(s));
+                if(userSubredditsPaginator != null){
+                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>();
+                    while(userSubredditsPaginator.hasNext()){
+                        Listing<Subreddit> subscriptions = userSubredditsPaginator.next();
+                        for (Subreddit s : subscriptions) {
+                            contentValuesList.add(DataMapper.mapSubredditToContentValues(s));
+                        }
                     }
                     if (contentValuesList.size() > 0) {
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
@@ -187,7 +191,13 @@ public class RedditAPI {
             //save the subreddit locally
             context.getContentResolver().insert(RedditContract.SubscriptionEntry.CONTENT_URI,
                     DataMapper.mapSubredditToContentValues(subredditToSubscribe));
-            //TODO call sync adapter to sync the subscriptions
+            try{
+                AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
+                accountManager.subscribe(subredditToSubscribe);
+            }catch (NetworkException e){
+                Log.d(LOG_TAG, "Network exception, subscription not succesful: " + e);
+            }
+
             return true;
         }else {
             Log.d(LOG_TAG, "Can't find subreddit to Subscribe");
@@ -201,7 +211,14 @@ public class RedditAPI {
                 RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId +"'", null);
         if(deleted > 0){
             Log.d(LOG_TAG, "Unsubscribed succesfully");
-            //TODO call sync adapter to sync the subscriptions
+            //unsubscribe on the server
+            try{
+                Subreddit subredditToUnsubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
+                AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
+                accountManager.unsubscribe(subredditToUnsubscribe);
+            }catch (NetworkException e){
+                Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
+            }
             return true;
         } else {
             Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
@@ -209,12 +226,17 @@ public class RedditAPI {
         }
     }
 
-    public static boolean checkIfSubscribed(String subredditId, Context context){
-        Cursor cursor = context.getContentResolver().query(RedditContract.SubscriptionEntry.CONTENT_URI, null,
-                RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId +"'", null, null );
+    public static boolean checkIfSubscribed(String subredditName, Context context){
+        String[] projection = new String[] {RedditContract.SubscriptionColumns.COLUMN_DISPLAY_NAME};
+        String selection = RedditContract.SubscriptionColumns.COLUMN_DISPLAY_NAME + " = ?";
+        String[] selectionArguments = { subredditName };
+        Cursor cursor = context.getContentResolver().query(RedditContract.SubscriptionEntry.CONTENT_URI, projection,
+                selection, selectionArguments, null);
         if((cursor != null) && (cursor.getCount() > 0)){
+            cursor.close();
             return true;
         } else {
+            cursor.close();
             return false;
         }
     }
