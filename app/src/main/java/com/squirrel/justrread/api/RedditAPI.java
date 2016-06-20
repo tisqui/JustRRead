@@ -32,6 +32,7 @@ import java.util.Vector;
  */
 public class RedditAPI {
     public static final String LOG_TAG = RedditAPI.class.getSimpleName();
+    public static boolean showNSFW = false;
 
     public interface APICallback<T> {
         void onSuccess(T result);
@@ -46,32 +47,6 @@ public class RedditAPI {
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
         return state.equals(AuthenticationState.READY);
     }
-
-//    public void getPostsSorted(SubredditPaginator paginator, Context context, Sorting sort) {
-//        if (checkAuthentificationReady()) {
-//            if (paginator != null) {
-//                paginator.setSorting(sort);
-//                if (paginator.hasNext()) {
-//                    Listing<Submission> firstPage = paginator.next();
-//                    Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
-//                    for (Submission s : firstPage) {
-//                        contentValuesList.add(DataMapper.mapSubmissionToContentValues(s));
-//                    }
-//                    if (contentValuesList.size() > 0) {
-//                        ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
-//                        contentValuesList.toArray(cvArray);
-//                        //delete all previous data
-//                        context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
-//                        context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
-//                    }
-//                } else {
-//                    Log.d(LOG_TAG, "No more pages available");
-//                }
-//            }
-//        } else {
-//            Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
-//        }
-//    }
 
     //get the subreddit feed
     public void getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) {

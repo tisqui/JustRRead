@@ -34,7 +34,6 @@ public class SubredditSearchResultsActivity extends BaseActivity {
     ProgressBar mSearchProgress;
 
     private SearchResultsListAdapter mSearchResultsListAdapter;
-    private boolean mIsNsfw = false;
 
     List<String> listOfResults;
 
@@ -71,7 +70,7 @@ public class SubredditSearchResultsActivity extends BaseActivity {
             new AsyncTask<Void, Void, List<String>>() {
                 @Override
                 protected List<String> doInBackground(Void... params) {
-                    return RedditAPI.searchForSubreddit(query, mIsNsfw);
+                    return RedditAPI.searchForSubreddit(query, RedditAPI.showNSFW);
                 }
 
                 @Override

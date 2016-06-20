@@ -24,7 +24,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         PreferenceManager.setDefaultValues(getActivity(), R.xml.settings, false);
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_nightmode_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_nsfw_key)));
+//        bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_nsfw_key)));
+        findPreference(getString(R.string.prefs_nsfw_key)).setEnabled(false);
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
