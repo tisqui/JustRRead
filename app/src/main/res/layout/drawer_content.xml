@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/drawer_linear_layout_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/drawer_width"
     android:layout_height="match_parent"
@@ -38,6 +39,7 @@
             android:src="@drawable/ic_reddit_grey600_24dp"/>
 
         <TextView
+            android:id="@+id/drawer_all_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -46,7 +48,6 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
             android:text="@string/drawer_all_item"
-            android:textColor="@drawable/text_drawer_color_selector"
             android:textSize="@dimen/drawer_list_item_text_size"/>
     </RelativeLayout>
 
@@ -67,6 +68,7 @@
             android:src="@drawable/ic_poll_grey600_24dp"/>
 
         <TextView
+            android:id="@+id/drawer_frontapge_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -74,7 +76,6 @@
             android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
             android:fontFamily="sans-serif-medium"
             android:text="@string/drawer_frontpage_item"
-            android:textColor="@color/drawerTextColor"
             android:textSize="@dimen/drawer_list_item_text_size"/>
     </RelativeLayout>
 
@@ -95,6 +96,7 @@
             android:src="@drawable/ic_puzzle_grey600_24dp"/>
 
         <TextView
+            android:id="@+id/drawer_random_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -102,7 +104,6 @@
             android:layout_marginLeft="@dimen/drawer_text_item_left_margin"
             android:fontFamily="sans-serif-medium"
             android:text="@string/drawer_random_item"
-            android:textColor="@color/drawerTextColor"
             android:textSize="@dimen/drawer_list_item_text_size"/>
     </RelativeLayout>
 

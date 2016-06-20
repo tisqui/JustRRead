@@ -23,6 +23,7 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        //delete the item when swipe
 //        mSubscriptionsRecyclerViewAdapter.remove(viewHolder.getAdapterPosition());
     }
 }

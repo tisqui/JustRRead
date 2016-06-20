@@ -1,6 +1,7 @@
 package com.squirrel.justrread.adapters;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -30,6 +31,14 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
             FeedItemViewHolder holder = (FeedItemViewHolder) vholder;
             final Post postItem = DataMapper.mapCursorToPost(mCursor);
             holder.itemView.setSelected(mSelectedPosition == position);
+
+            //set the selector, depending on the theme
+            if (PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .getBoolean(mContext.getString(R.string.prefs_nightmode_key), false)) {
+                holder.itemView.setBackgroundResource(R.drawable.feed_item_selector_dark);
+            } else {
+                holder.itemView.setBackgroundResource(R.drawable.feed_item_selector);
+            }
 
             //set all the data to the UI elements
 

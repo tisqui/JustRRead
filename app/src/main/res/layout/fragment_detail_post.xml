@@ -16,7 +16,6 @@
             android:id="@+id/detail_top_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/detail_info_block_background"
             android:elevation="8dp">
 
             <LinearLayout

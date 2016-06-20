@@ -20,11 +20,15 @@
     <color name="tisteTextColor">#212121</color>
     <color name="feedItemSelectedBgd">#E1F5FE</color>
     <color name="feedItemPressedBgd">#EEEEEE</color>
+    <color name="feedItemSelectedBgdD">#BDBDBD</color>
+    <color name="feedItemPressedBgdD">#212121</color>
 
 
     <!-- Drawer -->
     <color name="drawerBackground">#FFFFFF</color>
+    <color name="drawerBackgroundDark">#212121</color>
     <color name="drawerTextColor">#212121</color>
+    <color name="drawerTextColorDark">#FFFFFF</color>
     <color name="drawerItemBackgroundPressed">#E1F5FE</color>
     <color name="drawerTextColorPressed">#039BE5</color>
     <color name="drawerTextColorHighlight">@color/colorPrimary</color>
@@ -47,7 +51,7 @@
     <color name="primaryTextColorPopupD">#FFFFFF</color>
     <color name="hightlightTextColorPopupD">#00B0FF</color>
     <color name="popupBackgroundD">#757575</color>
-    <color name="mainBackgroundD">#757575</color>
+    <color name="mainBackgroundD">#212121</color>
     <color name="mainDividerColorD">#EEEEEE</color>
 
 

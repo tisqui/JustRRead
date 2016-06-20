@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:background="@color/white"
-        android:textColor="@color/drawerTextColor"
         android:textSize="@dimen/drawer_title_text_size"/>
 
     <LinearLayout

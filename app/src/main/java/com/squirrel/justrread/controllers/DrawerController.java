@@ -2,6 +2,7 @@ package com.squirrel.justrread.controllers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
@@ -141,6 +142,18 @@ public class DrawerController {
             mHelloUserText.setText("Hello," + username);
         }else{
             mHelloUserText.setText(R.string.hello_sername_default_text);
+        }
+    }
+
+    public void setTheme(){
+        if (PreferenceManager.getDefaultSharedPreferences(mContext)
+                .getBoolean(mContext.getString(R.string.prefs_nightmode_key), false)) {
+            mDrawerLayout.findViewById(R.id.drawer_linear_layout_container)
+                    .setBackgroundColor(mContext.getResources().getColor(R.color.drawerBackgroundDark));
+
+        } else {
+            mDrawerLayout.findViewById(R.id.drawer_linear_layout_container)
+                    .setBackgroundColor(mContext.getResources().getColor(R.color.drawerBackground));
         }
     }
 

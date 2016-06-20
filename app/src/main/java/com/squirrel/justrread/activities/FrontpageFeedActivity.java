@@ -134,6 +134,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerController.setUserName();
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment)));
+        mDrawerController.setTheme();
 
         mCallbacks = this;
         getSupportLoaderManager().initLoader(SUBSCRIPTIONS_LOADER, null, mCallbacks);
