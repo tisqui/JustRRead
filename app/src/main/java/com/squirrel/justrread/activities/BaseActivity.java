@@ -26,9 +26,7 @@ import net.dean.jraw.auth.AuthenticationState;
 public class BaseActivity extends AppCompatActivity {
     public static final String LOG_TAG = BaseActivity.class.getSimpleName();
     private Toolbar mToolbar;
-    private Navigator navigator;
     private Authentification mAuthentification;
-    private static String AUTH_STATE = "auth_state";
 
     public static final String FRONTPAGE_FEED_KEY = "FRONTPAGE_FEED";
     public static final String POST_DETAIL_KEY = "POST_DETAIL";
@@ -37,7 +35,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navigator = new Navigator();
 
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getString(R.string.prefs_nightmode_key), false)) {
@@ -98,7 +95,7 @@ public class BaseActivity extends AppCompatActivity {
 //        fragmentTransaction.commit();
     }
 
-    private void checkAuthentification(){
+    public void checkAuthentification(){
             AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
             if(Utils.isNetworkAvailable(getApplicationContext())){
@@ -122,8 +119,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the auth state
-        savedInstanceState.putString(AUTH_STATE, AuthenticationManager.get().checkAuthState().toString());
         super.onSaveInstanceState(savedInstanceState);
     }
 

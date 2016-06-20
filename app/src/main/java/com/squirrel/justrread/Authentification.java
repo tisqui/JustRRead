@@ -9,13 +9,9 @@ import com.squirrel.justrread.activities.LoginActivity;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.auth.NoSuchTokenException;
-import net.dean.jraw.http.NetworkException;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
-import net.dean.jraw.models.Listing;
-import net.dean.jraw.models.Submission;
-import net.dean.jraw.paginators.SubredditPaginator;
 
 import java.util.UUID;
 
@@ -99,69 +95,69 @@ public class Authentification {
         }.execute();
     }
 
-    private void tryAuthentificateAppWithExistingToken() {
-        new AsyncTask<String, Void, Void>() {
-            @Override
-            protected Void doInBackground(String... params) {
-                try {
+//    private void tryAuthentificateAppWithExistingToken() {
+//        new AsyncTask<String, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(String... params) {
+//                try {
+//
+//                    String token = mRedditTokenStore.readToken("");
+//
+//                    if (token == null) {
+//                        //not logged in mode, authentificate without user
+//                        final Credentials fcreds = Credentials.userlessApp(BuildConfig.APP_ID, UUID.randomUUID());
+//                        OAuthData authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
+//                        AuthenticationManager.get().getRedditClient().authenticate(authData);
+//
+//                    } else {
+//                        //some token exists, app was logged in
+//                        Credentials credentials = Credentials.installedApp(BuildConfig.APP_ID, BuildConfig.REDIRECT_URL);
+//                        OAuthData finalData = AuthenticationManager.get().getRedditClient().getOAuthHelper().refreshToken(credentials);
+//                        AuthenticationManager.get().getRedditClient().authenticate(finalData);
+//                    }
+//
+//                    return null;
+//                } catch (NetworkException | OAuthException e) {
+//                    Log.e(LOG_TAG, "Could not log in", e);
+//                    return null;
+//                } catch (NoSuchTokenException e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//            }
+//        }.execute();
+//    }
 
-                    String token = mRedditTokenStore.readToken("");
 
-                    if (token == null) {
-                        //not logged in mode, authentificate without user
-                        final Credentials fcreds = Credentials.userlessApp(BuildConfig.APP_ID, UUID.randomUUID());
-                        OAuthData authData = AuthenticationManager.get().getRedditClient().getOAuthHelper().easyAuth(fcreds);
-                        AuthenticationManager.get().getRedditClient().authenticate(authData);
-
-                    } else {
-                        //some token exists, app was logged in
-                        Credentials credentials = Credentials.installedApp(BuildConfig.APP_ID, BuildConfig.REDIRECT_URL);
-                        OAuthData finalData = AuthenticationManager.get().getRedditClient().getOAuthHelper().refreshToken(credentials);
-                        AuthenticationManager.get().getRedditClient().authenticate(finalData);
-                    }
-
-                    return null;
-                } catch (NetworkException | OAuthException e) {
-                    Log.e(LOG_TAG, "Could not log in", e);
-                    return null;
-                } catch (NoSuchTokenException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        }.execute();
-    }
-
-
-    //FOR TEST PURPOSES ONLY
-    public void getFrontPageContent() {
-        new AsyncTask<String, Void, Void>() {
-            @Override
-            protected Void doInBackground(String... params) {
-                // Set up a Paginator for the front page
-                SubredditPaginator paginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-                paginator.setLimit(50);
-                if (paginator != null) {
-                    // Request the first page
-                    if (paginator.hasNext()) {
-                        Listing<Submission> firstPage = paginator.next();
-                        for (Submission s : firstPage) {
-                            // Print some basic stats about the posts
-                            Log.d(LOG_TAG, "Subreddit name: " + s.getSubredditName() + " score: " + s.getScore() + "Title" + s.getTitle());
-                            System.out.printf("[/r/%s - %s karma] %s\n", s.getSubredditName(), s.getScore(), s.getTitle());
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-            }
-        }.execute();
-
-    }
+//    //FOR TEST PURPOSES ONLY
+//    public void getFrontPageContent() {
+//        new AsyncTask<String, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(String... params) {
+//                // Set up a Paginator for the front page
+//                SubredditPaginator paginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
+//                paginator.setLimit(50);
+//                if (paginator != null) {
+//                    // Request the first page
+//                    if (paginator.hasNext()) {
+//                        Listing<Submission> firstPage = paginator.next();
+//                        for (Submission s : firstPage) {
+//                            // Print some basic stats about the posts
+//                            Log.d(LOG_TAG, "Subreddit name: " + s.getSubredditName() + " score: " + s.getScore() + "Title" + s.getTitle());
+//                            System.out.printf("[/r/%s - %s karma] %s\n", s.getSubredditName(), s.getScore(), s.getTitle());
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                super.onPostExecute(aVoid);
+//            }
+//        }.execute();
+//
+//    }
 
     public static void logout() {
         //need to revoke access token first

@@ -31,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squirrel.justrread.Authentification;
-import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.api.RedditAPI;
@@ -58,7 +57,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private DrawerLayout mDrawerLayout;
-    private DrawerController mDrawerController;
     private LinearLayout mDrawerLinearLayout;
     private ListView mDrawerSubredditsList;
     private ArrayAdapter<String> mDrawerSubredditsListAdapter;
@@ -80,12 +78,13 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
 
     private Button mLogin;
+    private DrawerController mDrawerController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Init myInit = (Init) getApplicationContext();
-        myInit.initializeAuth();
+//        Init myInit = (Init) getApplicationContext();
+//        myInit.initializeAuth();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frontpage_feed);

@@ -47,7 +47,7 @@ public class DrawerController {
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigator.navigateToLogin(mContext);
+                Navigator.navigateToLogin(v.getContext());
             }
         });
     }
@@ -88,7 +88,7 @@ public class DrawerController {
         mSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigator.navigateToSettings(mContext);
+                Navigator.navigateToSettings(v.getContext());
             }
         });
 
@@ -97,9 +97,9 @@ public class DrawerController {
             @Override
             public void onClick(View v) {
                 if(Utils.checkUserLoggedIn()){
-                    Navigator.navigateToSubredditsSettings(mContext);
+                    Navigator.navigateToSubredditsSettings(v.getContext());
                 } else {
-                    BaseActivity.showLoginAlert(mContext);
+                    BaseActivity.showLoginAlert(v.getContext());
                 }
             }
         });
@@ -140,8 +140,18 @@ public class DrawerController {
     public void setUserName(){
         mHelloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
         if(Utils.checkUserLoggedIn()){
-            String username = AuthenticationManager.get().getRedditClient().me().getFullName();
-            mHelloUserText.setText("Hello," + username);
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    return AuthenticationManager.get().getRedditClient().me().getFullName();
+                }
+
+                @Override
+                protected void onPostExecute(String name) {
+                    super.onPostExecute(name);
+                    mHelloUserText.setText("Hello," + name);
+                }
+            }.execute();
         }else{
             mHelloUserText.setText(R.string.hello_sername_default_text);
         }

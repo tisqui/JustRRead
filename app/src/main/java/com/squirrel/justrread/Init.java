@@ -17,6 +17,12 @@ public class Init extends Application {
     private static final String APP_ID = BuildConfig.APP_ID;
     private static final String RED_URL = BuildConfig.REDIRECT_URL;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initializeAuth();
+    }
+
     public RedditTokenStore getRedditTokenStore() {
         return mRedditTokenStore;
     }
