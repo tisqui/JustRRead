@@ -36,6 +36,7 @@ import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.data.Post;
 
 import net.dean.jraw.models.CommentNode;
+import net.dean.jraw.models.VoteDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,7 +219,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                 @Override
                 public void onClick(View v) {
                     if(Utils.checkUserLoggedIn()){
-                        //TODO upvote
+                        RedditAPI.vote(mPost, VoteDirection.UPVOTE, getContext());
                     }else{
                         BaseActivity.showLoginAlert(getContext());
                     }
@@ -229,7 +230,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                 @Override
                 public void onClick(View v) {
                     if(Utils.checkUserLoggedIn()){
-                        //TODO downvote
+                        RedditAPI.vote(mPost, VoteDirection.DOWNVOTE, getContext());
                     }else{
                         BaseActivity.showLoginAlert(getContext());
                     }

@@ -9,8 +9,10 @@ import android.util.Log;
 import com.google.common.collect.FluentIterable;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.DataMapper;
+import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 
+import net.dean.jraw.ApiException;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.http.NetworkException;
@@ -20,6 +22,7 @@ import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.models.TraversalMethod;
+import net.dean.jraw.models.VoteDirection;
 import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
 import net.dean.jraw.paginators.UserSubredditsPaginator;
@@ -183,7 +186,7 @@ public class RedditAPI {
     public static boolean unsubscribeSubreddit(String subredditId, Context context){
         //delete the subscription from local
         int deleted = context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI,
-                RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId +"'", null);
+                RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId + "'", null);
         if(deleted > 0){
             Log.d(LOG_TAG, "Unsubscribed succesfully");
             //unsubscribe on the server
@@ -202,6 +205,45 @@ public class RedditAPI {
         } else {
             Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
             return false;
+        }
+    }
+
+    public static void vote(final Post post, final VoteDirection voteDirection, final Context context){
+        try{
+            new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
+                    try {
+                        Submission s = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
+                        accountManager.vote(s, voteDirection);
+                        return true;
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(Boolean res) {
+                    super.onPostExecute(res);
+                    if(res){
+                        //update the DB item - get the new submission
+                        Submission newSubmission = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
+                        int updated = context.getContentResolver().update(RedditContract.PostEntry.CONTENT_URI,
+                                DataMapper.mapSubmissionToContentValues(newSubmission),
+                                RedditContract.PostColumns.COLUMN_ID+"='" + post.getPostId() + "'",
+                                null);
+                        if(updated <1){
+                            Log.d(LOG_TAG, "No posts found to update");
+                        } else{
+                            Log.d(LOG_TAG, "Updated post: " + newSubmission.toString());
+                        }
+                    }
+                }
+            }.execute();
+        }catch (NetworkException e){
+            Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
         }
     }
 
