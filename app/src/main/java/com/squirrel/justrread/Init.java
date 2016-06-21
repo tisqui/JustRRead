@@ -28,7 +28,7 @@ public class Init extends Application {
     }
     public void initializeAuth(){
         RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
-        reddit.setLoggingMode(LoggingMode.ALWAYS);
+        reddit.setLoggingMode(LoggingMode.NEVER);
         mRedditTokenStore = new RedditTokenStore(this);
         //initialize Authentification manager
         AuthenticationManager.get().init(reddit, new RefreshTokenHandler(mRedditTokenStore, reddit));

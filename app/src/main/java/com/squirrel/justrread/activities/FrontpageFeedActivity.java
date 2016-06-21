@@ -228,7 +228,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             return true;
         }
         if(id == R.id.logout){
-            Authentification.logout();
+            Authentification.logout(this);
         }
         if (id == R.id.action_subreddit_about) {
             FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
@@ -455,7 +455,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                     new AsyncTask<Void, Void, Void>() {
                         @Override
                         protected Void doInBackground(Void... params) {
-                            Authentification.logout();
+                            Authentification.logout(getApplicationContext());
                             return null;
                         }
 

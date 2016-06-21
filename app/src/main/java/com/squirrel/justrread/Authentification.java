@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.squirrel.justrread.activities.LoginActivity;
+import com.squirrel.justrread.data.RedditContract;
 
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
@@ -159,10 +160,14 @@ public class Authentification {
 //
 //    }
 
-    public static void logout() {
+    public static void logout(Context context) {
         //need to revoke access token first
         if(Utils.checkUserLoggedIn()){
+            //clean all user subscriptions from DB
+            context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI, null, null);
             AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
+            AuthenticationManager.get().getRedditClient().deauthenticate();
+
         } else {
             Log.d(LOG_TAG, "Can't logout, because OAUthStatus is: " +
                     AuthenticationManager.get().getRedditClient().getOAuthHelper().getAuthStatus());

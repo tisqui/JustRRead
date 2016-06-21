@@ -37,7 +37,6 @@ import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
-import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.paginators.Sorting;
@@ -371,23 +370,23 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             if (null != tv) {
                 // if cursor is empty, why?
                 int message = R.string.empty_posts_list;
-                @RedditSyncAdapter.PostsStatus int location = Utils.getPostsStatus(getActivity());
-                switch (location) {
-                    case RedditSyncAdapter.POSTS_STATUS_SERVER_DOWN:
-                        message = R.string.list_posts_server_is_down;
-                        break;
-                    case RedditSyncAdapter.POSTS_STATUS_SERVER_INVALID:
-                        message = R.string.list_posts_server_is_invalid;
-                        break;
-                    case RedditSyncAdapter.POSTS_STATUS_INVALID:
-                        message = R.string.list_posts_posts_invalid;
-                        break;
-                    default:
-                        if (!Utils.isNetworkAvailable(getActivity())) {
-                            message = R.string.no_network_available;
-                        }
-                }
-                tv.setText(message);
+//                @RedditSyncAdapter.PostsStatus int location = Utils.getPostsStatus(getActivity());
+//                switch (location) {
+//                    case RedditSyncAdapter.POSTS_STATUS_SERVER_DOWN:
+//                        message = R.string.list_posts_server_is_down;
+//                        break;
+//                    case RedditSyncAdapter.POSTS_STATUS_SERVER_INVALID:
+//                        message = R.string.list_posts_server_is_invalid;
+//                        break;
+//                    case RedditSyncAdapter.POSTS_STATUS_INVALID:
+//                        message = R.string.list_posts_posts_invalid;
+//                        break;
+//                    default:
+//                        if (!Utils.isNetworkAvailable(getActivity())) {
+//                            message = R.string.no_network_available;
+//                        }
+//                }
+//                tv.setText(message);
             }
         }
     }

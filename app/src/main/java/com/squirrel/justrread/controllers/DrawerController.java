@@ -60,7 +60,7 @@ public class DrawerController {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        Authentification.logout();
+                        Authentification.logout(mContext);
                         return null;
                     }
 
