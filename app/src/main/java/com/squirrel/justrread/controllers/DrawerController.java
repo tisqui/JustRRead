@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
-import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.activities.Navigator;
 import com.squirrel.justrread.fragments.FeedFragment;
 
@@ -92,17 +91,17 @@ public class DrawerController {
             }
         });
 
-        mEditSubreddits = (Button) mDrawerLayout.findViewById(R.id.drawer_edit_subreddits_button);
-        mEditSubreddits.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Utils.checkUserLoggedIn()){
-                    Navigator.navigateToSubredditsSettings(v.getContext());
-                } else {
-                    BaseActivity.showLoginAlert(v.getContext());
-                }
-            }
-        });
+//        mEditSubreddits = (Button) mDrawerLayout.findViewById(R.id.drawer_edit_subreddits_button);
+//        mEditSubreddits.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(Utils.checkUserLoggedIn()){
+//                    Navigator.navigateToSubredditsSettings(v.getContext());
+//                } else {
+//                    BaseActivity.showLoginAlert(v.getContext());
+//                }
+//            }
+//        });
 
         mDrawerAllItem = (RelativeLayout) mDrawerLayout.findViewById(R.id.drawer_all_item);
         mDrawerFrontpageItem = (RelativeLayout) mDrawerLayout.findViewById(R.id.drawer_frontpage_item);

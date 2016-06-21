@@ -109,7 +109,8 @@ public class Utils {
 
     public static boolean checkUserLoggedIn(){
         try{
-           return AuthenticationManager.get().getRedditClient().getAuthenticatedUser() != null;
+           String authUser= AuthenticationManager.get().getRedditClient().getAuthenticatedUser();
+            return authUser != null && !authUser.isEmpty();
         }
         catch (IllegalStateException e){
             Log.d("Check log is status", "IllegalStateException " + e);

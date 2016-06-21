@@ -16,7 +16,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -141,6 +140,19 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment)));
         mDrawerController.setTheme();
+
+        //set the Edit button
+        Button editSubreddits = (Button) mDrawerLayout.findViewById(R.id.drawer_edit_subreddits_button);
+        editSubreddits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.checkUserLoggedIn()) {
+                    Navigator.navigateToSubredditsSettings(v.getContext());
+                } else {
+                    BaseActivity.showLoginAlert(FrontpageFeedActivity.this);
+                }
+            }
+        });
 
         mCallbacks = this;
         getSupportLoaderManager().initLoader(SUBSCRIPTIONS_LOADER, null, mCallbacks);
@@ -437,7 +449,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
     private void setLoginButton(){
         if(!Utils.checkUserLoggedIn()){
-            Log.d("DrawerController", "User not logged in ******************************");
             mLogin.setText("Login");
             mLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -447,7 +458,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                 }
             });
         } else {
-            Log.d("DrawerController", "User logged in ******************************");
             mLogin.setText("Logout");
             mLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -479,6 +489,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
                 TextView helloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
                 String result = data.getStringExtra("result");
+
                 helloUserText.setText("Hello, " + result + " !");
                 setLoginButton();
                 Toast.makeText(this, "Logged in as: " + result, Toast.LENGTH_SHORT).show();
