@@ -68,4 +68,8 @@ public class SubscriptionsRecyclerViewAdapter extends RecyclerView.Adapter<Subsc
         mSubscriptionsList.remove(position);
         notifyItemRemoved(position);
     }
+
+    public String getSubscriptionIdByPosition(int position){
+        return mSubscriptionsList.get(position).getSubredditId();
+    }
 }

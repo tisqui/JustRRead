@@ -191,10 +191,14 @@ public class RedditAPI {
                 Subreddit subredditToUnsubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
                 AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
                 accountManager.unsubscribe(subredditToUnsubscribe);
+                return true;
             }catch (NetworkException e){
                 Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
+                return false;
+            } catch(IllegalArgumentException e){
+                Log.d(LOG_TAG, "Subreddit does not exists: " + e);
+                return false;
             }
-            return true;
         } else {
             Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
             return false;

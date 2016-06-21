@@ -54,7 +54,7 @@ public class SubscriptionsActivity extends BaseActivity implements LoaderManager
         mSubscriptionsRecyclerViewAdapter = new SubscriptionsRecyclerViewAdapter(mEmptyText, new ArrayList<Subscription>());
         mSubscriptionsRecyclerView.setAdapter(mSubscriptionsRecyclerViewAdapter);
 
-        ItemTouchHelper.Callback callback = new SubscriptionsTouchHelper(mSubscriptionsRecyclerViewAdapter);
+        ItemTouchHelper.Callback callback = new SubscriptionsTouchHelper(mSubscriptionsRecyclerViewAdapter, this);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(mSubscriptionsRecyclerView);
 
