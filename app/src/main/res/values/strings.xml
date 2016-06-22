@@ -92,5 +92,6 @@
     <string name="no_connection_detailed_comments_message">No Internet connection. Please try later.</string>
     <string name="drawer_setting_button">Settings</string>
     <string name="drawer_login_button">Login</string>
+    <string name="widget_no_data_loaded_message">No posts loaded :(</string>
 
 </resources>

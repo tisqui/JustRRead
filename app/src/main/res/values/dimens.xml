@@ -28,5 +28,8 @@
     <!-- Post detail -->
     <dimen name="detail_image_thumbnail_size">160dp</dimen>
 
+    <dimen name="widget_collection_min_resize_width">220dp</dimen>
+    <dimen name="widget_collection_min_resize_height">180dp</dimen>
+
 
 </resources>

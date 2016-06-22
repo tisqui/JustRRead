@@ -11,6 +11,7 @@ import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
+import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.ApiException;
 import net.dean.jraw.auth.AuthenticationManager;
@@ -96,6 +97,7 @@ public class RedditAPI {
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
+                        RedditSyncAdapter.syncImmediately(context);
                     }
                 } else {
                     Log.d(LOG_TAG, "No more pages available");

@@ -288,6 +288,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             mLoadingListbar.setVisibility(View.GONE);
             mDrawerSubredditsList.setVisibility(View.GONE);
         }
+
     }
 
 
@@ -485,7 +486,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 //need to sync subscriptions after user logged in
-                RedditSyncAdapter.syncImmediately(this);
 
                 TextView helloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
                 String result = data.getStringExtra("result");

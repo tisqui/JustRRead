@@ -6,6 +6,7 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
@@ -33,6 +34,9 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private Context mContext;
 
+    public static final String ACTION_DATA_UPDATED =
+            "com.squirrel.justrread.ACTION_DATA_UPDATED";
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SUB_STATUS_OK, SUB_STATUS_SERVER_DOWN, SUB_STATUS_SERVER_INVALID, SUB_STATUS_UNKNOWN, SUB_STATUS_INVALID})
     public @interface SubscriptiosnStatus{}
@@ -53,9 +57,9 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        //TODO add the sync code
 
         Log.d(LOG_TAG, "onPerformSync called");
+        updateWidget();
 
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
@@ -152,6 +156,13 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle);
+    }
+
+    public void updateWidget(){
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
     }
 
 }
