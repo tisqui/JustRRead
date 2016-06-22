@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_reddit_grey600_24dp"
+            android:src="@drawable/ic_reddit_white_24dp"
             />
     </FrameLayout>
 

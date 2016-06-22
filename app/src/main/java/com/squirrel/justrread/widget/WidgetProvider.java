@@ -53,6 +53,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
             // Create an Intent to launch FrontpageFeedActivity when tapping on the top of the widget
             Intent intent = new Intent(context, FrontpageFeedActivity.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
