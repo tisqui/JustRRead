@@ -125,12 +125,11 @@ public class WidgetService extends RemoteViewsService {
                         .load(thumbnail)
                         .asBitmap()
                         .centerCrop()
-                        .centerCrop()
                         .placeholder(R.drawable.ic_duck_white_36dp)
                         .error(R.drawable.ic_duck_white_36dp)
                         .into(80, 80);
 
-                if(thumbnail != null && !thumbnail.isEmpty()){
+                if(thumbnail != null){
                     try {
                         Bitmap myBitmap = futureTarget.get();
                         views.setBitmap(R.id.widget_list_item_thumbnail, "setImageBitmap", myBitmap);

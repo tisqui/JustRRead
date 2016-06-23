@@ -9,6 +9,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.squirrel.justrread.BuildConfig;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.SearchResultsListAdapter;
 import com.squirrel.justrread.api.RedditAPI;
@@ -37,7 +40,6 @@ public class SubredditSearchResultsActivity extends BaseActivity {
 
     List<String> listOfResults;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,14 @@ public class SubredditSearchResultsActivity extends BaseActivity {
         mSearchResultsListAdapter = new SearchResultsListAdapter(this, listOfResults);
         mSearchResultsListView.setAdapter(mSearchResultsListAdapter);
         mSearchProgress.setVisibility(View.GONE);
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(BuildConfig.TEST_DEVICE_ID)
+                .build();
+        mAdView.loadAd(adRequest);
 
         handleIntent(getIntent());
     }
