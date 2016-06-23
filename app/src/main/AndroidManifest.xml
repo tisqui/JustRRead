@@ -81,6 +81,9 @@
             android:label=""
             android:parentActivityName=".activities.FrontpageFeedActivity"
             android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SubredditSearchResultsActivity"/>
         </activity>
         <activity android:name=".activities.SettingsActivity"
                   android:label="Settings"
