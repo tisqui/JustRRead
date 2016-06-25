@@ -29,7 +29,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squirrel.justrread.Authentification;
+import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.controllers.DrawerController;
@@ -87,6 +90,11 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frontpage_feed);
         getToolbar();
+
+        // Obtain the shared Tracker instance.
+        Init application = (Init) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         if (findViewById(R.id.two_pane_fragment_post_detail) != null) {
             // The application is in two pane mode

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string name="ga_trackingId"></string>
+    <bool name="ga_autoActivityTracking">true</bool>
+    <!-- The screen names that will appear in reports -->
+    <screenName name="com.squirrel.activities.FrontpageFeedActivity">
+        RRead MainFeed
+    </screenName>
+    <screenName name="com.squirrel.activities.DetailedPostActivity">
+        RRead DetailedPost
+    </screenName>
+    <screenName name="com.squirrel.activities.LoginActivity">
+        RRead Login
+    </screenName>
+    <screenName name="com.squirrel.activities.AboutSubredditActivity">
+        RRead AboutSubreddit
+    </screenName>
+    <screenName name="com.squirrel.activities.SettingsActivity">
+        RRead Settings
+    </screenName>
+    <screenName name="com.squirrel.activities.SubredditSearchResultsActivity">
+        RRead SearchResults
+    </screenName>
+    <screenName name="com.squirrel.activities.SubscriptionsActivity">
+        RRead Subscriptions
+    </screenName>
+    <screenName name="com.squirrel.activities.WebActivity">
+        RRead MainFeed
+    </screenName>
+    <!--Enable automatic exception tracking-->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+</resources>
