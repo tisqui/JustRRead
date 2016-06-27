@@ -23,7 +23,8 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
             android:gravity="center_vertical"
-            android:src="@drawable/ic_drag_vertical"/>
+            android:src="@drawable/ic_drag_vertical"
+            android:contentDescription="@string/subscriptions_list_item_drag_content_desc"/>
     </RelativeLayout>
 
 

@@ -29,6 +29,7 @@
             android:layout_marginRight="8dp"
             android:text="@string/drawer_setting_button"
             android:theme="@style/AppTheme.Button"
+            android:contentDescription="@string/drawer_settings_btn_content_desc"
             />
 
         <Button
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:text="@string/drawer_login_button"
             style="@style/Widget.AppCompat.Button.Colored"
+            android:contentDescription="@string/drawer_login_button_content_desc"
             />
     </LinearLayout>
 

@@ -100,4 +100,27 @@
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
+    <!-- Accessibility - content descriptions -->
+    <string name="comments_icon_content_description">Comment icon</string>
+    <string name="drawer_reddit_icon_content_description">Reddit icon</string>
+    <string name="drawer_frontpage_icon_content_desc">Frontpage icon</string>
+    <string name="drawer_random_content_description">Randm subreddit icon</string>
+    <string name="drawer_edit_subreddits_content_description">Edit subreddits button</string>
+    <string name="detail_post_upvote_content_descr">Upvote</string>
+    <string name="detail_downvote_content_description">Downvote</string>
+    <string name="detail_post_share_button_content_descr">Share button</string>
+    <string name="detail_post_thumbnail_img_content_desc">Post thumbnail image</string>
+    <string name="feed_item_upvote_content_descr">Upvote</string>
+    <string name="feed_item_downvote_content_desc">Downvote</string>
+    <string name="feed_item_thumbnail_content_desc">Post image thumbnail</string>
+    <string name="feed_item_comment_icon_content_desc">Comment icon</string>
+    <string name="drawer_settings_btn_content_desc">Settings button</string>
+    <string name="drawer_login_button_content_desc">Login button</string>
+    <string name="search_item_subscribe_btn_content_desc">Subscribe to subreddit button</string>
+    <string name="subscriptions_list_item_drag_content_desc">Adrag and drop list item</string>
+    <string name="widget_thumbnail_content_desc">Post image thumbnail</string>
+    <string name="widget_comment_icon_content_desc">Comment icon</string>
+    <string name="nsfw_settings_content_desc">Not safe for work checkbox</string>
+    <string name="night_mode_setting_content_desc">Night UI mode setting</string>
+
 </resources>

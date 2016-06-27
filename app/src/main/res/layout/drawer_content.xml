@@ -37,7 +37,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/drawer_item_margin_left"
             android:gravity="center_vertical"
-            android:src="@drawable/ic_reddit_grey600_24dp"/>
+            android:src="@drawable/ic_reddit_grey600_24dp"
+            android:contentDescription="@string/drawer_reddit_icon_content_description"/>
 
         <TextView
             android:id="@+id/drawer_all_item_text"
@@ -66,7 +67,8 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/drawer_item_margin_left"
-            android:src="@drawable/ic_poll_grey600_24dp"/>
+            android:src="@drawable/ic_poll_grey600_24dp"
+            android:contentDescription="@string/drawer_frontpage_icon_content_desc"/>
 
         <TextView
             android:id="@+id/drawer_frontapge_item_text"
@@ -94,7 +96,8 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/drawer_item_margin_left"
-            android:src="@drawable/ic_puzzle_grey600_24dp"/>
+            android:src="@drawable/ic_puzzle_grey600_24dp"
+            android:contentDescription="@string/drawer_random_content_description"/>
 
         <TextView
             android:id="@+id/drawer_random_item_text"
@@ -142,7 +145,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/drawer_item_margin_left"
             android:theme="@style/AppTheme.Button"
-            android:text="Edit"/>
+            android:text="Edit"
+            android:contentDescription="@string/drawer_edit_subreddits_content_description"/>
 
     </RelativeLayout>
 

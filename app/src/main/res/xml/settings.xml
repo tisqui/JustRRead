@@ -4,12 +4,14 @@
         android:defaultValue="false"
         android:key="@string/prefs_nightmode_key"
         android:summary="@string/prefs_night_mode_summary"
-        android:title="@string/prefs_night_mode_title"/>
+        android:title="@string/prefs_night_mode_title"
+        android:contentDescription="@string/night_mode_setting_content_desc"/>
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/prefs_nsfw_key"
         android:summary="Show NSFW content"
         android:title="NSFW"
+        android:contentDescription="@string/nsfw_settings_content_desc"
         />
 </PreferenceScreen>

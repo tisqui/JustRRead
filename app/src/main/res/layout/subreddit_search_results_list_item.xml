@@ -22,6 +22,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        android:contentDescription="@string/search_item_subscribe_btn_content_desc"/>
 
 </RelativeLayout>
