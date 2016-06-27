@@ -57,7 +57,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private LinearLayoutManager mLinearLayoutManager;
     private static final int POSTS_LOADER = 0;
     private static final String SELECTED_KEY = "selected_position";
-    public static final String SUBREDDIT_KEY = "subreddit_key";
+    public static final String Y_OFFSET_KEY = "y_offset";
     public static final int TWO_PANE_UNDEFINED = 2;
 
     private int mCurrentPage;
@@ -103,7 +103,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                         // to, do so now.
 
                         if (position < mPostsFeedAdapter.getCursor().getCount()) {
-                            mRecyclerView.smoothScrollToPosition(position);
                             RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
                                 //only for tablets open the detailed fragment
                                 mPostsFeedAdapter.onClick(null, position);
@@ -112,7 +111,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                                 }
 
                         }
-
 //                        if (null != vh && mAutoSelectView) {
 //                            FeedRecyclerViewAdapter.selectView(vh);
 //                        }
@@ -209,6 +207,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         if (mPosition != RecyclerView.NO_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }
+        int offset = mRecyclerView.computeVerticalScrollOffset();
+        outState.putInt(Y_OFFSET_KEY, offset);
     }
 
     @Override
@@ -292,8 +292,20 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         });
 
         // If there's instance state, get the last selected position
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        if (savedInstanceState != null) {
+            if(savedInstanceState.containsKey(SELECTED_KEY)){
+                mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            }
+            if(!mTwoPane && savedInstanceState.containsKey(Y_OFFSET_KEY)){
+//                final int yOffsset = savedInstanceState.getInt(Y_OFFSET_KEY);
+//                mRecyclerView.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mRecyclerView.smoothScrollBy(0, yOffsset);
+//                        mRecyclerView.scrollTo(0, yOffsset);
+//                    }
+//                });
+            }
         }
 
         //set the refresh
