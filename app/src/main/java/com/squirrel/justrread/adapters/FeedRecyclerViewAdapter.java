@@ -27,11 +27,13 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public static final int VIEW_TYPE_LOADING = 0;
     public static final int VIEW_TYPE_ACTIVITY = 1;
     protected boolean showLoader;
+    protected boolean mTwoPane;
 
-    public FeedRecyclerViewAdapter(List<Post> postList, Context context, View emptyView) {
+    public FeedRecyclerViewAdapter(List<Post> postList, Context context, View emptyView, boolean isTwoPane) {
         mPostList = postList;
         mContext = context;
         mEmptyView = emptyView;
+        mTwoPane = isTwoPane;
     }
 
 
@@ -71,8 +73,9 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         if(mCursor !=null && position < getItemCount() && mCursor.getCount() != 0){
             //        Post postItem = mPostList.get(position);
             Post postItem = DataMapper.mapCursorToPost(mCursor);
-            holder.itemView.setSelected(mSelectedPosition == position);
-
+            if(mTwoPane){
+                holder.itemView.setSelected(mSelectedPosition == position);
+            }
             bindPostsFeedViewHolder(holder, position);
 
 //        //set all the data to the UI elements

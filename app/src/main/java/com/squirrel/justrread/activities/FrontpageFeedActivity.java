@@ -102,6 +102,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         } else {
             mTwoPane = false;
         }
+        Utils.saveTwoPaneToSharedPfers(this, mTwoPane);
 
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer_linear_layout);
         mDrawerSubredditsList = (ListView) findViewById(R.id.drawer_subreddits_listview);
@@ -350,6 +351,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             isFirstLaunch = false;
             if (mTwoPane) {
                 setDetailsFragmentForTablet(post);
+            }else{
+                Intent intent = new Intent(this, DetailedPostActivity.class);
+                intent.putExtra(BaseActivity.POST_DETAIL_KEY, post);
+                startActivity(intent);
             }
         } else {
             if (mTwoPane) {

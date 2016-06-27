@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.squirrel.justrread.activities.FrontpageFeedActivity;
+import com.squirrel.justrread.fragments.FeedFragment;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.auth.AuthenticationManager;
@@ -102,6 +103,15 @@ public class Utils {
         spe.apply();
     }
 
+    public static void saveTwoPaneToSharedPfers(Context c, boolean isTwoPane){
+        saveIntItemToSharedPrefs(c, c.getString(R.string.two_pane_key), isTwoPane ? 1 : 0);
+    }
+
+    public static int getTwoPaneFromSharedPrefs(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getInt(c.getString(R.string.two_pane_key), FeedFragment.TWO_PANE_UNDEFINED);
+    }
+
 
     public static String getHtmlFromMarkdown(String markdown){
         return new MarkdownProcessor().markdown(markdown);
@@ -177,5 +187,4 @@ public class Utils {
         long timeDistance = currentDate().getTime() - time;
         return Math.round((Math.abs(timeDistance) / 1000) / 60);
     }
-
 }

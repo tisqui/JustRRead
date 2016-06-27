@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
 
-    public PostsFeedAdapter(List<Post> postList, Context context, View emptyView) {
-        super(postList, context, emptyView);
+    public PostsFeedAdapter(List<Post> postList, Context context, View emptyView, boolean isTwoPane) {
+        super(postList, context, emptyView, isTwoPane);
     }
 
     @Override
@@ -30,7 +30,9 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
         if(vholder instanceof FeedItemViewHolder){
             FeedItemViewHolder holder = (FeedItemViewHolder) vholder;
             final Post postItem = DataMapper.mapCursorToPost(mCursor);
-            holder.itemView.setSelected(mSelectedPosition == position);
+            if(mTwoPane) {
+                holder.itemView.setSelected(mSelectedPosition == position);
+            }
 
             //set the selector, depending on the theme
             if (PreferenceManager.getDefaultSharedPreferences(mContext)

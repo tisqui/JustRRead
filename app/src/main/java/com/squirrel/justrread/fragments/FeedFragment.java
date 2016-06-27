@@ -58,6 +58,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int POSTS_LOADER = 0;
     private static final String SELECTED_KEY = "selected_position";
     public static final String SUBREDDIT_KEY = "subreddit_key";
+    public static final int TWO_PANE_UNDEFINED = 2;
 
     private int mCurrentPage;
     private SubredditPaginator mSubredditPaginator;
@@ -65,6 +66,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private boolean mIsSubreddit;
     private String mSubredditId;
+
+    private boolean mTwoPane;
 
     private boolean mCanUpdate = true;
 
@@ -102,9 +105,12 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                         if (position < mPostsFeedAdapter.getCursor().getCount()) {
                             mRecyclerView.smoothScrollToPosition(position);
                             RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+                                //only for tablets open the detailed fragment
+                                mPostsFeedAdapter.onClick(null, position);
+                                if(mTwoPane) {
+                                    ((Callback) getActivity()).onItemSelected(DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor()));
+                                }
 
-                            mPostsFeedAdapter.onClick(null, position);
-                            ((Callback) getActivity()).onItemSelected(DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor()));
                         }
 
 //                        if (null != vh && mAutoSelectView) {
@@ -176,22 +182,33 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mRedditAPI = new RedditAPI();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
         setHasOptionsMenu(true);
+
+        // If there's instance state, get the last selected position
+//        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+//            if(!mTwoPane){
+//                mPosition = savedInstanceState.getInt(SELECTED_KEY);
+//                if(mRecyclerView != null){
+//                    mRecyclerView.smoothScrollToPosition(mPosition);
+//                }
+//            }
+//        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         // When tablets rotate, the currently selected list item needs to be saved.
         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
         // so check for that before storing.
         if (mPosition != RecyclerView.NO_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -208,7 +225,14 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         View emptyView = rootView.findViewById(R.id.posts_list_emply_message);
 
-        mPostsFeedAdapter = new PostsFeedAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView);
+        if (Utils.getTwoPaneFromSharedPrefs(getContext()) == 1) {
+            // The application is in two pane mode
+            mTwoPane = true;
+        } else {
+            mTwoPane = false;
+        }
+
+        mPostsFeedAdapter = new PostsFeedAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView, mTwoPane);
         mRecyclerView.setAdapter(mPostsFeedAdapter);
 
         mRecyclerView.addOnItemTouchListener(new PostClickListener(getActivity().getApplicationContext(),

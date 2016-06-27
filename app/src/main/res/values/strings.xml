@@ -48,6 +48,8 @@
 
     <!-- Shared prefs keys -->
     <string name="front_filter_key">front_filter</string>
+    <string name="two_pane_key">two_pane</string>
+
 
     <!-- Subreddit about screen -->
     <string name="subreddit_about_no_connection">No Internet connection. Try later.</string>
