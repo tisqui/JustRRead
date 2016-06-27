@@ -11,7 +11,6 @@ import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
-import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.ApiException;
 import net.dean.jraw.auth.AuthenticationManager;
@@ -56,16 +55,18 @@ public class RedditAPI {
     public void getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) {
         if (checkAuthentificationReady()) {
             if (paginator != null) {
-                if (sort != null) {
-                    paginator.setSorting(sort);
-                }
                 if (subredditId != null) {
                     //check of this is not the first page of the same subreddit for this paginator
                     if(!subredditId.equals(paginator.getSubreddit())) {
                         //need to reset paginator before setting new subreddit
+                        //delete all data, we are getting new subreddit
+                        context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
                         paginator.reset();
                         paginator.setSubreddit(subredditId);
                     }
+                }
+                if (sort != null) {
+                    paginator.setSorting(sort);
                 }
                 if (paginator.hasNext()) {
                     Listing<Submission> firstPage = paginator.next();
@@ -76,8 +77,6 @@ public class RedditAPI {
                     if (contentValuesList.size() > 0) {
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
-                        //delete all previous data
-                        context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
                     }
                 } else {
@@ -102,7 +101,6 @@ public class RedditAPI {
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
-                        RedditSyncAdapter.syncImmediately(context);
                     }
                 } else {
                     Log.d(LOG_TAG, "No more pages available");

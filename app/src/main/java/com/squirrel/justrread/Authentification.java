@@ -10,6 +10,7 @@ import com.squirrel.justrread.data.RedditContract;
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
 import net.dean.jraw.auth.NoSuchTokenException;
+import net.dean.jraw.http.NetworkException;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
@@ -165,8 +166,12 @@ public class Authentification {
         if(Utils.checkUserLoggedIn()){
             //clean all user subscriptions from DB
             context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI, null, null);
-            AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
-            AuthenticationManager.get().getRedditClient().deauthenticate();
+            try {
+                AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
+//                AuthenticationManager.get().getRedditClient().deauthenticate();
+            }catch (NetworkException e){
+                Log.d(LOG_TAG, e.getStackTrace().toString());
+            }
 
         } else {
             Log.d(LOG_TAG, "Can't logout, because OAUthStatus is: " +

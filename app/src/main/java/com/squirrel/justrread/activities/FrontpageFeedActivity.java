@@ -91,6 +91,11 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         setContentView(R.layout.activity_frontpage_feed);
         getToolbar();
 
+        if(isFirstLaunch){
+            //sync initially to get data for widget
+            RedditSyncAdapter.syncImmediately(this);
+        }
+
         // Obtain the shared Tracker instance.
         Init application = (Init) getApplication();
         Tracker tracker = application.getDefaultTracker();
@@ -145,7 +150,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         //set all the Drawer actions
         mDrawerController = new DrawerController(mDrawerLayout, this);
         mDrawerController.initDrawerActions();
-//        mDrawerController.setUserName();
+        mDrawerController.setUserName();
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment)));
         mDrawerController.setTheme();
@@ -497,6 +502,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 //need to sync subscriptions after user logged in
+                RedditSyncAdapter.syncImmediately(this);
 
                 TextView helloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
                 String result = data.getStringExtra("result");
