@@ -114,6 +114,7 @@ public class DrawerController {
                 @Override
                 public void onClick(View v) {
                     feedFragment.refreshNewSubreddit("all");
+                    feedFragment.setPageTitle("/all");
                     feedFragment.setIsSubreddit(false);
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                 }
@@ -122,7 +123,7 @@ public class DrawerController {
                 @Override
                 public void onClick(View v) {
                     feedFragment.setIsSubreddit(false);
-                    feedFragment.onResume();
+                    feedFragment.setPageTitle("/frontpage");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                 }
             });
@@ -130,6 +131,7 @@ public class DrawerController {
                 @Override
                 public void onClick(View v) {
                     feedFragment.refreshNewSubreddit("random");
+                    feedFragment.setPageTitle("/random");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                 }
             });

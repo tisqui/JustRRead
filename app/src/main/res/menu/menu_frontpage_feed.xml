@@ -42,9 +42,4 @@
         android:title="@string/action_controversial"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/logout"
-        android:orderInCategory="50"
-        android:title="LOGOUT"
-        app:showAsAction="never"/>
 </menu>

@@ -145,7 +145,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         //set all the Drawer actions
         mDrawerController = new DrawerController(mDrawerLayout, this);
         mDrawerController.initDrawerActions();
-        mDrawerController.setUserName();
+//        mDrawerController.setUserName();
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.feed_fragment)));
         mDrawerController.setTheme();
@@ -248,9 +248,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             Utils.saveMainFeedSortToSharedPrefs(this, FRONT_FILTER_CONTROVERSIAL);
             return true;
         }
-        if(id == R.id.logout){
-            Authentification.logout(this);
-        }
+
         if (id == R.id.action_subreddit_about) {
             FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.feed_fragment));
@@ -333,11 +331,11 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     }
 
 
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
-    }
+//    @Override
+//    public void setTitle(CharSequence title) {
+//        mTitle = title;
+//        getSupportActionBar().setTitle(mTitle);
+//    }
 
     /**
      * When the new post is clicked in the feed list - update the detailed fragment for the tablet view.
@@ -509,4 +507,5 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             }
         }
     }
+
 }

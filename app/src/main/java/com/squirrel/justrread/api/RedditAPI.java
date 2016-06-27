@@ -60,6 +60,7 @@ public class RedditAPI {
                     paginator.setSorting(sort);
                 }
                 if (subredditId != null) {
+//                    paginator.reset();
                     paginator.setSubreddit(subredditId);
                 }
                 if (paginator.hasNext()) {

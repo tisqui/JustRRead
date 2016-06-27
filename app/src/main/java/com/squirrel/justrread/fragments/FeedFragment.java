@@ -215,7 +215,14 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mCurrentPage = 1;
-        mIsSubreddit = false;
+        setIsSubreddit(Utils.getiSSubredditFromSharePrefs(getContext()));
+
+        if(isSubreddit()){
+            mSubredditId = Utils.getSubredditId(getContext());
+            setPageTitle("/"+mSubredditId);
+        }else{
+            setPageTitle("/frontpage");
+        }
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
@@ -502,6 +509,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public void setIsSubreddit(boolean isSubreddit) {
         mIsSubreddit = isSubreddit;
+        Utils.saveiSSubredditToSharedPrefs(getContext(), mIsSubreddit);
     }
 
     public String getSubredditId() {
@@ -510,8 +518,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public void refreshNewSubreddit(final String subredditId) {
         if (Utils.isNetworkAvailable(getContext())) {
-            mIsSubreddit = true;
+//            mIsSubreddit = true;
+            setIsSubreddit(true);
             mSubredditId = subredditId;
+            Utils.saveSubredditIdToSharedPrefs(getContext(), mSubredditId);
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -525,6 +535,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     super.onPostExecute(aVoid);
                     cleanAllSettingsOnrefresh();
                     Toast.makeText(getContext(), "Now browsing " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
+                    mSubredditId = mSubredditPaginator.getSubreddit();
                 }
             }.execute();
         } else {
@@ -561,5 +572,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
         }
         return false;
+    }
+
+    public void setPageTitle(String title){
+        getActivity().setTitle(title);
     }
 }

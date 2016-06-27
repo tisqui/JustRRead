@@ -112,6 +112,28 @@ public class Utils {
         return sp.getInt(c.getString(R.string.two_pane_key), FeedFragment.TWO_PANE_UNDEFINED);
     }
 
+    public static void saveiSSubredditToSharedPrefs(Context c, boolean isSubreddit){
+        saveIntItemToSharedPrefs(c, c.getString(R.string.is_subreddit), isSubreddit ? 1 : 0);
+    }
+
+    public static boolean getiSSubredditFromSharePrefs(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        int res = sp.getInt(c.getString(R.string.is_subreddit), 0);
+        return res == 0 ? false : true;
+    }
+
+    public static void saveSubredditIdToSharedPrefs(Context c, String subredditId){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putString(c.getString(R.string.subreddit_id), subredditId);
+        spe.apply();
+    }
+
+    public static String getSubredditId(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getString(c.getString(R.string.subreddit_id), "");
+    }
+
 
     public static String getHtmlFromMarkdown(String markdown){
         return new MarkdownProcessor().markdown(markdown);

@@ -49,6 +49,8 @@
     <!-- Shared prefs keys -->
     <string name="front_filter_key">front_filter</string>
     <string name="two_pane_key">two_pane</string>
+    <string name="is_subreddit">is_paginator_subreddit</string>
+    <string name="subreddit_id">paginator_subreddit_id</string>
 
 
     <!-- Subreddit about screen -->
