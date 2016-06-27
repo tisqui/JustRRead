@@ -60,8 +60,12 @@ public class RedditAPI {
                     paginator.setSorting(sort);
                 }
                 if (subredditId != null) {
-//                    paginator.reset();
-                    paginator.setSubreddit(subredditId);
+                    //check of this is not the first page of the same subreddit for this paginator
+                    if(!subredditId.equals(paginator.getSubreddit())) {
+                        //need to reset paginator before setting new subreddit
+                        paginator.reset();
+                        paginator.setSubreddit(subredditId);
+                    }
                 }
                 if (paginator.hasNext()) {
                     Listing<Submission> firstPage = paginator.next();

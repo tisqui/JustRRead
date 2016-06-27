@@ -50,7 +50,7 @@
         <activity
             android:name=".activities.WebActivity"
             android:label=""
-            android:parentActivityName=".activities.FrontpageFeedActivity"
+            android:parentActivityName=".activities.DetailedPostActivity"
             android:theme="@style/AppTheme">
         </activity>
         <activity
