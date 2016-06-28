@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
@@ -35,10 +37,14 @@ public class DrawerController {
     private RelativeLayout mDrawerRandomItem;
     private TextView mHelloUserText;
 
+    private Tracker mTracker;
 
-    public DrawerController(DrawerLayout drawerLayout, Context context) {
+
+    public DrawerController(DrawerLayout drawerLayout, Context context, Tracker tracker) {
         mDrawerLayout = drawerLayout;
         mContext = context;
+        mTracker = tracker;
+
     }
 
     private void setLoginButton(){
@@ -117,14 +123,33 @@ public class DrawerController {
                     feedFragment.setPageTitle("/all");
                     feedFragment.setIsSubreddit(false);
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
+
+                    //set the GA event
+                    if(mTracker != null){
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory(mContext.getString(R.string.ga_subreddits_category))
+                                .setAction(mContext.getString(R.string.ga_all_action))
+                                .setLabel(mContext.getString(R.string.ga_subreddit_label))
+                                .build());
+                    }
                 }
             });
             mDrawerFrontpageItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     feedFragment.setIsSubreddit(false);
+                    feedFragment.refreshNewSorting();
                     feedFragment.setPageTitle("/frontpage");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
+
+                    //set the GA event
+                    if(mTracker != null){
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory(mContext.getString(R.string.ga_subreddits_category))
+                                .setAction(mContext.getString(R.string.ga_frontpage_action))
+                                .setLabel(mContext.getString(R.string.ga_subreddit_label))
+                                .build());
+                    }
                 }
             });
             mDrawerRandomItem.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +158,15 @@ public class DrawerController {
                     feedFragment.refreshNewSubreddit("random");
                     feedFragment.setPageTitle("/random");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
+
+                    //set the GA event
+                    if(mTracker != null){
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory(mContext.getString(R.string.ga_subreddits_category))
+                                .setAction(mContext.getString(R.string.ga_random_action))
+                                .setLabel(mContext.getString(R.string.ga_subreddit_label))
+                                .build());
+                    }
                 }
             });
         }

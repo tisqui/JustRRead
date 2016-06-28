@@ -81,6 +81,8 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     private Button mLogin;
     private DrawerController mDrawerController;
 
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -98,8 +100,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
         // Obtain the shared Tracker instance.
         Init application = (Init) getApplication();
-        Tracker tracker = application.getDefaultTracker();
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        mTracker = application.getDefaultTracker();
 
         if (findViewById(R.id.two_pane_fragment_post_detail) != null) {
             // The application is in two pane mode
@@ -148,7 +149,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_reddit);
 
         //set all the Drawer actions
-        mDrawerController = new DrawerController(mDrawerLayout, this);
+        mDrawerController = new DrawerController(mDrawerLayout, this, mTracker);
         mDrawerController.initDrawerActions();
         mDrawerController.setUserName();
         mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
@@ -162,8 +163,18 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             public void onClick(View v) {
                 if (Utils.checkUserLoggedIn()) {
                     Navigator.navigateToSubredditsSettings(v.getContext());
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_logget_in_user_category))
+                            .setAction(getString(R.string.ga_edit_subscriptions_action))
+                            .setLabel(getString(R.string.ga_label_button))
+                            .build());
                 } else {
                     BaseActivity.showLoginAlert(FrontpageFeedActivity.this);
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_logged_out_category))
+                            .setAction(getString(R.string.ga_edit_subscriptions_action))
+                            .setLabel(getString(R.string.ga_label_button))
+                            .build());
                 }
             }
         });
@@ -273,14 +284,12 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        //TODO smth
+        //do nothing
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        //load the subscriptions data, if user logged in
         if (Utils.checkUserLoggedIn()) {
 //            new AsyncTask<Void, Void, Void>() {
 //                @Override
@@ -334,13 +343,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         Toast.makeText(this, "Item " + position + "clicked", Toast.LENGTH_SHORT).show();
         mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
-
-
-//    @Override
-//    public void setTitle(CharSequence title) {
-//        mTitle = title;
-//        getSupportActionBar().setTitle(mTitle);
-//    }
 
     /**
      * When the new post is clicked in the feed list - update the detailed fragment for the tablet view.
@@ -472,6 +474,11 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                 public void onClick(View v) {
                     Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivityForResult(loginIntent, 1);
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_logged_out_category))
+                            .setAction(getString(R.string.ga_login_action))
+                            .setLabel(getString(R.string.ga_label_button))
+                            .build());
                 }
             });
         } else {
@@ -479,6 +486,11 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             mLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_logget_in_user_category))
+                            .setAction(getString(R.string.ga_logout_action))
+                            .setLabel(getString(R.string.ga_label_button))
+                            .build());
                     new AsyncTask<Void, Void, Void>() {
                         @Override
                         protected Void doInBackground(Void... params) {

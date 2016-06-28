@@ -11,7 +11,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squirrel.justrread.BuildConfig;
+import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.adapters.SearchResultsListAdapter;
 import com.squirrel.justrread.api.RedditAPI;
@@ -39,6 +42,7 @@ public class SubredditSearchResultsActivity extends BaseActivity {
     private SearchResultsListAdapter mSearchResultsListAdapter;
 
     List<String> listOfResults;
+    private Tracker mTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class SubredditSearchResultsActivity extends BaseActivity {
         setContentView(R.layout.activity_subreddit_search_results);
         activateToolbarWithHomeEnabled();
         ButterKnife.bind(this);
+
+        mTracker = ((Init)getApplication()).getDefaultTracker();
 
         listOfResults = new ArrayList<String>();
 
@@ -76,7 +82,14 @@ public class SubredditSearchResultsActivity extends BaseActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             final String query = intent.getStringExtra(SearchManager.QUERY);
             mSearchProgress.setVisibility(View.VISIBLE);
-            //use the query to search your data somehow
+
+            //add GA event
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(getString(R.string.ga_search_category))
+                    .setAction(getString(R.string.ga_search_action))
+                    .setLabel(query)
+                    .build());
+
             new AsyncTask<Void, Void, List<String>>() {
                 @Override
                 protected List<String> doInBackground(Void... params) {

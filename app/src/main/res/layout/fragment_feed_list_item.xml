@@ -27,7 +27,6 @@
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="100"
                 android:textColor="@color/buttonsTextColor"/>
 
             <Button
@@ -68,7 +67,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:maxLines="1"
-                    android:text="(imgur.net)"
                     android:textColor="@color/buttonsTextColor"
                     android:textSize="@dimen/smallTextSize"/>
 
@@ -77,7 +75,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:text="22 days ago"
                     android:textColor="@color/postsListdateTextColor"
                     android:textSize="@dimen/smallTextSize"/>
 
@@ -90,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:maxLines="3"
-                android:text="Post title"
                 android:textSize="@dimen/titleTextSize"/>
 
 
@@ -111,7 +107,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="10"
                     android:textColor="@color/colorAccent"/>
 
                 <!--<Button-->

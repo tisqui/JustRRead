@@ -123,4 +123,20 @@
     <string name="nsfw_settings_content_desc">Not safe for work checkbox</string>
     <string name="night_mode_setting_content_desc">Night UI mode setting</string>
 
+    <!-- GA events -->
+    <string name="ga_logget_in_user_category">Logged in user</string>
+    <string name="ga_edit_subscriptions_action">Edit subsriptions</string>
+    <string name="ga_label_button">Button</string>
+    <string name="ga_logged_out_category">Logged out</string>
+    <string name="ga_login_action">Login</string>
+    <string name="ga_logout_action">Logout</string>
+    <string name="ga_subreddits_category">Subreddits</string>
+    <string name="ga_all_action">All</string>
+    <string name="ga_subreddit_label">Open subreddit</string>
+    <string name="ga_frontpage_action">Frontpage</string>
+    <string name="ga_random_action">Random</string>
+    <string name="ga_search_category">Search</string>
+    <string name="ga_search_action">Search subreddit</string>
+
+
 </resources>
