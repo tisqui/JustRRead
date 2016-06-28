@@ -138,7 +138,7 @@ public class DrawerController {
                 @Override
                 public void onClick(View v) {
                     feedFragment.setIsSubreddit(false);
-                    feedFragment.refreshNewSorting();
+                    feedFragment.getInitialFrontpage();
                     feedFragment.setPageTitle("/frontpage");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 

@@ -88,7 +88,7 @@ public class RedditAPI {
         }
     }
 
-    public void getPostsFront(SubredditPaginator paginator, Context context) {
+    public void getPostsFront(SubredditPaginator paginator, Context context, boolean doClear) {
         if (checkAuthentificationReady()) {
             if (paginator != null) {
                 if (paginator.hasNext()) {
@@ -100,6 +100,9 @@ public class RedditAPI {
                     if (contentValuesList.size() > 0) {
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
+                        if(doClear){
+                            context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
+                        }
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
                     }
                 } else {
