@@ -263,40 +263,36 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 if (Utils.isNetworkAvailable(getContext())) {
-
-                    if (mCanUpdate) {
-                        Log.d(LOG_TAG, "LOADING MORE");
+                     Log.d(LOG_TAG, "LOADING MORE");
                         //show the loading
                         mPostsFeedAdapter.showLoading(true);
                         mPostsFeedAdapter.notifyDataSetChanged();
 
                         if (mSubredditPaginator != null) {
-                            new AsyncTask<Void, Void, Void>() {
+                            new AsyncTask<Void, Void, Boolean>() {
                                 @Override
-                                protected Void doInBackground(Void... params) {
-                                    mCanUpdate = false;
+                                protected Boolean doInBackground(Void... params) {
                                     if (!mIsSubreddit) {
-                                        mRedditAPI.getPostsFront(mSubredditPaginator, getContext(), false);
+                                       return mRedditAPI.getPostsFront(mSubredditPaginator, getContext(), false);
                                     } else {
-                                        mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
+                                       return mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
                                     }
-                                    return null;
                                 }
 
                                 @Override
-                                protected void onPostExecute(Void aVoid) {
-                                    super.onPostExecute(aVoid);
+                                protected void onPostExecute(Boolean ifDownloadedNew) {
+                                    super.onPostExecute(ifDownloadedNew);
                                     mPostsFeedAdapter.showLoading(false);
-                                    mPostsFeedAdapter.notifyDataSetChanged();
-                                    mCanUpdate = true;
-                                    mCurrentPage++;
-                                    mPosition += 50;
+                                    if(ifDownloadedNew) {
+                                        mPostsFeedAdapter.notifyDataSetChanged();
+                                        mCurrentPage++;
+                                        // mPosition += 50;
+                                    }else{
+                                        Toast.makeText(getContext(), "No posts to load more", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }.execute();
                         }
-                    } else {
-                        Log.d(LOG_TAG, "Previous Update is still in progress, can't load more now.");
-                    }
                 }else{
                     Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
                 }
@@ -309,14 +305,14 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 mPosition = savedInstanceState.getInt(SELECTED_KEY);
             }
             if(!mTwoPane && savedInstanceState.containsKey(Y_OFFSET_KEY)){
-//                final int yOffsset = savedInstanceState.getInt(Y_OFFSET_KEY);
-//                mRecyclerView.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mRecyclerView.smoothScrollBy(0, yOffsset);
+                final int yOffsset = savedInstanceState.getInt(Y_OFFSET_KEY);
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRecyclerView.smoothScrollBy(0, yOffsset);
 //                        mRecyclerView.scrollTo(0, yOffsset);
-//                    }
-//                });
+                    }
+                });
             }
         }
 
@@ -402,11 +398,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         if (Utils.isNetworkAvailable(getContext())) {
             mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
             mSubredditPaginator.setLimit(50);
-            if (mCanUpdate) {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        mCanUpdate = false;
                         if (!mIsSubreddit) {
                             mRedditAPI.getPostsFront(mSubredditPaginator, getContext(), true);
                         } else {
@@ -418,11 +412,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
-                        mCanUpdate = true;
                         Toast.makeText(getContext(), "Now browsing frontpage " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
                     }
                 }.execute();
-            }
         } else {
             Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
         }
@@ -511,6 +503,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 }.execute();
             } else {
                 Log.d(LOG_TAG, "Previous Update is still in progress");
+                mSwipeContainer.setRefreshing(false);
             }
         }else {
             Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();

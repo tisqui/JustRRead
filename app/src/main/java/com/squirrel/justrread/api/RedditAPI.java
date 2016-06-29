@@ -52,7 +52,8 @@ public class RedditAPI {
     }
 
     //get the subreddit feed
-    public void getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) {
+    public boolean getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) {
+        boolean res = false;
         if (checkAuthentificationReady()) {
             if (paginator != null) {
                 if (subredditId != null) {
@@ -75,6 +76,7 @@ public class RedditAPI {
                         contentValuesList.add(DataMapper.mapSubmissionToContentValues(s));
                     }
                     if (contentValuesList.size() > 0) {
+                        res = true;
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
@@ -86,9 +88,11 @@ public class RedditAPI {
         } else {
             Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
         }
+        return true;
     }
 
-    public void getPostsFront(SubredditPaginator paginator, Context context, boolean doClear) {
+    public boolean getPostsFront(SubredditPaginator paginator, Context context, boolean doClear) {
+        boolean res = false;
         if (checkAuthentificationReady()) {
             if (paginator != null) {
                 if (paginator.hasNext()) {
@@ -98,6 +102,7 @@ public class RedditAPI {
                         contentValuesList.add(DataMapper.mapSubmissionToContentValues(s));
                     }
                     if (contentValuesList.size() > 0) {
+                        res = true;
                         ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
                         contentValuesList.toArray(cvArray);
                         if(doClear){
@@ -112,6 +117,7 @@ public class RedditAPI {
                 Log.d(LOG_TAG, "getFrontPost: Not Authentificated");
             }
         }
+        return res;
     }
 
     public List<CommentNode> getTopNodeAllComments(String postId) {

@@ -199,6 +199,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         menu.findItem(R.id.action_new).setVisible(!drawerOpen);
         menu.findItem(R.id.action_controversial).setVisible(!drawerOpen);
         menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+
+        boolean showAboutAction = ((FeedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.feed_fragment)).isSubreddit();
+        menu.findItem(R.id.action_subreddit_about).setVisible(!drawerOpen && showAboutAction);
         return super.onPrepareOptionsMenu(menu);
     }
 
