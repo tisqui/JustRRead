@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.squirrel.justrread.activities.FrontpageFeedActivity;
-import com.squirrel.justrread.fragments.FeedFragment;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.auth.AuthenticationManager;
@@ -101,15 +100,6 @@ public class Utils {
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(key, value);
         spe.apply();
-    }
-
-    public static void saveTwoPaneToSharedPfers(Context c, boolean isTwoPane){
-        saveIntItemToSharedPrefs(c, c.getString(R.string.two_pane_key), isTwoPane ? 1 : 0);
-    }
-
-    public static int getTwoPaneFromSharedPrefs(Context c){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        return sp.getInt(c.getString(R.string.two_pane_key), FeedFragment.TWO_PANE_UNDEFINED);
     }
 
     public static void saveiSSubredditToSharedPrefs(Context c, boolean isSubreddit){

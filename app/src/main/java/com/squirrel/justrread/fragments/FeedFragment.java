@@ -87,9 +87,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mPostsFeedAdapter.swapCursor(data);
         updateEmptyView();
-        if (data.getCount() == 0) {
-//            getActivity().supportStartPostponedEnterTransition();
-        } else {
+        if (data.getCount() != 0) {
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
@@ -97,33 +95,28 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     // we see Children.
                     if (mRecyclerView.getChildCount() > 0) {
                         mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        int position = mPosition;
-                        if (position == RecyclerView.NO_POSITION) position = 0;
+                        if (mPosition == RecyclerView.NO_POSITION) {
+                            mPosition = 0;
+                            mPostsFeedAdapter.onClick(null, mPosition);
+                        }
                         // If we don't need to restart the loader, and there's a desired position to restore
                         // to, do so now.
 
-                        if (position < mPostsFeedAdapter.getCursor().getCount()) {
-                            RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+                        if (mPosition < mPostsFeedAdapter.getCursor().getCount()) {
+                            RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(mPosition);
                                 //only for tablets open the detailed fragment
-                                mPostsFeedAdapter.onClick(null, position);
+                                mPostsFeedAdapter.onClick(null, mPosition);
                                 if(mTwoPane) {
                                     ((Callback) getActivity()).onItemSelected(DataMapper.mapCursorToPost(mPostsFeedAdapter.getCursor()));
                                 }
-
                         }
-//                        if (null != vh && mAutoSelectView) {
-//                            FeedRecyclerViewAdapter.selectView(vh);
-//                        }
-//                        if ( mHoldForTransition ) {
-//                            getActivity().supportStartPostponedEnterTransition();
-//                        }
+                        mRecyclerView.smoothScrollToPosition(mPosition);
                         return true;
                     }
                     return false;
                 }
             });
         }
-        mSwipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -224,6 +217,11 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             setPageTitle("/frontpage");
         }
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mTwoPane = arguments.getBoolean("TwoPane");
+        }
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feed_recycler_view);
@@ -231,13 +229,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         View emptyView = rootView.findViewById(R.id.posts_list_emply_message);
-
-        if (Utils.getTwoPaneFromSharedPrefs(getContext()) == 1) {
-            // The application is in two pane mode
-            mTwoPane = true;
-        } else {
-            mTwoPane = false;
-        }
 
         mPostsFeedAdapter = new PostsFeedAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView, mTwoPane);
         mRecyclerView.setAdapter(mPostsFeedAdapter);
@@ -370,28 +361,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
         getInitialFrontpage();
 
-//        mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-//        mSubredditPaginator.setLimit(50);
-//        if (mCanUpdate) {
-//            new AsyncTask<Void, Void, Void>() {
-//                @Override
-//                protected Void doInBackground(Void... params) {
-//                    mCanUpdate = false;
-//                    if (!mIsSubreddit) {
-//                        mRedditAPI.getPostsFront(mSubredditPaginator, getContext());
-//                    } else {
-//                        mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
-//                    }
-//                    return null;
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Void aVoid) {
-//                    super.onPostExecute(aVoid);
-//                    mCanUpdate = true;
-//                }
-//            }.execute();
-//        }
     }
 
     public void getInitialFrontpage(){
@@ -412,7 +381,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
-                        Toast.makeText(getContext(), "Now browsing frontpage " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "Now browsing frontpage " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
                     }
                 }.execute();
         } else {
@@ -440,6 +409,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private void updateEmptyView() {
         if (mPostsFeedAdapter.getItemCount() == 0) {
             TextView tv = (TextView) getView().findViewById(R.id.posts_list_emply_message);
+            mRecyclerView.setVisibility(View.GONE);
+            tv.setVisibility(View.VISIBLE);
             if (null != tv) {
                 // if cursor is empty, why?
                 int message = R.string.empty_posts_list;

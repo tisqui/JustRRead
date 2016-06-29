@@ -15,6 +15,7 @@
         android:drawSelectorOnTop="true"
         android:scrollbars="vertical"
         />
+
     <!-- empty list -->
     <TextView
         android:id="@+id/posts_list_emply_message"

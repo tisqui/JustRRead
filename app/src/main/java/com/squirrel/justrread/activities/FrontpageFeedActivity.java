@@ -83,6 +83,8 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
     private Tracker mTracker;
 
+    private FeedFragment mFeedFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -108,7 +110,14 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         } else {
             mTwoPane = false;
         }
-        Utils.saveTwoPaneToSharedPfers(this, mTwoPane);
+
+        mFeedFragment = new FeedFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("TwoPane", mTwoPane);
+        mFeedFragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.feed_fragment, mFeedFragment, DETAILFRAGMENT_TAG)
+                .commit();
 
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer_linear_layout);
         mDrawerSubredditsList = (ListView) findViewById(R.id.drawer_subreddits_listview);
@@ -152,8 +161,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerController = new DrawerController(mDrawerLayout, this, mTracker);
         mDrawerController.initDrawerActions();
         mDrawerController.setUserName();
-        mDrawerController.setCotentActions(((FeedFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.feed_fragment)));
+        mDrawerController.setCotentActions(mFeedFragment);
         mDrawerController.setTheme();
 
         //set the Edit button
@@ -200,8 +208,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         menu.findItem(R.id.action_controversial).setVisible(!drawerOpen);
         menu.findItem(R.id.action_search).setVisible(!drawerOpen);
 
-        boolean showAboutAction = ((FeedFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.feed_fragment)).isSubreddit();
+        boolean showAboutAction = mFeedFragment.isSubreddit();
         menu.findItem(R.id.action_subreddit_about).setVisible(!drawerOpen && showAboutAction);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -270,11 +277,9 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         }
 
         if (id == R.id.action_subreddit_about) {
-            FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.feed_fragment));
-            if (feedFragment.isSubreddit()) {
+            if (mFeedFragment.isSubreddit()) {
                 Intent intent = new Intent(this, AboutSubredditActivity.class);
-                intent.putExtra(BaseActivity.SUBREDDIT_ID_KEY, feedFragment.getSubredditId());
+                intent.putExtra(BaseActivity.SUBREDDIT_ID_KEY, mFeedFragment.getSubredditId());
                 startActivity(intent);
             }
             return true;
@@ -335,10 +340,8 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     private void selectItem(int position) {
 
         // Call the method to refresh the feed for subreddit now
-        FeedFragment feedFragment = ((FeedFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.feed_fragment));
-        if (feedFragment != null && mDrawerSubredditsList.getCount() >0) {
-            feedFragment.refreshNewSubreddit(mDrawerSubredditsListAdapter.getItem(position));
+        if (mFeedFragment != null && mDrawerSubredditsList.getCount() >0) {
+            mFeedFragment.refreshNewSubreddit(mDrawerSubredditsListAdapter.getItem(position));
         }
         // Highlight the selected item, update the title, and close the drawer
         mDrawerSubredditsList.setItemChecked(position, true);

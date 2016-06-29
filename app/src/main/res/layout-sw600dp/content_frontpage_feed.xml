@@ -21,15 +21,13 @@
         android:showDividers="middle"
         android:layout_below="@+id/application_toolbar">
 
-        <fragment
+        <FrameLayout
             android:id="@+id/feed_fragment"
-            android:name="com.squirrel.justrread.fragments.FeedFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            tools:context="com.squirrel.justrread.fragments.FeedFragment"
             android:layout_weight="1.7"
             tools:layout="@layout/fragment_feed">
-        </fragment>
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/two_pane_fragment_post_detail"
