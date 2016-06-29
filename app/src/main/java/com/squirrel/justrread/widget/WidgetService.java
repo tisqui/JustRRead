@@ -134,9 +134,7 @@ public class WidgetService extends RemoteViewsService {
                         Bitmap myBitmap = futureTarget.get();
                         views.setBitmap(R.id.widget_list_item_thumbnail, "setImageBitmap", myBitmap);
                         Glide.clear(futureTarget);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
+                    } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
                 } else {

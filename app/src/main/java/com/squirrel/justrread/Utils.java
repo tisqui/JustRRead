@@ -109,7 +109,7 @@ public class Utils {
     public static boolean getiSSubredditFromSharePrefs(Context c){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         int res = sp.getInt(c.getString(R.string.is_subreddit), 0);
-        return res == 0 ? false : true;
+        return res != 0;
     }
 
     public static void saveSubredditIdToSharedPrefs(Context c, String subredditId){

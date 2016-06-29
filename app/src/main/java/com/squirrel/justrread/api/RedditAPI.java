@@ -68,6 +68,7 @@ public class RedditAPI {
                 }
                 if (sort != null) {
                     paginator.setSorting(sort);
+                    context.getContentResolver().delete(RedditContract.PostEntry.CONTENT_URI, null, null);
                 }
                 if (paginator.hasNext()) {
                     Listing<Submission> firstPage = paginator.next();
@@ -82,7 +83,7 @@ public class RedditAPI {
                         context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
                     }
                 } else {
-                    Log.d(LOG_TAG, "No more pages available");
+                    Log.d(LOG_TAG, "No more posts available");
                 }
             }
         } else {
@@ -125,9 +126,7 @@ public class RedditAPI {
             FluentIterable<CommentNode> nodes = AuthenticationManager.get().getRedditClient().
                     getSubmission(postId).getComments().walkTree(TraversalMethod.PRE_ORDER);
 
-            List<CommentNode> resultList = nodes.toList();
-
-            return resultList;
+            return nodes.toList();
         }
         return null;
     }
@@ -271,6 +270,7 @@ public class RedditAPI {
             cursor.close();
             return true;
         } else {
+            assert cursor != null;
             cursor.close();
             return false;
         }

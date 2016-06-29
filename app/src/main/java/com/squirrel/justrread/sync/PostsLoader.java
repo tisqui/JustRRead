@@ -52,10 +52,12 @@ public class PostsLoader extends AsyncTaskLoader<List<Post>> {
     public List<Post> loadInBackground() {
         List<Post> postsList = new ArrayList<>();
         Cursor postCursor = mContext.getContentResolver().query(RedditContract.PostEntry.CONTENT_URI, null, null, null, null);
-        int count = postCursor.getCount();
-        for(int i=0; i< count; i++){
-            postCursor.moveToPosition(i);
-            postsList.add(mapPost(postCursor));
+        if(postCursor != null){
+            int count = postCursor.getCount();
+            for(int i=0; i< count; i++){
+                postCursor.moveToPosition(i);
+                postsList.add(mapPost(postCursor));
+            }
         }
         return postsList;
     }
@@ -70,9 +72,9 @@ public class PostsLoader extends AsyncTaskLoader<List<Post>> {
                 new Date(cursor.getLong(COL_DATE_CREATED)),
                 cursor.getString(COL_AUTHOR),
                 cursor.getString(COL_DOMAIN),
-                cursor.getInt(COL_SELF)==1 ? true:false,
+                cursor.getInt(COL_SELF) == 1,
                 cursor.getInt(COL_NUM_COMMENTS),
-                cursor.getInt(COL_NSFW)==1 ? true:false,
+                cursor.getInt(COL_NSFW) == 1,
                 cursor.getString(COL_SUBREDDIT),
                 cursor.getString(COL_SUBREDDIT_ID),
                 cursor.getString(COL_SELFHTML),

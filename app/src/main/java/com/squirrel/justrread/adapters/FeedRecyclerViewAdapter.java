@@ -46,8 +46,7 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
         } else if (viewType == VIEW_TYPE_ACTIVITY){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_feed_list_item, parent, false);
-            FeedItemViewHolder feedViewHolder = new FeedItemViewHolder(view);
-            return feedViewHolder;
+            return new FeedItemViewHolder(view);
         }
         throw new IllegalArgumentException("Invalid ViewType: " + viewType);
 

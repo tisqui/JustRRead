@@ -65,8 +65,9 @@ public class SubredditSearchResultsActivity extends BaseActivity {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice(BuildConfig.TEST_DEVICE_ID)
                 .build();
-        mAdView.loadAd(adRequest);
-
+        if(mAdView != null){
+            mAdView.loadAd(adRequest);
+        }
         handleIntent(getIntent());
     }
 

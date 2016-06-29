@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.squirrel.justrread.R;
 
-import org.w3c.dom.Text;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

@@ -104,12 +104,8 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         Init application = (Init) getApplication();
         mTracker = application.getDefaultTracker();
 
-        if (findViewById(R.id.two_pane_fragment_post_detail) != null) {
-            // The application is in two pane mode
-            mTwoPane = true;
-        } else {
-            mTwoPane = false;
-        }
+        // The application is in two pane mode
+        mTwoPane = findViewById(R.id.two_pane_fragment_post_detail) != null;
 
         mFeedFragment = new FeedFragment();
         Bundle args = new Bundle();
@@ -379,15 +375,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         }
     }
 
-    @Override
-    public void onWebOpen(String url) {
-        //TODO add the logic for opened web page
-    }
-
     /**
      * Set up the post which will be passed to tge detailed fragment
      *
-     * @param post
+     * @param post the post which is selected now
      */
     private void setDetailsFragmentForTablet(Post post) {
         Bundle args = new Bundle();

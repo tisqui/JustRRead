@@ -129,9 +129,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Post post);
-
-        public void onWebOpen(String url);
+        void onItemSelected(Post post);
     }
 
 

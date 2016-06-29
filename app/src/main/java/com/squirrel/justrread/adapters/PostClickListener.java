@@ -12,9 +12,9 @@ import android.view.View;
  */
 public class PostClickListener implements RecyclerView.OnItemTouchListener {
 
-    public static interface OnItemClickListener{
-        public void onItemClick(View view, int position);
-        public void onItemLongClick(View view, int position);
+    public interface OnItemClickListener{
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
     }
 
     private OnItemClickListener mOnItemClickListener;

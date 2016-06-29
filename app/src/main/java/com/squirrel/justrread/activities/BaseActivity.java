@@ -135,8 +135,7 @@ public class BaseActivity extends AppCompatActivity {
     public int getNavBarSize(){
         TypedValue tv = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
-        return actionBarHeight;
+        return getResources().getDimensionPixelSize(tv.resourceId);
     }
 
     public static void showLoginAlert(final Context context){

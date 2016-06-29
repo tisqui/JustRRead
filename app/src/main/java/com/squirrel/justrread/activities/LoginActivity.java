@@ -87,7 +87,7 @@ public class LoginActivity extends BaseActivity {
             protected void onPostExecute(String s) {
                 Log.i(LOG_TAG, s + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",s.toString());
+                returnIntent.putExtra("result",s);
                 setResult(Activity.RESULT_OK, returnIntent);
                 LoginActivity.this.finish();
             }

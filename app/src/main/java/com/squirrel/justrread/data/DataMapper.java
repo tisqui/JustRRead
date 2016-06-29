@@ -99,9 +99,9 @@ public class DataMapper {
                 new Date(cursor.getLong(COL_DATE_CREATED)),
                 cursor.getString(COL_AUTHOR),
                 cursor.getString(COL_DOMAIN),
-                cursor.getInt(COL_SELF)==1 ? true:false,
+                cursor.getInt(COL_SELF) == 1,
                 cursor.getInt(COL_NUM_COMMENTS),
-                cursor.getInt(COL_NSFW)==1 ? true:false,
+                cursor.getInt(COL_NSFW) == 1,
                 cursor.getString(COL_SUBREDDIT),
                 cursor.getString(COL_SUBREDDIT_ID),
                 cursor.getString(COL_SELFHTML),
@@ -126,7 +126,7 @@ public class DataMapper {
         return new Subscription(
                 cursor.getString(COL_SUBSCRIPTION_ID),
                 cursor.getString(COL_SUBSCRIPTION_DISPLAY_NAME),
-                cursor.getInt(COL_SUBSCRIPTION_NSFW)==1 ? true:false
+                cursor.getInt(COL_SUBSCRIPTION_NSFW) == 1
         );
     }
 }
