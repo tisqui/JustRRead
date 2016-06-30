@@ -124,12 +124,12 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 //        notifyItemRangeInserted(curSize, mPostList.size() - 1);
 //    }
 //
-//    public Post getPost(int position){
-//        if(mPostList != null){
-//            return mPostList.get(position);
-//        }
-//        return null;
-//    }
+    public Post getPost(int position){
+        if(mPostList != null && !mPostList.isEmpty()){
+            return mPostList.get(position);
+        }
+        return null;
+    }
 
     public void onClick(View view, int position) {
         int old_position = mSelectedPosition;

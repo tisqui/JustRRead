@@ -3,6 +3,7 @@ package com.squirrel.justrread;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.squirrel.justrread.activities.LoginActivity;
 import com.squirrel.justrread.data.RedditContract;
@@ -52,7 +53,7 @@ public class Authentification {
         }
     }
 
-    public void refreshAccessTokenAsync() {
+    public static void refreshAccessTokenAsync() {
         new AsyncTask<Credentials, Void, Void>() {
             @Override
             protected Void doInBackground(Credentials... params) {
@@ -176,6 +177,21 @@ public class Authentification {
         } else {
             Log.d(LOG_TAG, "Can't logout, because OAUthStatus is: " +
                     AuthenticationManager.get().getRedditClient().getOAuthHelper().getAuthStatus());
+        }
+    }
+
+    public static void refreshAuthAfterSleep(Context context){
+        if(Utils.isNetworkAvailable(context)){
+            AuthenticationState state = AuthenticationManager.get().checkAuthState();
+            switch (state) {
+                case NEED_REFRESH:
+                    Log.d(LOG_TAG, "Refreshing access token");
+                    refreshAccessTokenAsync();
+                    break;
+            }
+        }
+        else{
+            Toast.makeText(context, "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
         }
     }
 }

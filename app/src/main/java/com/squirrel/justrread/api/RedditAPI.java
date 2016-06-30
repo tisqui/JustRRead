@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.collect.FluentIterable;
+import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
@@ -52,7 +54,7 @@ public class RedditAPI {
     }
 
     //get the subreddit feed
-    public boolean getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) {
+    public boolean getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) throws NetworkException{
         boolean res = false;
         if (checkAuthentificationReady()) {
             if (paginator != null) {
@@ -92,7 +94,7 @@ public class RedditAPI {
         return true;
     }
 
-    public boolean getPostsFront(SubredditPaginator paginator, Context context, boolean doClear) {
+    public boolean getPostsFront(SubredditPaginator paginator, Context context, boolean doClear) throws NetworkException{
         boolean res = false;
         if (checkAuthentificationReady()) {
             if (paginator != null) {
@@ -121,7 +123,7 @@ public class RedditAPI {
         return res;
     }
 
-    public List<CommentNode> getTopNodeAllComments(String postId) {
+    public List<CommentNode> getTopNodeAllComments(String postId) throws NetworkException{
         if (checkAuthentificationReady()) {
             FluentIterable<CommentNode> nodes = AuthenticationManager.get().getRedditClient().
                     getSubmission(postId).getComments().walkTree(TraversalMethod.PRE_ORDER);
@@ -131,7 +133,7 @@ public class RedditAPI {
         return null;
     }
 
-    public static String getSubredditAbout(String subredditId){
+    public static String getSubredditAbout(String subredditId) throws NetworkException{
         if (checkAuthentificationReady()) {
             Subreddit subreddit = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
             return subreddit.getSidebar();
@@ -141,7 +143,7 @@ public class RedditAPI {
         }
     }
 
-    public static List<String> searchForSubreddit(String searchStr, boolean includeNsfw){
+    public static List<String> searchForSubreddit(String searchStr, boolean includeNsfw) throws NetworkException{
         if(checkAuthentificationReady()){
             return AuthenticationManager.get().getRedditClient().searchSubreddits(searchStr, includeNsfw);
         }else {
@@ -150,7 +152,7 @@ public class RedditAPI {
         }
     }
 
-    public static void getUserSubscriptions(Context context){
+    public static void getUserSubscriptions(Context context) throws NetworkException{
         if(checkAuthentificationReady()){
             if(Utils.checkUserLoggedIn()){
                 UserSubredditsPaginator userSubredditsPaginator =
@@ -176,87 +178,108 @@ public class RedditAPI {
         }
     }
 
-    public static boolean subscribeSubreddit(String subredditId, Context context){
-        Subreddit subredditToSubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
-        if(subredditToSubscribe != null){
-            //save the subreddit locally
-            context.getContentResolver().insert(RedditContract.SubscriptionEntry.CONTENT_URI,
-                    DataMapper.mapSubredditToContentValues(subredditToSubscribe));
-            try{
-                AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
-                accountManager.subscribe(subredditToSubscribe);
-            }catch (NetworkException e){
-                Log.d(LOG_TAG, "Network exception, subscription not succesful: " + e);
-            }
+    public static boolean subscribeSubreddit(String subredditId, Context context) throws NetworkException{
+        if(checkAuthentificationReady()) {
+            Subreddit subredditToSubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
+            if (subredditToSubscribe != null) {
+                //save the subreddit locally
+                context.getContentResolver().insert(RedditContract.SubscriptionEntry.CONTENT_URI,
+                        DataMapper.mapSubredditToContentValues(subredditToSubscribe));
+                try {
+                    AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
+                    accountManager.subscribe(subredditToSubscribe);
+                } catch (NetworkException e) {
+                    Log.d(LOG_TAG, "Network exception, subscription not succesful: " + e);
+                }
 
-            return true;
-        }else {
-            Log.d(LOG_TAG, "Can't find subreddit to Subscribe");
+                return true;
+            } else {
+                Log.d(LOG_TAG, "Can't find subreddit to Subscribe");
+                return false;
+            }
+        }else{
+            Log.d(LOG_TAG, "Can't subscribe, authentification not valid");
+            Authentification.refreshAuthAfterSleep(context);
+            subscribeSubreddit(subredditId, context);
             return false;
         }
     }
 
-    public static boolean unsubscribeSubreddit(String subredditId, Context context){
-        //delete the subscription from local
-        int deleted = context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI,
-                RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId + "'", null);
-        if(deleted > 0){
-            Log.d(LOG_TAG, "Unsubscribed succesfully");
-            //unsubscribe on the server
-            try{
-                Subreddit subredditToUnsubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
-                AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
-                accountManager.unsubscribe(subredditToUnsubscribe);
-                return true;
-            }catch (NetworkException e){
-                Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
-                return false;
-            } catch(IllegalArgumentException e){
-                Log.d(LOG_TAG, "Subreddit does not exists: " + e);
+    public static boolean unsubscribeSubreddit(String subredditId, Context context) throws NetworkException{
+        if(checkAuthentificationReady()) {
+            //delete the subscription from local
+            int deleted = context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI,
+                    RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId + "'", null);
+            if (deleted > 0) {
+                Log.d(LOG_TAG, "Unsubscribed succesfully");
+                //unsubscribe on the server
+                try {
+                    Subreddit subredditToUnsubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
+                    AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
+                    accountManager.unsubscribe(subredditToUnsubscribe);
+                    return true;
+                } catch (NetworkException e) {
+                    Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
+                    return false;
+                } catch (IllegalArgumentException e) {
+                    Log.d(LOG_TAG, "Subreddit does not exists: " + e);
+                    return false;
+                }
+            } else {
+                Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
                 return false;
             }
-        } else {
-            Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
+        }else {
+            Log.d(LOG_TAG, "Can't unsubscribe, authentification not valid");
+            Authentification.refreshAuthAfterSleep(context);
+            unsubscribeSubreddit(subredditId, context);
             return false;
         }
     }
 
     public static void vote(final Post post, final VoteDirection voteDirection, final Context context){
-        try{
-            new AsyncTask<Void, Void, Boolean>() {
-                @Override
-                protected Boolean doInBackground(Void... params) {
-                    AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
-                    try {
-                        Submission s = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
-                        accountManager.vote(s, voteDirection);
-                        return true;
-                    } catch (ApiException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(Boolean res) {
-                    super.onPostExecute(res);
-                    if(res){
-                        //update the DB item - get the new submission
-                        Submission newSubmission = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
-                        int updated = context.getContentResolver().update(RedditContract.PostEntry.CONTENT_URI,
-                                DataMapper.mapSubmissionToContentValues(newSubmission),
-                                RedditContract.PostColumns.COLUMN_ID+"='" + post.getPostId() + "'",
-                                null);
-                        if(updated <1){
-                            Log.d(LOG_TAG, "No posts found to update");
-                        } else{
-                            Log.d(LOG_TAG, "Updated post: " + newSubmission.toString());
+        if(checkAuthentificationReady()) {
+            try {
+                new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
+                        try {
+                            Submission s = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
+                            accountManager.vote(s, voteDirection);
+                            return true;
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                            return false;
                         }
                     }
-                }
-            }.execute();
-        }catch (NetworkException e){
-            Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
+
+                    @Override
+                    protected void onPostExecute(Boolean res) {
+                        super.onPostExecute(res);
+                        if (res) {
+                            //update the DB item - get the new submission
+                            Submission newSubmission = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
+                            int updated = context.getContentResolver().update(RedditContract.PostEntry.CONTENT_URI,
+                                    DataMapper.mapSubmissionToContentValues(newSubmission),
+                                    RedditContract.PostColumns.COLUMN_ID + "='" + post.getPostId() + "'",
+                                    null);
+                            if (updated < 1) {
+                                Log.d(LOG_TAG, "No posts found to update");
+                            } else {
+                                Log.d(LOG_TAG, "Updated post: " + newSubmission.toString());
+                                Toast.makeText(context, "Think you for voting for the post!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }.execute();
+            } catch (NetworkException e) {
+                Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
+            }
+        }else {
+            Log.d(LOG_TAG, "Authentification needs refresh");
+            Authentification.refreshAuthAfterSleep(context);
+            vote(post, voteDirection, context);
         }
     }
 

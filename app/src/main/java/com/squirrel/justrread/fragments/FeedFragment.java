@@ -39,6 +39,7 @@ import com.squirrel.justrread.data.RedditContract;
 import com.squirrel.justrread.listeners.EndlessRecyclerViewScrollListener;
 
 import net.dean.jraw.auth.AuthenticationManager;
+import net.dean.jraw.http.NetworkException;
 import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
 
@@ -228,7 +229,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         View emptyView = rootView.findViewById(R.id.posts_list_emply_message);
 
-        mPostsFeedAdapter = new PostsFeedAdapter(new ArrayList<Post>(), getActivity().getApplicationContext(), emptyView, mTwoPane);
+        mPostsFeedAdapter = new PostsFeedAdapter(new ArrayList<Post>(), getActivity(), emptyView, mTwoPane);
         mRecyclerView.setAdapter(mPostsFeedAdapter);
 
         mRecyclerView.addOnItemTouchListener(new PostClickListener(getActivity().getApplicationContext(),
@@ -369,9 +370,17 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     protected Void doInBackground(Void... params) {
                         if (!mIsSubreddit) {
-                            mRedditAPI.getPostsFront(mSubredditPaginator, getContext(), true);
+                            try {
+                                mRedditAPI.getPostsFront(mSubredditPaginator, getContext(), true);
+                            }catch (NetworkException e){
+                                e.printStackTrace();
+                            }
                         } else {
-                            mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
+                            try {
+                                mRedditAPI.getSubredditPostsSorted(mSubredditPaginator, getContext(), mSubredditId, null);
+                            }catch (NetworkException e){
+                                e.printStackTrace();
+                            }
                         }
                         return null;
                     }

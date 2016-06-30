@@ -10,8 +10,11 @@ import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.BaseActivity;
 import com.squirrel.justrread.activities.Navigator;
+import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
+
+import net.dean.jraw.models.VoteDirection;
 
 import java.util.List;
 
@@ -74,11 +77,13 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
                 });
             }
 
+            final Post currentPost = getPost(position);
             holder.upBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(Utils.checkUserLoggedIn()){
-                        //TODO upvote and update num of votes
+                        if(currentPost!=null){
+                            RedditAPI.vote(currentPost, VoteDirection.UPVOTE, mContext);}
                     }else{
                         BaseActivity.showLoginAlert(mContext);
                     }
@@ -89,7 +94,9 @@ public class PostsFeedAdapter extends FeedRecyclerViewAdapter {
                 @Override
                 public void onClick(View v) {
                     if(Utils.checkUserLoggedIn()){
-                        //TODO downvote and update num of votes
+                        if (currentPost!=null) {
+                            RedditAPI.vote(currentPost, VoteDirection.DOWNVOTE, mContext);
+                        }
                     }else{
                         BaseActivity.showLoginAlert(mContext);
                     }

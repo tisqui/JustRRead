@@ -35,6 +35,7 @@ import com.squirrel.justrread.adapters.CommentsRecyclerViewAdapter;
 import com.squirrel.justrread.api.RedditAPI;
 import com.squirrel.justrread.data.Post;
 
+import net.dean.jraw.http.NetworkException;
 import net.dean.jraw.models.CommentNode;
 import net.dean.jraw.models.VoteDirection;
 
@@ -273,7 +274,13 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             @Override
             protected List<CommentNode> doInBackground(Void... params) {
                 Log.d(LOG_TAG, "Trying to download the post by id " + mPost.getPosId());
-                return mCommentsRedditAPI.getTopNodeAllComments(mPost.getPosId());
+                List<CommentNode> resList = new ArrayList<CommentNode>();
+                try{
+                    resList = mCommentsRedditAPI.getTopNodeAllComments(mPost.getPosId());
+                }catch (NetworkException e){
+                    e.printStackTrace();
+                }
+                return resList;
             }
             @Override
             protected void onPostExecute(List<CommentNode> result) {
