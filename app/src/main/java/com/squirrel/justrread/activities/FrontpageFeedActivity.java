@@ -45,7 +45,6 @@ import com.squirrel.justrread.fragments.FeedFragment;
 import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class FrontpageFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -54,7 +53,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         DetailPostFragment.OnFragmentInteractionListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
-    private static String[] mSubredditsList = {"/pics", "/gifs", "/videos"};
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private DrawerLayout mDrawerLayout;
@@ -88,9 +86,6 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-//        Init myInit = (Init) getApplicationContext();
-//        myInit.initializeAuth();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frontpage_feed);
         getToolbar();
@@ -121,7 +116,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mDrawerSubredditsListAdapter = new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, new ArrayList<String>(Arrays.asList(mSubredditsList)));
+                R.layout.drawer_list_item, new ArrayList<String>());
         mDrawerSubredditsList.setAdapter(mDrawerSubredditsListAdapter);
         mDrawerSubredditsList.setOnItemClickListener(new DrawerItemClickListener());
         mEmptyListView = (TextView) findViewById(R.id.drawer_empty_subscriptions_listview);
@@ -296,18 +291,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     protected void onResume() {
         super.onResume();
         if (Utils.checkUserLoggedIn()) {
-//            new AsyncTask<Void, Void, Void>() {
-//                @Override
-//                protected Void doInBackground(Void... params) {
-//                    RedditAPI.getUserSubscriptions(getApplicationContext());
-//                    return null;
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Void aVoid) {
-//                    super.onPostExecute(aVoid);
-//                }
-//            }.execute();
+            //do nothing
         } else {
             mEmptyListView.setVisibility(View.VISIBLE);
             mEmptyListView.setText("No subscriptions available for the not logged in user.");
@@ -517,7 +501,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                 TextView helloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
                 String result = data.getStringExtra("result");
 
-                helloUserText.setText("Hello, " + result + " !");
+                helloUserText.setText(getString(R.string.drawer_user_invitation_text) + result + " !");
                 setLoginButton();
                 Toast.makeText(this, "Logged in as: " + result, Toast.LENGTH_SHORT).show();
             }

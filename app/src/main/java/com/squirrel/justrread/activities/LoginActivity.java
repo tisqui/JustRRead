@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity {
         String[] scopes = {"identity", "read", "mysubreddits", "subscribe", "vote"};
 
         final URL authorizationUrl = helper.getAuthorizationUrl(CREDENTIALS, true, true, scopes);
-//        final WebView webView = ((WebView) findViewById(R.id.login_webview));
         // Load the authorization URL into the browser
         mWebView.loadUrl(authorizationUrl.toExternalForm());
         mWebView.setWebViewClient(new WebViewClient() {
@@ -61,7 +60,7 @@ public class LoginActivity extends BaseActivity {
                     // We've detected the redirect URL
                     onUserChallenge(url, CREDENTIALS);
                 } else if (url.contains("error=")) {
-                    Toast.makeText(LoginActivity.this, "You must press 'allow' to log in with this account", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.login_allow_message_text, Toast.LENGTH_SHORT).show();
                     mWebView.loadUrl(authorizationUrl.toExternalForm());
                 }
             }
@@ -85,9 +84,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(String s) {
-                Log.i(LOG_TAG, s + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",s);
+                returnIntent.putExtra(getString(R.string.login_result_key),s);
                 setResult(Activity.RESULT_OK, returnIntent);
                 LoginActivity.this.finish();
             }

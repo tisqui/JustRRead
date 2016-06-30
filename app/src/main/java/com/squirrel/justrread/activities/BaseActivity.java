@@ -113,7 +113,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             }
             else{
-                Toast.makeText(getApplicationContext(), "No internet connection. Please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
             }
     }
 
@@ -141,14 +141,14 @@ public class BaseActivity extends AppCompatActivity {
     public static void showLoginAlert(final Context context){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Login");
-        dialog.setMessage("You need to login to proceed. Do you want to login?");
-        dialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+        dialog.setMessage(context.getString(R.string.dialog_login_message));
+        dialog.setPositiveButton(context.getString(R.string.dialog_login_btn_text), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Navigator.navigateToLogin(context);
             }
         });
 
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(context.getString(R.string.dialog_cancel_btn_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

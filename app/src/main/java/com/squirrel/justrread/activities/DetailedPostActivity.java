@@ -40,21 +40,11 @@ public class DetailedPostActivity extends BaseActivity implements DetailPostFrag
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_detail_post, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-//        if (id == R.id.action_detail_share) {
-//            return true;
-//        }
-//        if (id == R.id.action_detail_search) {
-//            return true;
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -61,7 +61,7 @@ public class WebActivity extends BaseActivity {
                 if(mUrl != null && !mUrl.isEmpty()){
                     Navigator.shareWebUrl(this, mUrl);
                 } else {
-                    Toast.makeText(this, "No url to share", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.web_no_url_error, Toast.LENGTH_SHORT).show();
                 }
                 return true;
         }

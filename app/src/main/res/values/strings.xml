@@ -138,5 +138,46 @@
     <string name="ga_search_category">Search</string>
     <string name="ga_search_action">Search subreddit</string>
 
+    <!-- UI strings -->
+    <string name="no_iternet_connection_text">No internet connection. Please try again later</string>
+    <string name="dialog_login_message">You need to login to proceed. Do you want to login?</string>
+    <string name="dialog_login_btn_text">Login</string>
+    <string name="dialog_cancel_btn_text">Cancel</string>
+    <string name="drawer_user_invitation_text">"Hello, "</string>
+    <string name="login_allow_message_text">You must press \'allow\' to log in with this account</string>
+
+    <!-- Key strings -->
+    <string name="login_result_key">result</string>
+    <string name="all_key">all</string>
+    <string name="random_subreddit_kay">random</string>
+
+    <string name="sharing_facebook_error_message">Can\'t share to Facebook, because Facebook app is not installed.</string>
+    <string name="sharing_twitter_error_message">Can\'t share to Twitter, because Twitter app is not installed.</string>
+    <string name="share_post_message_text">Share post link via:</string>
+    <string name="web_no_url_error">No url to share</string>
+    <string name="recycler_adapter_invalid_viewtype_error_msg">"Invalid ViewType: "</string>
+    <string name="search_unsubscribe_msg">You unsubscribed from /</string>
+    <string name="search_unsubscribe_err_msg">"Unsubscription error: "</string>
+    <string name="search_subscribe_msg">You subscribed to /</string>
+    <string name="search_subsribe_error_msg">"Subscription error: "</string>
+    <string name="subscription_id_text_np_name">No name available</string>
+    <string name="subscriptions_dialog_title">Unsubscribe</string>
+    <string name="subscriptions_dialog_messae">Do you want to unsubscribe from subreddit?</string>
+    <string name="subscriptions_dialog_unsubscribe">Unsubscribe</string>
+    <string name="subscriptions_unsubscribe_error">Unsubscription error. Try once more.</string>
+    <string name="unsubscribe_dialog_cancel_btn">Cancel</string>
+    <string name="drawer_page_title_frontpage">/frontpage</string>
+    <string name="drawer_page_title_random">/random</string>
+    <string name="drawer_page_title_all">/all</string>
+    <string name="detail_num_comments_text_no_comments">No comments</string>
+    <string name="detail_comments_text">" comments"</string>
+    <string name="detail_post_erros_no_post">Post information was not properly passed to the fragment</string>
+    <string name="detail_must_implement_err_message">" must implement OnFragmentInteractionListener"</string>
+    <string name="feed_no_posts_more_txt">No posts to load more</string>
+    <string name="feed_getting_new_posts">Getting the new posts</string>
+    <string name="feed_must_implement_msg">" must implement OnFragmentInteractionListener"</string>
+    <string name="feed_page_title_frontpage">/frontpage</string>
+    <string name="feed_two_pane_key">TwoPane</string>
+
 
 </resources>

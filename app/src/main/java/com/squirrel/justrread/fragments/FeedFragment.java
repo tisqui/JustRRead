@@ -213,12 +213,12 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             mSubredditId = Utils.getSubredditId(getContext());
             setPageTitle("/"+mSubredditId);
         }else{
-            setPageTitle("/frontpage");
+            setPageTitle(getContext().getString(R.string.feed_page_title_frontpage));
         }
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mTwoPane = arguments.getBoolean("TwoPane");
+            mTwoPane = arguments.getBoolean(getContext().getString(R.string.feed_two_pane_key));
         }
 
         // Inflate the layout for this fragment
@@ -278,13 +278,13 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                                         mCurrentPage++;
                                         // mPosition += 50;
                                     }else{
-                                        Toast.makeText(getContext(), "No posts to load more", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.feed_no_posts_more_txt, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }.execute();
                         }
                 }else{
-                    Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -334,7 +334,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + context.getString(R.string.feed_must_implement_msg));
         }
     }
 
@@ -392,7 +392,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }.execute();
         } else {
-            Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -448,7 +448,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             updateEmptyView();
         }
         if (key.equals(getString(R.string.front_filter_key))) {
-            Toast.makeText(getContext(), "Getting the new posts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.feed_getting_new_posts, Toast.LENGTH_SHORT).show();
             refreshNewSorting();
         }
     }
@@ -484,7 +484,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 mSwipeContainer.setRefreshing(false);
             }
         }else {
-            Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
             mSwipeContainer.setRefreshing(false);
         }
     }
@@ -513,7 +513,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }.execute();
         } else {
-            Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -553,7 +553,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }.execute();
         } else {
-            Toast.makeText(getContext(), "Internet connection is not available, please try later.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
         }
     }
 

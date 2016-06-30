@@ -81,13 +81,6 @@ public class DrawerController {
 
     public void initDrawerActions(){
         mLogin = (Button) mDrawerLayout.findViewById(R.id.drawer_btn_login);
-//        if(!Utils.checkUserLoggedIn()){
-//            Log.d("DrawerController", "User not logged in ******************************");
-//           setLoginButton();
-//        } else {
-//            Log.d("DrawerController", "User logged in ******************************");
-//            setLogoutButton();
-//        }
 
         mSettings = (Button) mDrawerLayout.findViewById(R.id.drawer_btn_settings);
         mSettings.setOnClickListener(new View.OnClickListener() {
@@ -96,18 +89,6 @@ public class DrawerController {
                 Navigator.navigateToSettings(v.getContext());
             }
         });
-
-//        mEditSubreddits = (Button) mDrawerLayout.findViewById(R.id.drawer_edit_subreddits_button);
-//        mEditSubreddits.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(Utils.checkUserLoggedIn()){
-//                    Navigator.navigateToSubredditsSettings(v.getContext());
-//                } else {
-//                    BaseActivity.showLoginAlert(v.getContext());
-//                }
-//            }
-//        });
 
         mDrawerAllItem = (RelativeLayout) mDrawerLayout.findViewById(R.id.drawer_all_item);
         mDrawerFrontpageItem = (RelativeLayout) mDrawerLayout.findViewById(R.id.drawer_frontpage_item);
@@ -119,8 +100,8 @@ public class DrawerController {
             mDrawerAllItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    feedFragment.refreshNewSubreddit("all");
-                    feedFragment.setPageTitle("/all");
+                    feedFragment.refreshNewSubreddit(mContext.getString(R.string.all_key));
+                    feedFragment.setPageTitle(mContext.getString(R.string.drawer_page_title_all));
                     feedFragment.setIsSubreddit(false);
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 
@@ -139,7 +120,7 @@ public class DrawerController {
                 public void onClick(View v) {
                     feedFragment.setIsSubreddit(false);
                     feedFragment.getInitialFrontpage();
-                    feedFragment.setPageTitle("/frontpage");
+                    feedFragment.setPageTitle(mContext.getString(R.string.drawer_page_title_frontpage));
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 
                     //set the GA event
@@ -155,8 +136,8 @@ public class DrawerController {
             mDrawerRandomItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    feedFragment.refreshNewSubreddit("random");
-                    feedFragment.setPageTitle("/random");
+                    feedFragment.refreshNewSubreddit(mContext.getString(R.string.random_subreddit_kay));
+                    feedFragment.setPageTitle(mContext.getString(R.string.drawer_page_title_random));
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 
                     //set the GA event

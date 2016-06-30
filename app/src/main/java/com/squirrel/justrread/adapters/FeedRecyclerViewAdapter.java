@@ -48,7 +48,7 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_feed_list_item, parent, false);
             return new FeedItemViewHolder(view);
         }
-        throw new IllegalArgumentException("Invalid ViewType: " + viewType);
+        throw new IllegalArgumentException(mContext.getString(R.string.recycler_adapter_invalid_viewtype_error_msg) + viewType);
 
     }
 
@@ -77,35 +77,8 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             }
             bindPostsFeedViewHolder(holder, position);
 
-//        //set all the data to the UI elements
-//
-//        if(postItem.getThumbnail() == null){
-//            holder.thumbnailImageView.setVisibility(View.GONE);
-//        }else{
-//            holder.thumbnailImageView.setVisibility(View.VISIBLE);
-//            Glide.with(mContext)
-//                    .load(postItem.getThumbnail())
-//                    .centerCrop()
-//                    .placeholder(R.drawable.ic_duck_white_36dp)
-//                    .error(R.drawable.ic_duck_white_36dp)
-//                    .into(holder.thumbnailImageView);
-//        }
-//
-//        holder.titleTextView.setText(postItem.getTitle());
-//        holder.sourceTextView.setText(postItem.getDomain());
-//        holder.postDateTextView.setText(String.valueOf(postItem.getCreated()));
-//        holder.commentsBtn.setText(postItem.getNumComments()+"");
-//        holder.numberOfVotesTextView.setText(postItem.getUpVotes()+ "");
-
-            //TODO add callbacks for all the buttons
-
         }
     }
-
-//    @Override
-//    public int getItemCount() {
-//        return (null != mPostList ? mPostList.size() : 0);
-//    }
 
     @Override
     public int getItemCount() {
@@ -118,12 +91,6 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         return mCursor;
     }
 
-//    public void addPostsToList(List<Post> morePosts){
-//        mPostList.addAll(morePosts);
-//        int curSize = getItemCount();
-//        notifyItemRangeInserted(curSize, mPostList.size() - 1);
-//    }
-//
     public Post getPost(int position){
         if(mPostList != null && !mPostList.isEmpty()){
             return mPostList.get(position);
@@ -140,24 +107,11 @@ public abstract class FeedRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     }
 
-//    public void swapPostsData(List<Post> posts){
-//        Log.d(LOG_TAG, "New posts received");
-//        mPostList = posts;
-//        notifyDataSetChanged();
-//    }
-
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
-
-//    public void selectView(RecyclerView.ViewHolder viewHolder) {
-//        if ( viewHolder instanceof FeedItemViewHolder ) {
-//            FeedItemViewHolder vfh = (FeedItemViewHolder)viewHolder;
-//            vfh.onClick(vfh.itemView);
-//        }
-//    }
 
     @Override
     public int getItemViewType(int position) {

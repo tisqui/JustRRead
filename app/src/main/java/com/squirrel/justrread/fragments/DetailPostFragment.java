@@ -158,9 +158,9 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                 mDetailText.setText(Html.fromHtml(Utils.getHtmlFromMarkdown(mPost.getSelfTextHtml())));
             }
             if(mPost.getNumComments() == 0){
-                mDetailNumComments.setText("No comments");
+                mDetailNumComments.setText(R.string.detail_num_comments_text_no_comments);
             } else{
-                mDetailNumComments.setText(mPost.getNumComments() + " comments");
+                mDetailNumComments.setText(mPost.getNumComments() + getContext().getString(R.string.detail_comments_text));
             }
 
             mDetailVotesNum.setText(mPost.getUpVotes() + "");
@@ -239,7 +239,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             });
         }
         else{
-            Toast.makeText(getContext(), "Post information was not properly passed to the fragment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.detail_post_erros_no_post, Toast.LENGTH_SHORT).show();
         }
 
         return rootView;
@@ -300,7 +300,7 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + context.getString(R.string.detail_must_implement_err_message));
         }
     }
 

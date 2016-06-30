@@ -9,6 +9,8 @@ import android.content.pm.ResolveInfo;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.squirrel.justrread.R;
+
 import java.util.List;
 
 /**
@@ -69,7 +71,7 @@ public class Navigator {
                 break;
             }
         }
-        Toast.makeText(context, "Can't share to Facebook, because Facebook app is not installed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.sharing_facebook_error_message, Toast.LENGTH_SHORT).show();
     }
 
     public static void sharePostTwitter(String text, Context context){
@@ -92,14 +94,14 @@ public class Navigator {
                 break;
             }
         }
-        Toast.makeText(context, "Can't share to Twitter, because Twitter app is not installed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.sharing_twitter_error_message, Toast.LENGTH_SHORT).show();
     }
 
     public static void shareWebUrl(Context context, String url){
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(Intent.EXTRA_TEXT, url);
-        context.startActivity(Intent.createChooser(sharingIntent, "Share post link via:"));
+        context.startActivity(Intent.createChooser(sharingIntent, context.getString(R.string.share_post_message_text)));
     }
 
     public static void navigateToSettings(Context context){

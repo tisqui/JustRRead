@@ -74,10 +74,10 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
                             super.onPostExecute(res);
                             if(res){
                                 setUnsubscribeButton(subredditId, subButton);
-                                Toast.makeText(getContext(), "You subscribed to /" + subredditId,
+                                Toast.makeText(getContext(), getContext().getString(R.string.search_subscribe_msg) + subredditId,
                                         Toast.LENGTH_SHORT).show();
                             }else {
-                                Toast.makeText(getContext(), "Subscription error: " + subredditId,
+                                Toast.makeText(getContext(), getContext().getString(R.string.search_subsribe_error_msg) + subredditId,
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -96,7 +96,6 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
                 if (Utils.checkUserLoggedIn()) {
-                    Toast.makeText(getContext(), "Unsubscribing", Toast.LENGTH_SHORT).show();
                     new AsyncTask<Void, Void, Boolean>() {
                         @Override
                         protected Boolean doInBackground(Void... params) {
@@ -108,10 +107,10 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
                             super.onPostExecute(res);
                             if(res){
                                 setSubscribeButton(subredditId, subButton);
-                                Toast.makeText(getContext(), "You unsubscribed from /" + subredditId,
+                                Toast.makeText(getContext(), getContext().getString(R.string.search_unsubscribe_msg) + subredditId,
                                         Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "Unsubscription error: " + subredditId,
+                                Toast.makeText(getContext(), getContext().getString(R.string.search_unsubscribe_err_msg) + subredditId,
                                         Toast.LENGTH_SHORT).show();
                             }
                         }

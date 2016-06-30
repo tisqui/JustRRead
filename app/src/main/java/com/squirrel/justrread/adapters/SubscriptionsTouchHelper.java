@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
 
+import com.squirrel.justrread.R;
 import com.squirrel.justrread.api.RedditAPI;
 
 /**
@@ -34,9 +35,9 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
         //delete the item when swipe
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle("Unsubscribe");
-        dialog.setMessage("Do you want to unsubscribe from subreddit?");
-        dialog.setPositiveButton("Unsubscribe", new DialogInterface.OnClickListener() {
+        dialog.setTitle(mContext.getString(R.string.subscriptions_dialog_title));
+        dialog.setMessage(mContext.getString(R.string.subscriptions_dialog_messae));
+        dialog.setPositiveButton(mContext.getString(R.string.subscriptions_dialog_unsubscribe), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
@@ -54,14 +55,14 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
                             mSubscriptionsRecyclerViewAdapter.remove(viewHolder.getAdapterPosition());
                         }
                         else {
-                            Toast.makeText(mContext, "Unsubscription error. Try once more.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.subscriptions_unsubscribe_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }.execute();
             }
         });
 
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(mContext.getString(R.string.unsubscribe_dialog_cancel_btn), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
