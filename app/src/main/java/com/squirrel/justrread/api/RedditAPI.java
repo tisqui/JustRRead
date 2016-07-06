@@ -13,6 +13,7 @@ import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.data.DataMapper;
 import com.squirrel.justrread.data.Post;
 import com.squirrel.justrread.data.RedditContract;
+import com.squirrel.justrread.sync.RedditSyncAdapter;
 
 import net.dean.jraw.ApiException;
 import net.dean.jraw.auth.AuthenticationManager;
@@ -207,16 +208,15 @@ public class RedditAPI {
 
     public static boolean unsubscribeSubreddit(String subredditId, Context context) throws NetworkException{
         if(checkAuthentificationReady()) {
-            //delete the subscription from local
-            int deleted = context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI,
-                    RedditContract.SubscriptionColumns.COLUMN_ID + "='" + subredditId + "'", null);
-            if (deleted > 0) {
-                Log.d(LOG_TAG, "Unsubscribed succesfully");
                 //unsubscribe on the server
                 try {
                     Subreddit subredditToUnsubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
                     AccountManager accountManager = new AccountManager(AuthenticationManager.get().getRedditClient());
                     accountManager.unsubscribe(subredditToUnsubscribe);
+                    //delete the subscription from local
+                    int deleted = context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI,
+                            RedditContract.SubscriptionColumns.COLUMN_DISPLAY_NAME + "='" + subredditId + "'", null);
+                    RedditSyncAdapter.syncImmediately(context);
                     return true;
                 } catch (NetworkException e) {
                     Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
@@ -225,10 +225,7 @@ public class RedditAPI {
                     Log.d(LOG_TAG, "Subreddit does not exists: " + e);
                     return false;
                 }
-            } else {
-                Log.d(LOG_TAG, "No subscription found in DB to unsibscribe");
-                return false;
-            }
+
         }else {
             Log.d(LOG_TAG, "Can't unsubscribe, authentification not valid");
             Authentification.refreshAuthAfterSleep(context);

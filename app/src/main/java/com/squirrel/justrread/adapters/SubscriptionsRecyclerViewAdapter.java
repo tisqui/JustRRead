@@ -69,7 +69,7 @@ public class SubscriptionsRecyclerViewAdapter extends RecyclerView.Adapter<Subsc
         notifyItemRemoved(position);
     }
 
-    public String getSubscriptionIdByPosition(int position){
-        return mSubscriptionsList.get(position).getSubredditId();
+    public String getSubscriptionNameByPosition(int position){
+        return mSubscriptionsList.get(position).getSubredditDisplayName();
     }
 }

@@ -41,12 +41,12 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
         dialog.setMessage(mContext.getString(R.string.subscriptions_dialog_messae));
         dialog.setPositiveButton(mContext.getString(R.string.subscriptions_dialog_unsubscribe), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                final int itemPosition = viewHolder.getAdapterPosition();
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
                     protected Boolean doInBackground(Void... params) {
-                        int item = viewHolder.getAdapterPosition()-1;
                         String id = mSubscriptionsRecyclerViewAdapter.
-                                getSubscriptionIdByPosition(item);
+                                getSubscriptionNameByPosition(itemPosition);
                         boolean res;
                         try {
                             res = RedditAPI.unsubscribeSubreddit(id, mContext);
@@ -61,7 +61,7 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
                     protected void onPostExecute(Boolean res) {
                         super.onPostExecute(res);
                         if(res){
-                            mSubscriptionsRecyclerViewAdapter.remove(viewHolder.getAdapterPosition());
+                            mSubscriptionsRecyclerViewAdapter.remove(itemPosition);
                         }
                         else {
                             Toast.makeText(mContext, R.string.subscriptions_unsubscribe_error, Toast.LENGTH_SHORT).show();
