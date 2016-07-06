@@ -46,6 +46,7 @@ public class SubscriptionsActivity extends BaseActivity implements LoaderManager
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_open, R.anim.activity_close);
         setContentView(R.layout.activity_subscriptions);
         ButterKnife.bind(this);
         activateToolbarWithHomeEnabled();

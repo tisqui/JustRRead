@@ -28,6 +28,7 @@ public class DetailedPostActivity extends BaseActivity implements DetailPostFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_open, R.anim.activity_close);
         setContentView(R.layout.activity_detailed_post);
         activateToolbarWithHomeEnabled();
         mTitle = "";

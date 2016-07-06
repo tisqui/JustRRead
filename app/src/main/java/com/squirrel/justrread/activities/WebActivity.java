@@ -27,7 +27,8 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_web);
+        overridePendingTransition(R.anim.activity_open, R.anim.activity_close);
+        setContentView(R.layout.activity_web);
             activateToolbarWithHomeEnabled();
             mWebView = (WebView) findViewById(R.id.webview_container);
             mUrl = getIntent().getExtras().getString(EXTRA_URL, "");

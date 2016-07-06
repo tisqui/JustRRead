@@ -13,6 +13,7 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_open, R.anim.activity_close);
         setContentView(R.layout.activity_settings);
         activateToolbarWithHomeEnabled();
         getFragmentManager().beginTransaction().replace(R.id.settings_fragment_container, new SettingsFragment()).commit();

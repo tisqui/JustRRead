@@ -40,6 +40,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_open, R.anim.activity_close);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         activateToolbarWithHomeEnabled();

@@ -47,6 +47,7 @@ public class SubredditSearchResultsActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_open, R.anim.activity_close);
         setContentView(R.layout.activity_subreddit_search_results);
         activateToolbarWithHomeEnabled();
         ButterKnife.bind(this);

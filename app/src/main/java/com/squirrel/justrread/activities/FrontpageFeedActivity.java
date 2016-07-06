@@ -87,6 +87,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_back_open, R.anim.activity_back_close);
         setContentView(R.layout.activity_frontpage_feed);
         getToolbar();
 
@@ -507,5 +508,4 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             }
         }
     }
-
 }
