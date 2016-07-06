@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.api.RedditAPI;
 
+import net.dean.jraw.http.NetworkException;
+
 /**
  * Created by squirrel on 6/7/16.
  */
@@ -45,7 +47,14 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
                         int item = viewHolder.getAdapterPosition()-1;
                         String id = mSubscriptionsRecyclerViewAdapter.
                                 getSubscriptionIdByPosition(item);
-                        return  RedditAPI.unsubscribeSubreddit(id, mContext);
+                        boolean res;
+                        try {
+                            res = RedditAPI.unsubscribeSubreddit(id, mContext);
+                        } catch (NetworkException e){
+                            e.printStackTrace();
+                            res = false;
+                        }
+                        return res;
                     }
 
                     @Override

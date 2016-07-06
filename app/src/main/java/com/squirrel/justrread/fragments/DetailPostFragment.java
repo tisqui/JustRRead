@@ -263,13 +263,14 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             getComments();
         }
         else{
-            mCommentsRecyclerView.setVisibility(View.GONE);
             mEmptyCommentsView.setText(R.string.no_connection_detailed_comments_message);
+            mEmptyCommentsView.setVisibility(View.VISIBLE);
         }
     }
 
     private void getComments(){
         mCommentsProgressbar.setVisibility(View.VISIBLE);
+        mEmptyCommentsView.setVisibility(View.GONE);
         new AsyncTask<Void, Void, List<CommentNode>>(){
             @Override
             protected List<CommentNode> doInBackground(Void... params) {
@@ -285,10 +286,15 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             @Override
             protected void onPostExecute(List<CommentNode> result) {
                 super.onPostExecute(result);
-                mCommentsProgressbar.setVisibility(View.INVISIBLE);
+                mCommentsProgressbar.setVisibility(View.GONE);
                 //update the list
                 Log.d(LOG_TAG, "Loading of the comments finished");
                 mCommentsRecyclerViewAdapter.swapTopNode(result);
+
+                if(result.isEmpty()){
+                    mEmptyCommentsView.setText(R.string.empty_comments_list);
+                    mEmptyCommentsView.setVisibility(View.VISIBLE);
+                }
             }
         }.execute();
     }

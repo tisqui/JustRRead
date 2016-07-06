@@ -16,6 +16,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.squirrel.justrread.BuildConfig;
 import com.squirrel.justrread.Init;
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.adapters.SearchResultsListAdapter;
 import com.squirrel.justrread.api.RedditAPI;
 
@@ -92,25 +93,29 @@ public class SubredditSearchResultsActivity extends BaseActivity {
                     .setLabel(query)
                     .build());
 
-            new AsyncTask<Void, Void, List<String>>() {
-                @Override
-                protected List<String> doInBackground(Void... params) {
-                    return RedditAPI.searchForSubreddit(query, RedditAPI.showNSFW);
-                }
-
-                @Override
-                protected void onPostExecute(List<String> result) {
-                    super.onPostExecute(result);
-                    mSearchProgress.setVisibility(View.GONE);
-                    listOfResults = result;
-                    if(listOfResults != null){
-                        mSearchResultsListAdapter.addAll(listOfResults);
-                        mEmptyView.setVisibility(View.GONE);
-                    }else {
-                        mEmptyView.setVisibility(View.VISIBLE);
+            if(Utils.isNetworkAvailable(this)) {
+                new AsyncTask<Void, Void, List<String>>() {
+                    @Override
+                    protected List<String> doInBackground(Void... params) {
+                        return RedditAPI.searchForSubreddit(query, RedditAPI.showNSFW);
                     }
-                }
-            }.execute();
+
+                    @Override
+                    protected void onPostExecute(List<String> result) {
+                        super.onPostExecute(result);
+                        mSearchProgress.setVisibility(View.GONE);
+                        listOfResults = result;
+                        if (listOfResults != null) {
+                            mSearchResultsListAdapter.addAll(listOfResults);
+                            mEmptyView.setVisibility(View.GONE);
+                        } else {
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }.execute();
+            }else {
+                mEmptyView.setText(R.string.no_internet_connection_search_results);
+            }
         }
         mEmptyView.setVisibility(View.VISIBLE);
     }

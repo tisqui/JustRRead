@@ -99,20 +99,22 @@ public class Authentification {
     }
 
     public static void logout(Context context) {
-        //need to revoke access token first
-        if(Utils.checkUserLoggedIn()){
-            //clean all user subscriptions from DB
-            context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI, null, null);
-            try {
-                AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
+        if(Utils.isNetworkAvailable(context)) {
+            //need to revoke access token first
+            if (Utils.checkUserLoggedIn()) {
+                //clean all user subscriptions from DB
+                context.getContentResolver().delete(RedditContract.SubscriptionEntry.CONTENT_URI, null, null);
+                try {
+                    AuthenticationManager.get().getRedditClient().getOAuthHelper().revokeAccessToken(LoginActivity.CREDENTIALS);
 //                AuthenticationManager.get().getRedditClient().deauthenticate();
-            }catch (NetworkException e){
-                Log.d(LOG_TAG, e.getStackTrace().toString());
-            }
+                } catch (NetworkException e) {
+                    Log.d(LOG_TAG, e.getStackTrace().toString());
+                }
 
-        } else {
-            Log.d(LOG_TAG, "Can't logout, because OAUthStatus is: " +
-                    AuthenticationManager.get().getRedditClient().getOAuthHelper().getAuthStatus());
+            } else {
+                Log.d(LOG_TAG, "Can't logout, because OAUthStatus is: " +
+                        AuthenticationManager.get().getRedditClient().getOAuthHelper().getAuthStatus());
+            }
         }
     }
 

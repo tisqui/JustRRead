@@ -7,10 +7,12 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.util.Log;
 
@@ -20,6 +22,7 @@ import com.squirrel.justrread.api.RedditAPI;
 
 import net.dean.jraw.auth.AuthenticationManager;
 import net.dean.jraw.auth.AuthenticationState;
+import net.dean.jraw.http.NetworkException;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -38,15 +41,13 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
             "com.squirrel.justrread.ACTION_DATA_UPDATED";
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({SUB_STATUS_OK, SUB_STATUS_SERVER_DOWN, SUB_STATUS_SERVER_INVALID, SUB_STATUS_UNKNOWN, SUB_STATUS_INVALID})
+    @IntDef({SUB_STATUS_OK, SUB_STATUS_SERVER_DOWN, SUB_STATUS_UNKNOWN})
     public @interface SubscriptiosnStatus{}
 
 
-    public static final int SUB_STATUS_OK = 5;
-    public static final int SUB_STATUS_SERVER_DOWN = 6;
-    public static final int SUB_STATUS_SERVER_INVALID = 7;
-    public static final int SUB_STATUS_UNKNOWN = 8;
-    public static final int SUB_STATUS_INVALID = 9;
+    public static final int SUB_STATUS_OK = 0;
+    public static final int SUB_STATUS_SERVER_DOWN = 1;
+    public static final int SUB_STATUS_UNKNOWN = 2;
 
 
     public RedditSyncAdapter(Context context, boolean autoInitialize) {
@@ -64,7 +65,14 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
         if (state.equals(AuthenticationState.READY) && Utils.checkUserLoggedIn()) {
-            RedditAPI.getUserSubscriptions(mContext);
+            try {
+                RedditAPI.getUserSubscriptions(mContext);
+                setSubStatus(getContext(), SUB_STATUS_OK);
+
+            }catch (NetworkException e){
+                e.printStackTrace();
+                setSubStatus(getContext(), SUB_STATUS_SERVER_DOWN);
+            }
         } else {
             //do nothing if the user is not logged in
         }
@@ -163,6 +171,18 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
         Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
                 .setPackage(mContext.getPackageName());
         mContext.sendBroadcast(dataUpdatedIntent);
+    }
+
+    /**
+     * Sets the subscriptions status into shared preference.
+     * @param c Context to get the PreferenceManager from.
+     * @param subStatus The IntDef value to set
+     */
+    static private void setSubStatus(Context c, @SubscriptiosnStatus int subStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.subscriptions_status_key), subStatus);
+        spe.commit();
     }
 
 }

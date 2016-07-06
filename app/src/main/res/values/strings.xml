@@ -38,6 +38,8 @@
     <string name="action_top">Top</string>
     <string name="action_subreddit_about">Subreddit about</string>
     <string name="action_controversial">Controversial</string>
+    <string name="empty_subscriptions_list">No subscriptions loaded.</string>
+
 
     <!-- Detail Post screen -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -51,6 +53,7 @@
     <string name="two_pane_key">two_pane</string>
     <string name="is_subreddit">is_paginator_subreddit</string>
     <string name="subreddit_id">paginator_subreddit_id</string>
+    <string name="subscriptions_status_key">sub_key</string>
 
 
     <!-- Subreddit about screen -->
@@ -140,6 +143,7 @@
 
     <!-- UI strings -->
     <string name="no_iternet_connection_text">No internet connection. Please try again later</string>
+    <string name="no_iternet_connection_subreddit">No internet connection, can\'t open subreddit(</string>
     <string name="dialog_login_message">You need to login to proceed. Do you want to login?</string>
     <string name="dialog_login_btn_text">Login</string>
     <string name="dialog_cancel_btn_text">Cancel</string>
@@ -179,5 +183,8 @@
     <string name="feed_page_title_frontpage">/frontpage</string>
     <string name="feed_two_pane_key">TwoPane</string>
 
+    <!-- Search results -->
+    <string name="empty_search_results_text">No subreddits found :(</string>
+    <string name="no_internet_connection_search_results">No internet connection :(</string>
 
 </resources>

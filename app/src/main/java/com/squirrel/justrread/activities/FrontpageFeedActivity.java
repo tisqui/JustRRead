@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -50,7 +51,8 @@ import java.util.ArrayList;
 public class FrontpageFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         FeedFragment.OnFragmentInteractionListener,
         FeedFragment.Callback,
-        DetailPostFragment.OnFragmentInteractionListener {
+        DetailPostFragment.OnFragmentInteractionListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     static final String LOG_TAG = FrontpageFeedActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -91,7 +93,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         setContentView(R.layout.activity_frontpage_feed);
         getToolbar();
 
-        if(isFirstLaunch){
+        if (isFirstLaunch) {
             //sync initially to get data for widget
             RedditSyncAdapter.syncImmediately(this);
         }
@@ -184,7 +186,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
 
     }
 
-    public void reloadActivity(){
+    public void reloadActivity() {
         this.recreate();
     }
 
@@ -321,14 +323,14 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
     private void selectItem(int position) {
 
         // Call the method to refresh the feed for subreddit now
-        if (mFeedFragment != null && mDrawerSubredditsList.getCount() >0) {
+        if (mFeedFragment != null && mDrawerSubredditsList.getCount() > 0) {
             mFeedFragment.refreshNewSubreddit(mDrawerSubredditsListAdapter.getItem(position));
+            // Highlight the selected item, update the title, and close the drawer
+            mDrawerSubredditsList.setItemChecked(position, true);
+            if (Utils.isNetworkAvailable(this)) {
+                setTitle(mDrawerSubredditsListAdapter.getItem(position));
+            }
         }
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerSubredditsList.setItemChecked(position, true);
-        setTitle(mDrawerSubredditsListAdapter.getItem(position));
-
-        Toast.makeText(this, "Item " + position + "clicked", Toast.LENGTH_SHORT).show();
         mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
@@ -344,7 +346,7 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             isFirstLaunch = false;
             if (mTwoPane) {
                 setDetailsFragmentForTablet(post);
-            }else{
+            } else {
                 Intent intent = new Intent(this, DetailedPostActivity.class);
                 intent.putExtra(BaseActivity.POST_DETAIL_KEY, post);
                 startActivity(intent);
@@ -422,22 +424,16 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerSubredditsListAdapter.clear();
     }
 
-    private void updateEmptyView() {
+    private void updateSubscriptionsEmptyView() {
         if (mDrawerSubredditsList.getCount() == 0) {
             TextView tv = (TextView) findViewById(R.id.drawer_empty_subscriptions_listview);
             if (null != tv) {
                 // if cursor is empty, why?
-                int message = R.string.empty_posts_list;
-                @RedditSyncAdapter.SubscriptiosnStatus int location = Utils.getSubscriptionsStatus(this);
-                switch (location) {
+                int message = R.string.empty_subscriptions_list;
+                @RedditSyncAdapter.SubscriptiosnStatus int sub = Utils.getSubscriptionsStatus(this);
+                switch (sub) {
                     case RedditSyncAdapter.SUB_STATUS_SERVER_DOWN:
                         message = R.string.list_posts_server_is_down;
-                        break;
-                    case RedditSyncAdapter.SUB_STATUS_SERVER_INVALID:
-                        message = R.string.list_posts_server_is_invalid;
-                        break;
-                    case RedditSyncAdapter.SUB_STATUS_INVALID:
-                        message = R.string.list_posts_posts_invalid;
                         break;
                     default:
                         if (!Utils.isNetworkAvailable(this)) {
@@ -445,12 +441,13 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                         }
                 }
                 tv.setText(message);
+                tv.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private void setLoginButton(){
-        if(!Utils.checkUserLoggedIn()){
+    private void setLoginButton() {
+        if (!Utils.checkUserLoggedIn()) {
             mLogin.setText("Login");
             mLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -474,19 +471,23 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                             .setAction(getString(R.string.ga_logout_action))
                             .setLabel(getString(R.string.ga_label_button))
                             .build());
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            Authentification.logout(getApplicationContext());
-                            return null;
-                        }
+                    if(Utils.isNetworkAvailable(v.getContext())) {
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                Authentification.logout(getApplicationContext());
+                                return null;
+                            }
 
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-                            super.onPostExecute(aVoid);
-                            reloadActivity();
-                        }
-                    }.execute();
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                super.onPostExecute(aVoid);
+                                reloadActivity();
+                            }
+                        }.execute();
+                    }else {
+                        Toast.makeText(v.getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -506,6 +507,13 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
                 setLoginButton();
                 Toast.makeText(this, "Logged in as: " + result, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(R.string.subscriptions_status_key)) {
+            updateSubscriptionsEmptyView();
         }
     }
 }

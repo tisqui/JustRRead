@@ -553,7 +553,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }.execute();
         } else {
-            Toast.makeText(getContext(), R.string.no_iternet_connection_text, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_iternet_connection_subreddit, Toast.LENGTH_SHORT).show();
         }
     }
 
