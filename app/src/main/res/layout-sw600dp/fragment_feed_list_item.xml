@@ -64,10 +64,12 @@
 
                 <TextView
                     android:id="@+id/fragment_feed_list_item_source"
-                    android:layout_width="wrap_content"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:maxLength="15"
+                    android:ellipsize="end"
                     android:textColor="@color/buttonsTextColor"
                     android:textSize="@dimen/smallTextSize"/>
 
