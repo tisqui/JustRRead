@@ -101,7 +101,8 @@ public class DrawerController {
                 @Override
                 public void onClick(View v) {
                     feedFragment.refreshNewSubreddit(mContext.getString(R.string.all_key));
-                    feedFragment.setPageTitle(mContext.getString(R.string.drawer_page_title_all));
+                    feedFragment.setDefaultPageTitle(mContext.getString(R.string.drawer_page_title_all));
+                    feedFragment.setPageTitle();
                     feedFragment.setIsSubreddit(false);
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 
@@ -120,7 +121,8 @@ public class DrawerController {
                 public void onClick(View v) {
                     feedFragment.setIsSubreddit(false);
                     feedFragment.getInitialFrontpage();
-                    feedFragment.setPageTitle(mContext.getString(R.string.drawer_page_title_frontpage));
+                    feedFragment.setDefaultPageTitle(mContext.getString(R.string.drawer_page_title_frontpage));
+                    feedFragment.setPageTitle();
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 
                     //set the GA event
@@ -137,7 +139,7 @@ public class DrawerController {
                 @Override
                 public void onClick(View v) {
                     feedFragment.refreshNewSubreddit(mContext.getString(R.string.random_subreddit_kay));
-                    feedFragment.setPageTitle(mContext.getString(R.string.drawer_page_title_random));
+                    feedFragment.setPageTitle();
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
 
                     //set the GA event

@@ -67,6 +67,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private boolean mIsSubreddit;
     private String mSubredditId;
+    private String mDefaultPageTitle;
 
     private boolean mTwoPane;
 
@@ -179,6 +180,8 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         setHasOptionsMenu(true);
 
+        mDefaultPageTitle = getContext().getString(R.string.drawer_page_title_all);
+
         // If there's instance state, get the last selected position
 //        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
 //            if(!mTwoPane){
@@ -213,7 +216,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             mSubredditId = Utils.getSubredditId(getContext());
         }
 
-        setPageTitle(getContext().getString(R.string.drawer_page_title_frontpage));
+        setPageTitle();
 
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -509,7 +512,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
                     cleanAllSettingsOnrefresh();
-                    setPageTitle(getContext().getString(R.string.drawer_page_title_frontpage));
+                    setPageTitle();
                 }
             }.execute();
         } else {
@@ -549,7 +552,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     cleanAllSettingsOnrefresh();
                     Toast.makeText(getContext(), "Now browsing " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
                     mSubredditId = mSubredditPaginator.getSubreddit();
-                    setPageTitle(getContext().getString(R.string.drawer_page_title_frontpage));
+                    setPageTitle();
                 }
             }.execute();
         } else {
@@ -588,11 +591,15 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         return false;
     }
 
-    public void setPageTitle(String defaultPageName){
+    public void setPageTitle(){
         if(isSubreddit()){
             getActivity().setTitle("/" + mSubredditId + " | " + Utils.getMainFeedSortFromSharedPrefs(getContext()));
         } else {
-            getActivity().setTitle(defaultPageName + " | " + Utils.getMainFeedSortFromSharedPrefs(getContext()));
+            getActivity().setTitle(mDefaultPageTitle + " | " + Utils.getMainFeedSortFromSharedPrefs(getContext()));
         }
+    }
+
+    public void setDefaultPageTitle(String defaultPageTitle) {
+        mDefaultPageTitle = defaultPageTitle;
     }
 }
