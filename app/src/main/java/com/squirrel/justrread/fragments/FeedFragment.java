@@ -211,10 +211,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
         if(isSubreddit()){
             mSubredditId = Utils.getSubredditId(getContext());
-            setPageTitle("/"+mSubredditId);
-        }else{
-            setPageTitle(getContext().getString(R.string.feed_page_title_frontpage));
         }
+
+        setPageTitle(getContext().getString(R.string.drawer_page_title_frontpage));
 
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -510,6 +509,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
                     cleanAllSettingsOnrefresh();
+                    setPageTitle(getContext().getString(R.string.drawer_page_title_frontpage));
                 }
             }.execute();
         } else {
@@ -532,7 +532,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public void refreshNewSubreddit(final String subredditId) {
         if (Utils.isNetworkAvailable(getContext())) {
-//            mIsSubreddit = true;
             setIsSubreddit(true);
             mSubredditId = subredditId;
             Utils.saveSubredditIdToSharedPrefs(getContext(), mSubredditId);
@@ -550,6 +549,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                     cleanAllSettingsOnrefresh();
                     Toast.makeText(getContext(), "Now browsing " + mSubredditPaginator.getSubreddit(), Toast.LENGTH_SHORT).show();
                     mSubredditId = mSubredditPaginator.getSubreddit();
+                    setPageTitle(getContext().getString(R.string.drawer_page_title_frontpage));
                 }
             }.execute();
         } else {
@@ -588,7 +588,11 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         return false;
     }
 
-    public void setPageTitle(String title){
-        getActivity().setTitle(title);
+    public void setPageTitle(String defaultPageName){
+        if(isSubreddit()){
+            getActivity().setTitle("/" + mSubredditId + " | " + Utils.getMainFeedSortFromSharedPrefs(getContext()));
+        } else {
+            getActivity().setTitle(defaultPageName + " | " + Utils.getMainFeedSortFromSharedPrefs(getContext()));
+        }
     }
 }

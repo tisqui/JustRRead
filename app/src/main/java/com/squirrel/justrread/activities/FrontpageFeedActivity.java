@@ -328,7 +328,8 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
             // Highlight the selected item, update the title, and close the drawer
             mDrawerSubredditsList.setItemChecked(position, true);
             if (Utils.isNetworkAvailable(this)) {
-                setTitle(mDrawerSubredditsListAdapter.getItem(position));
+//                setTitle(mDrawerSubredditsListAdapter.getItem(position));
+                setPageTitle(mDrawerSubredditsListAdapter.getItem(position));
             }
         }
         mDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -515,5 +516,9 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         if (key.equals(R.string.subscriptions_status_key)) {
             updateSubscriptionsEmptyView();
         }
+    }
+
+    private void setPageTitle(String subreddit){
+        this.setTitle("/"+ subreddit + " | " + Utils.getMainFeedSortFromSharedPrefs(this));
     }
 }

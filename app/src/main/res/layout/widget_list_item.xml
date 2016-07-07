@@ -21,7 +21,6 @@
             android:layout_margin="8dp"
             android:background="@color/imgBg"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_duck_white_36dp"
             android:contentDescription="@string/widget_thumbnail_content_desc"/>
 
         <LinearLayout
