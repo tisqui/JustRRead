@@ -324,23 +324,25 @@ public class RedditAPI {
                     protected void onPostExecute(Boolean res) {
                         super.onPostExecute(res);
                         if (res) {
-                            //update the DB item - get the new submission
-                            Submission newSubmission = AuthenticationManager.get().getRedditClient().getSubmission(post.getPostId());
-                            int updated = context.getContentResolver().update(RedditContract.PostEntry.CONTENT_URI,
-                                    DataMapper.mapSubmissionToContentValues(newSubmission),
-                                    RedditContract.PostColumns.COLUMN_ID + "='" + post.getPostId() + "'",
-                                    null);
-                            if (updated < 1) {
-                                Log.d(LOG_TAG, "No posts found to update");
-                            } else {
-                                Log.d(LOG_TAG, "Updated post: " + newSubmission.toString());
-                                Toast.makeText(context, "Think you for voting for the post!", Toast.LENGTH_SHORT).show();
-                            }
+                            //update the data in DB
+                            int new_vote_num = post.getUpVotes() + voteDirection.getValue();
+                            RedditAPI.updatePostVote(post.getPosId(), new_vote_num, context);
+                            Toast.makeText(context, "Thank you for voting for the post!",
+                                    Toast.LENGTH_SHORT).show();
+//                            try{
+//                                Submission newSubmission = AuthenticationManager.get().
+//                                        getRedditClient().getSubmission(post.getPostId());
+//                            }catch (NetworkOnMainThreadException e){
+//                                e.printStackTrace();
+//                                //can't get the submission from the API by id, leave the post not
+//                                //updated
+//                                Log.d(LOG_TAG, "Error getting the new post to update after voting");
+//                            }
                         }
                     }
                 }.execute();
             } catch (NetworkException e) {
-                Log.d(LOG_TAG, "Network exception, unsubscription not succesful: " + e);
+                Log.d(LOG_TAG, "Network exception, vote not succesful: " + e);
             }
         }else {
             Log.d(LOG_TAG, "Authentification needs refresh");
@@ -369,6 +371,34 @@ public class RedditAPI {
             cursor.close();
             return false;
         }
+    }
+
+    /**
+     * Update the post votes in local storage
+     * @param postId the id of the post to update votes
+     * @param voteSum the new votes number
+     * @param context the context to get ContentResover
+     * @return true if the data was updated
+     */
+    public static boolean updatePostVote(String postId, int voteSum, Context context){
+        ContentValues values = new ContentValues();
+        values.put(RedditContract.PostColumns.COLUMN_DOWN_VOTES, voteSum);
+        values.put(RedditContract.PostColumns.COLUMN_UP_VOTES, voteSum);
+
+        String selection = RedditContract.PostColumns.COLUMN_ID + " = ?";
+        String[] selectionArguments = { postId };
+
+        int updated = context.getContentResolver().update(RedditContract.PostEntry.CONTENT_URI,
+                values,
+                selection,
+                selectionArguments);
+        if (updated < 1) {
+            Log.d(LOG_TAG, "No posts found to update");
+        } else {
+            Log.d(LOG_TAG, "Updated post");
+           return true;
+        }
+        return false;
     }
 
 }
