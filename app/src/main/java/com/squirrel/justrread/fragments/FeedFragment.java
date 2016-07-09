@@ -72,6 +72,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     private boolean mTwoPane;
 
     private boolean mCanUpdate = true;
+    private int mFeedPageSize = 50;
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -259,7 +260,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
                                     if(ifDownloadedNew) {
                                         mPostsFeedAdapter.notifyDataSetChanged();
                                         mCurrentPage++;
-                                        // mPosition += 50;
+                                        // mPosition += mPageSize;
                                     }else{
                                         Toast.makeText(getContext(), R.string.feed_no_posts_more_txt, Toast.LENGTH_SHORT).show();
                                     }
@@ -345,7 +346,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     public void getInitialFrontpage(){
         if (Utils.isNetworkAvailable(getContext())) {
             mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-            mSubredditPaginator.setLimit(50);
+            mSubredditPaginator.setLimit(mFeedPageSize);
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {

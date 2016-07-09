@@ -104,6 +104,9 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
 
     private CommentNode mCommentNode;
 
+    private List<CommentNode> mListOfComments;
+    private int mCommentsPerPage = 50;
+
 
     public DetailPostFragment() {
         // Required empty public constructor
@@ -172,8 +175,11 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             mCommentsRecyclerView.setLayoutManager(mCommentsLinearLayoutManager);
 
 
-            mCommentsRecyclerViewAdapter = new CommentsRecyclerViewAdapter(new ArrayList<CommentNode>(), mEmptyCommentsView);
+            mCommentsRecyclerViewAdapter = new CommentsRecyclerViewAdapter(new ArrayList<CommentNode>(),
+                    mEmptyCommentsView, getContext());
             mCommentsRecyclerView.setAdapter(mCommentsRecyclerViewAdapter);
+
+            mListOfComments = new ArrayList<>();
 
             //set the source and on click go to web view
             if(mPost.getUrl()!= null && !mPost.getUrl().isEmpty()){
@@ -242,6 +248,18 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
             Toast.makeText(getContext(), R.string.detail_post_erros_no_post, Toast.LENGTH_SHORT).show();
         }
 
+        //TODO comments pagination
+//        mCommentsRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(mCommentsLinearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount) {
+//                if(!mListOfComments.isEmpty()){
+//                    Log.d(LOG_TAG, "getting new page number " + page + " of " + mListOfComments.size());
+//                    mCommentsRecyclerViewAdapter.addComments(mListOfComments);
+//                    dataSetChanged();
+//                }
+//            }
+//        });
+
         return rootView;
 
     }
@@ -277,7 +295,6 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
         new AsyncTask<Void, Void, List<CommentNode>>(){
             @Override
             protected List<CommentNode> doInBackground(Void... params) {
-                Log.d(LOG_TAG, "Trying to download the post by id " + mPost.getPosId());
                 List<CommentNode> resList = new ArrayList<CommentNode>();
                 try{
                     resList = mCommentsRedditAPI.getTopNodeAllComments(mPost.getPosId());
@@ -287,12 +304,14 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                 return resList;
             }
             @Override
-            protected void onPostExecute(List<CommentNode> result) {
+            protected void onPostExecute(final List<CommentNode> result) {
                 super.onPostExecute(result);
                 mCommentsProgressbar.setVisibility(View.GONE);
                 //update the list
                 Log.d(LOG_TAG, "Loading of the comments finished");
-                mCommentsRecyclerViewAdapter.swapTopNode(result);
+                mListOfComments = result;
+
+                mCommentsRecyclerViewAdapter.swapTopNode(mListOfComments);
 
                 if(result.isEmpty()){
                     mEmptyCommentsView.setText(R.string.empty_comments_list);
@@ -356,4 +375,18 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     }
 
+    private List<CommentNode> getPageOfComments(int page){
+        List<CommentNode> res = new ArrayList<CommentNode>();
+        if(!mListOfComments.isEmpty() && page > 0){
+            int startPos = page == 1 ? 0 : (page - 1) * mCommentsPerPage;
+            int endPos = startPos + mCommentsPerPage - 1;
+            if (startPos <= mListOfComments.size()){
+                if(endPos > mListOfComments.size()){
+                    endPos = mListOfComments.size()-1;
+                }
+                res = mListOfComments.subList(startPos, endPos);
+            }
+        }
+        return res;
+    }
 }

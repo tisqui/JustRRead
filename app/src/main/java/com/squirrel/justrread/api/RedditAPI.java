@@ -30,6 +30,7 @@ import net.dean.jraw.paginators.Sorting;
 import net.dean.jraw.paginators.SubredditPaginator;
 import net.dean.jraw.paginators.UserSubredditsPaginator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -45,7 +46,20 @@ public class RedditAPI {
 
     public static boolean checkAuthentificationReady() {
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
-        return state.equals(AuthenticationState.READY);
+        switch (state) {
+            case READY:
+                //no need to perform actions
+                return true;
+            case NONE:
+                //user was not logged in, app was not authentificated - try to auth without login
+                Authentification.authentificateWithoutLoginAsync();
+                break;
+            case NEED_REFRESH:
+                //authentificated, but token should be refreshed
+                Authentification.refreshAccessTokenAsync();
+                break;
+        }
+        return false;
     }
 
     /**
@@ -148,7 +162,7 @@ public class RedditAPI {
 
             return nodes.toList();
         }
-        return null;
+        return new ArrayList<CommentNode>();
     }
 
     /**

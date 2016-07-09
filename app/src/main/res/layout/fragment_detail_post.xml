@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/application_toolbar"
-    tools:context="com.squirrel.justrread.fragments.DetailPostFragment">
+    tools:context="com.squirrel.justrread.fragments.DetailPostFragment"
+    android:scrollbars="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"

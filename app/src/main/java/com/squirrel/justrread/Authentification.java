@@ -78,7 +78,7 @@ public class Authentification {
     /**
      * Authentificate the user without logging in - get the token
      */
-    public void authentificateWithoutLoginAsync() {
+    public static void authentificateWithoutLoginAsync() {
         new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... params) {

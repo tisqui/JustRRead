@@ -1,7 +1,9 @@
 package com.squirrel.justrread.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import com.squirrel.justrread.Utils;
 import net.dean.jraw.models.Comment;
 import net.dean.jraw.models.CommentNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,13 +23,15 @@ import java.util.List;
 public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentItemViewholder> {
     private final String LOG_TAG = CommentsRecyclerViewAdapter.class.getSimpleName();
     private View mEmptyView;
+    private Context mContext;
 
     private List<CommentNode> mCommentNodesList;
 
 
-    public CommentsRecyclerViewAdapter(List<CommentNode> list, View emptyView) {
-        mCommentNodesList = list;
+    public CommentsRecyclerViewAdapter(List<CommentNode> list, View emptyView, Context context) {
+        mCommentNodesList = new ArrayList<>(list);
         mEmptyView = emptyView;
+        mContext = context;
     }
 
     @Override
@@ -48,8 +53,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentIte
                     holder.mCommentAuthorTextView.setText("no author");
                 }
 
-                if (comment.getEditDate() != null) {
-                    holder.mCommentDateTextView.setText(comment.getCreated().toString());
+                if (comment.getCreated() != null) {
+                    holder.mCommentDateTextView.setText(Utils.getPostedTimeAgo(comment.getCreated(),
+                            mContext));
                 } else {
                     holder.mCommentDateTextView.setText("no date");
                 }
@@ -80,9 +86,17 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentIte
      * @param nodeList
      */
     public void swapTopNode(List<CommentNode> nodeList) {
-        mCommentNodesList = nodeList;
+        mCommentNodesList = new ArrayList<>(nodeList);
         notifyDataSetChanged();
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    public void addComments(List<CommentNode> newComments){
+        int curSize = getItemCount();
+        Log.d("adding", "Current size = " + curSize);
+        mCommentNodesList.addAll(newComments);
+        Log.d("adding", "New size = " + mCommentNodesList.size());
+        notifyItemRangeInserted(curSize, newComments.size());
     }
 
 
