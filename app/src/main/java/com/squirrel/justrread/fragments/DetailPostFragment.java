@@ -268,6 +268,9 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
         }
     }
 
+    /**
+     * Get the comments for the post and show them
+     */
     private void getComments(){
         mCommentsProgressbar.setVisibility(View.VISIBLE);
         mEmptyCommentsView.setVisibility(View.GONE);

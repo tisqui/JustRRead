@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.squirrel.justrread.Authentification;
 import com.squirrel.justrread.R;
 import com.squirrel.justrread.Utils;
 import com.squirrel.justrread.activities.Navigator;
@@ -47,38 +46,10 @@ public class DrawerController {
 
     }
 
-    private void setLoginButton(){
-        mLogin.setText("Login");
-        mLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigator.navigateToLogin(v.getContext());
-            }
-        });
-    }
 
-    private void setLogoutButton(){
-        mLogin.setText("Logout");
-        mLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        Authentification.logout(mContext);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        super.onPostExecute(aVoid);
-                        setLoginButton();
-                    }
-                }.execute();
-            }
-        });
-    }
-
+    /**
+     * Initialize all actions for the UI elements of the drawer
+     */
     public void initDrawerActions(){
         mLogin = (Button) mDrawerLayout.findViewById(R.id.drawer_btn_login);
 
@@ -95,6 +66,10 @@ public class DrawerController {
         mDrawerRandomItem = (RelativeLayout) mDrawerLayout.findViewById(R.id.drawer_random_item);
     }
 
+    /**
+     * Set the actions for the basic posts lists - All, Frontpage, Random
+     * @param feedFragment
+     */
     public void setCotentActions(final FeedFragment feedFragment){
         if(feedFragment != null){
             mDrawerAllItem.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +130,9 @@ public class DrawerController {
         }
     }
 
+    /**
+     * Show the user name on the drawer if the user is logged in
+     */
     public void setUserName(){
         mHelloUserText = (TextView) mDrawerLayout.findViewById(R.id.drawer_hello_user_text);
         if(Utils.checkUserLoggedIn()){
@@ -175,6 +153,9 @@ public class DrawerController {
         }
     }
 
+    /**
+     * Set the theme after the theme is changed in settings
+     */
     public void setTheme(){
         if (PreferenceManager.getDefaultSharedPreferences(mContext)
                 .getBoolean(mContext.getString(R.string.prefs_nightmode_key), false)) {

@@ -425,6 +425,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         mDrawerSubredditsListAdapter.clear();
     }
 
+    /**
+     * Updates the text in the textview that shows the text for cases when there is no data
+     * in the subscriptions list in navigation drawer.
+     */
     private void updateSubscriptionsEmptyView() {
         if (mDrawerSubredditsList.getCount() == 0) {
             TextView tv = (TextView) findViewById(R.id.drawer_empty_subscriptions_listview);
@@ -447,6 +451,11 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         }
     }
 
+    /**
+     * Sets the text on the "Login" button of the navigation drawer and the click listener.
+     * When user logged in - show the "Logout" text and set logout listener, when user is not
+     * logged in - show the "Login" button.
+     */
     private void setLoginButton() {
         if (!Utils.checkUserLoggedIn()) {
             mLogin.setText("Login");
@@ -494,6 +503,9 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         }
     }
 
+    /**
+     * Catch when the user gets back from the login - need to update the drawer UI
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
@@ -518,6 +530,10 @@ public class FrontpageFeedActivity extends BaseActivity implements LoaderManager
         }
     }
 
+    /**
+     * Set the activity title. Format /subreddit_name | filter_value
+     * @param subreddit the name of the subreddit or "Frontpage" and "All"
+     */
     private void setPageTitle(String subreddit){
         this.setTitle("/"+ subreddit + " | " + Utils.getMainFeedSortFromSharedPrefs(this));
     }

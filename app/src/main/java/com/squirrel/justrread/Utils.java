@@ -68,10 +68,20 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Save the sort parameter value to the shared preferences
+     * @param c Context used to get the SharedPreferences
+     * @param value sort value
+     */
     public static void saveMainFeedSortToSharedPrefs(Context c, int value){
         saveIntItemToSharedPrefs(c, c.getString(R.string.front_filter_key), value);
     }
 
+    /**
+     * Get the sorting parameter value from teh sahed preferences
+     * @param c Context used to get the SharedPreferences
+     * @return the sorting type
+     */
     public static Sorting getMainFeedSortFromSharedPrefs(Context c){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
         int sortInt = sharedPref.getInt(c.getString(R.string.front_filter_key), 0);
@@ -95,6 +105,12 @@ public class Utils {
         return res;
     }
 
+    /**
+     * Save the int value to shared preferences
+     * @param c Context used to get the SharedPreferences
+     * @param key
+     * @param value
+     */
     public static void saveIntItemToSharedPrefs(Context c, String key, int value){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
@@ -102,16 +118,31 @@ public class Utils {
         spe.apply();
     }
 
+    /**
+     * Save the subreddit flag to the shared preferences
+     * @param c Context used to get the SharedPreferences
+     * @param isSubreddit the value of the subreddit flag
+     */
     public static void saveiSSubredditToSharedPrefs(Context c, boolean isSubreddit){
         saveIntItemToSharedPrefs(c, c.getString(R.string.is_subreddit), isSubreddit ? 1 : 0);
     }
 
+    /**
+     * Get the subreddit flag from shared preferences
+     * @param c Context used to get the SharedPreferences
+     * @return the value of the subreddit flag
+     */
     public static boolean getiSSubredditFromSharePrefs(Context c){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         int res = sp.getInt(c.getString(R.string.is_subreddit), 0);
         return res != 0;
     }
 
+    /**
+     * Save the current browsing subreddit id to the shared preferences
+     * @param c Context used to get the SharedPreferences
+     * @param subredditId the id of the current browsing subreddit
+     */
     public static void saveSubredditIdToSharedPrefs(Context c, String subredditId){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
@@ -119,12 +150,21 @@ public class Utils {
         spe.apply();
     }
 
+    /**
+     * Get the current browsing subreddit id from the shared preferences
+     * @param c Context used to get the SharedPreferences
+     * @return the id of the subreddit
+     */
     public static String getSubredditId(Context c){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getString(c.getString(R.string.subreddit_id), "");
     }
 
-
+    /**
+     * Parse the markdown into the html text
+     * @param markdown the markdown text
+     * @return html text
+     */
     public static String getHtmlFromMarkdown(String markdown){
         return new MarkdownProcessor().markdown(markdown);
     }
@@ -195,6 +235,11 @@ public class Utils {
         return timeAgo + " " + ctx.getResources().getString(R.string.date_util_suffix);
     }
 
+    /**
+     * Get the time difference between the date and the current time
+     * @param time the date
+     * @return the difference between date and now in minutes
+     */
     private static int getTimeDistanceInMinutes(long time) {
         long timeDistance = currentDate().getTime() - time;
         return Math.round((Math.abs(timeDistance) / 1000) / 60);

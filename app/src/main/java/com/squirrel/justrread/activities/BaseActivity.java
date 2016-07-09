@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -52,9 +51,6 @@ public class BaseActivity extends AppCompatActivity {
             mToolbar = (Toolbar) findViewById(R.id.application_toolbar);
             if (mToolbar != null) {
                 setSupportActionBar(mToolbar);
-//                int statusBarHeight = getStatusBarHeight();
-//                mToolbar.setPadding(0, statusBarHeight, 0, 0);
-//                mToolbar.setMinimumHeight(getNavBarSize() + statusBarHeight);
             }
         }
         return mToolbar;
@@ -84,17 +80,12 @@ public class BaseActivity extends AppCompatActivity {
             checkAuthentification();
         }
     }
-    /**
-     * Add the fragment to this activity
-     * @param containerId the container id to where to add the fragment
-     * @param fragment fragment to add
-     */
-    protected void addFragment(int containerId, Fragment fragment) {
-//        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
-//        fragmentTransaction.add(containerId, fragment);
-//        fragmentTransaction.commit();
-    }
 
+    /**
+     * Check user authentification status. If the user is not authentificated -
+     * authetificate without login to be able to use API. If token needs refresh -
+     * refresh token.
+     */
     public void checkAuthentification(){
             AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
@@ -122,7 +113,10 @@ public class BaseActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    // A method to find height of the status bar
+    /**
+     * Find height of the status bar
+     * @return the height of the status bar
+     */
     public int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -132,12 +126,21 @@ public class BaseActivity extends AppCompatActivity {
         return result;
     }
 
+    /**
+     * Find the height of the navigation bar
+     * @return the height of the navigation bar
+     */
     public int getNavBarSize(){
         TypedValue tv = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
         return getResources().getDimensionPixelSize(tv.resourceId);
     }
 
+    /**
+     * Show dialog which proposes user to login with 2 buttons "Cancel"
+     * and "Login". "Login" goes tot he Login activity.
+     * @param context
+     */
     public static void showLoginAlert(final Context context){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Login");

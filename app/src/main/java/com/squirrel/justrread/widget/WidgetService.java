@@ -141,15 +141,6 @@ public class WidgetService extends RemoteViewsService {
                     views.setViewVisibility(R.id.widget_list_item_thumbnail, View.GONE);
                 }
 
-
-//                Glide.with(getBaseContext())
-//                        .load(thumbnail)
-//                        .asBitmap()
-//                        .centerCrop()
-//                        .placeholder(R.drawable.ic_duck_white_36dp)
-//                        .error(R.drawable.ic_duck_white_36dp)
-//                        .into(appWidgetTarget);
-
                 final Intent fillInIntent = new Intent();
                 views.setOnClickFillInIntent(R.id.widget_list_item_frame, fillInIntent);
                 return views;

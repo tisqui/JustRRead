@@ -40,12 +40,6 @@ public class RedditAPI {
     public static final String LOG_TAG = RedditAPI.class.getSimpleName();
     public static boolean showNSFW = false;
 
-    public interface APICallback<T> {
-        void onSuccess(T result);
-
-        void onFailure(Throwable t);
-    }
-
     public RedditAPI() {
     }
 
@@ -54,8 +48,17 @@ public class RedditAPI {
         return state.equals(AuthenticationState.READY);
     }
 
-    //get the subreddit feed
-    public boolean getSubredditPostsSorted(SubredditPaginator paginator, Context context, String subredditId, Sorting sort) throws NetworkException{
+    /**
+     * Gets the page of the posts lists for certain subreddit.
+     * @param paginator the SubredditPaginator to use for posts
+     * @param context current context
+     * @param subredditId id of the subreddit for which to get posts
+     * @param sort sorting of the posts - Top, Controversial, New, Hot
+     * @return true if got new posts, false - if not
+     * @throws NetworkException
+     */
+    public boolean getSubredditPostsSorted(SubredditPaginator paginator, Context context,
+                                           String subredditId, Sorting sort) throws NetworkException{
         boolean res = false;
         if (checkAuthentificationReady()) {
             if (paginator != null) {
@@ -95,6 +98,14 @@ public class RedditAPI {
         return true;
     }
 
+    /**
+     * Get the posts lists for the frontpage
+     * @param paginator the SubredditPaginator to use for posts
+     * @param context current context
+     * @param doClear if delete the previous posts from DB
+     * @return true if got new posts, false - if not
+     * @throws NetworkException
+     */
     public boolean getPostsFront(SubredditPaginator paginator, Context context, boolean doClear) throws NetworkException{
         boolean res = false;
         if (checkAuthentificationReady()) {
@@ -124,6 +135,12 @@ public class RedditAPI {
         return res;
     }
 
+    /**
+     * Get the list of comments for the post by postId
+     * @param postId the id of the post to get all comments for
+     * @return the list of all comment nodes
+     * @throws NetworkException
+     */
     public List<CommentNode> getTopNodeAllComments(String postId) throws NetworkException{
         if (checkAuthentificationReady()) {
             FluentIterable<CommentNode> nodes = AuthenticationManager.get().getRedditClient().
@@ -134,6 +151,12 @@ public class RedditAPI {
         return null;
     }
 
+    /**
+     * Get the About information of the subreddip
+     * @param subredditId the id of the subreddit
+     * @return the about text formatted as markdown
+     * @throws NetworkException
+     */
     public static String getSubredditAbout(String subredditId) throws NetworkException{
         if (checkAuthentificationReady()) {
             Subreddit subreddit = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
@@ -144,6 +167,13 @@ public class RedditAPI {
         }
     }
 
+    /**
+     * Get the lists of subreddits for the search request
+     * @param searchStr the input search key
+     * @param includeNsfw if include the NSFW content
+     * @return the list of the subreddits found
+     * @throws NetworkException
+     */
     public static List<String> searchForSubreddit(String searchStr, boolean includeNsfw) throws NetworkException{
         if(checkAuthentificationReady()){
             return AuthenticationManager.get().getRedditClient().searchSubreddits(searchStr, includeNsfw);
@@ -153,6 +183,11 @@ public class RedditAPI {
         }
     }
 
+    /**
+     * Get the list of all subscriptions of the user
+     * @param context the current context
+     * @throws NetworkException
+     */
     public static void getUserSubscriptions(Context context) throws NetworkException{
         if(checkAuthentificationReady()){
             if(Utils.checkUserLoggedIn()){
@@ -179,6 +214,13 @@ public class RedditAPI {
         }
     }
 
+    /**
+     * Subscribe to the subreddit
+     * @param subredditId the id of the subreddit to subscribe
+     * @param context the current context
+     * @return true if the subscription was succesful
+     * @throws NetworkException
+     */
     public static boolean subscribeSubreddit(String subredditId, Context context) throws NetworkException{
         if(checkAuthentificationReady()) {
             Subreddit subredditToSubscribe = AuthenticationManager.get().getRedditClient().getSubreddit(subredditId);
@@ -206,6 +248,13 @@ public class RedditAPI {
         }
     }
 
+    /**
+     * Unsubscribe from subreddit
+     * @param subredditId the id of the subreddit to unsubscribe
+     * @param context the current context
+     * @return true if the unsubscription was succesful
+     * @throws NetworkException
+     */
     public static boolean unsubscribeSubreddit(String subredditId, Context context) throws NetworkException{
         if(checkAuthentificationReady()) {
                 //unsubscribe on the server
@@ -234,6 +283,12 @@ public class RedditAPI {
         }
     }
 
+    /**
+     * Vote for the post
+     * @param post the id of the post to vote for
+     * @param voteDirection the direction of the vote - up or down
+     * @param context the current context
+     */
     public static void vote(final Post post, final VoteDirection voteDirection, final Context context){
         if(checkAuthentificationReady()) {
             try {
@@ -280,6 +335,12 @@ public class RedditAPI {
         }
     }
 
+    /**
+     * Check if the user is subscribed to the subreddit by subredditName
+     * @param subredditName
+     * @param context
+     * @return true if subscribed
+     */
     public static boolean checkIfSubscribed(String subredditName, Context context){
         String[] projection = new String[] {RedditContract.SubscriptionColumns.COLUMN_DISPLAY_NAME};
         String selection = RedditContract.SubscriptionColumns.COLUMN_DISPLAY_NAME + " = ?";
@@ -293,44 +354,6 @@ public class RedditAPI {
             assert cursor != null;
             cursor.close();
             return false;
-        }
-    }
-
-    public class GetPosts extends AsyncTask<String, Void, Void> {
-        SubredditPaginator mSubredditPaginator;
-        String page;
-        int pageSize;
-        Context context;
-
-        public GetPosts(SubredditPaginator subredditPaginator, int pSize, Context c) {
-            mSubredditPaginator = subredditPaginator;
-            this.pageSize = pSize;
-            this.context = c;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-
-            if (mSubredditPaginator == null) {
-                //getting the first page
-                mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
-            }
-            mSubredditPaginator.setLimit(pageSize);
-            if (mSubredditPaginator.hasNext()) {
-                Listing<Submission> firstPage = mSubredditPaginator.next();
-                Vector<ContentValues> contentValuesList = new Vector<ContentValues>(firstPage.size());
-                for (Submission s : firstPage) {
-                    contentValuesList.add(DataMapper.mapSubmissionToContentValues(s));
-                }
-                if (contentValuesList.size() > 0) {
-                    ContentValues[] cvArray = new ContentValues[contentValuesList.size()];
-                    contentValuesList.toArray(cvArray);
-                    context.getContentResolver().bulkInsert(RedditContract.PostEntry.CONTENT_URI, cvArray);
-                }
-            } else {
-                Log.d(LOG_TAG, "No more pages available");
-            }
-            return null;
         }
     }
 

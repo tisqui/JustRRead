@@ -43,7 +43,6 @@ public class RedditAuthentificator extends AbstractAccountAuthenticator {
         return null;
     }
 
-    // TODO get authentication token
     @Override
     public Bundle getAuthToken(
             AccountAuthenticatorResponse r,

@@ -53,6 +53,9 @@ public class Authentification {
         }
     }
 
+    /**
+     * Refresh the access token when user is not logged in
+     */
     public static void refreshAccessTokenAsync() {
         new AsyncTask<Credentials, Void, Void>() {
             @Override
@@ -72,6 +75,9 @@ public class Authentification {
         }.execute();
     }
 
+    /**
+     * Authentificate the user without logging in - get the token
+     */
     public void authentificateWithoutLoginAsync() {
         new AsyncTask<String, Void, Void>() {
             @Override
@@ -98,6 +104,10 @@ public class Authentification {
         }.execute();
     }
 
+    /**
+     * Logout the current user
+     * @param context current context
+     */
     public static void logout(Context context) {
         if(Utils.isNetworkAvailable(context)) {
             //need to revoke access token first
@@ -118,6 +128,10 @@ public class Authentification {
         }
     }
 
+    /**
+     * Refresh the auth after the long application sleep
+     * @param context
+     */
     public static void refreshAuthAfterSleep(Context context){
         if(Utils.isNetworkAvailable(context)){
             AuthenticationState state = AuthenticationManager.get().checkAuthState();

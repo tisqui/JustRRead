@@ -65,7 +65,6 @@ public class WidgetProvider extends AppWidgetProvider {
                 setRemoteAdapterV11(context, views);
             }
 
-            //TODO When clicking on the list item - open the appropriate Post of the application
 //            boolean useDetailActivity = true;
             Intent clickIntentTemplate =  new Intent(context, FrontpageFeedActivity.class);
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)

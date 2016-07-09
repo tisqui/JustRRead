@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by squirrel on 5/2/16.
+ * Handles all login actions of the user.
  */
 public class LoginActivity extends BaseActivity {
 
@@ -68,6 +69,11 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Authentificate the user
+     * @param url authentification URL
+     * @param creds caredentials for login
+     */
     private void onUserChallenge(final String url, final Credentials creds) {
         new AsyncTask<String, Void, String>() {
             @Override

@@ -32,6 +32,10 @@ public class Init extends Application {
     public RedditTokenStore getRedditTokenStore() {
         return mRedditTokenStore;
     }
+
+    /**
+     * Intialize the authentification client from JRAW
+     */
     public void initializeAuth(){
         RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
         reddit.setLoggingMode(LoggingMode.NEVER);
@@ -40,6 +44,10 @@ public class Init extends Application {
         AuthenticationManager.get().init(reddit, new RefreshTokenHandler(mRedditTokenStore, reddit));
     }
 
+    /**
+     * Get the google analytics Tracker. Ensuring that there is only one instance.
+     * @return the current tracker
+     */
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);

@@ -69,6 +69,11 @@ public class WebActivity extends BaseActivity {
         return false;
     }
 
+    /**
+     * Parses the url and gets domain name of it
+     * @param url
+     * @return the domain name
+     */
     public static String getDomainName(String url) {
         URI uri;
         try {

@@ -53,6 +53,11 @@ public class SubscriptionsRecyclerViewAdapter extends RecyclerView.Adapter<Subsc
         }
     }
 
+    /**
+     * Exchange furstPosition and secondPostion places
+     * @param firstPosition
+     * @param secondPosition
+     */
     public void swap(int firstPosition, int secondPosition) {
         Collections.swap(mSubscriptionsList, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);

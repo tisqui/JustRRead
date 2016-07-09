@@ -27,12 +27,19 @@ public class SubscriptionsTouchHelper extends ItemTouchHelper.SimpleCallback {
         mContext = context;
     }
 
+    /**
+     * On drag and drop - place element to the new position
+     * TODO in ver 2: save the new position
+     */
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         mSubscriptionsRecyclerViewAdapter.swap(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
+    /**
+     * OnSwipe action: element should be deleted from the suscriptions
+     */
     @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
         //delete the item when swipe

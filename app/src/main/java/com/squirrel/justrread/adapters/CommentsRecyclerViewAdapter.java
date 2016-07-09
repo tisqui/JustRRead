@@ -73,7 +73,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentIte
     }
 
 
-
+    /**
+     * Changes the current top comment node by replacing current comment list by new node list.
+     * @param nodeList
+     */
     public void swapTopNode(List<CommentNode> nodeList) {
         mCommentNodesList = nodeList;
         notifyDataSetChanged();

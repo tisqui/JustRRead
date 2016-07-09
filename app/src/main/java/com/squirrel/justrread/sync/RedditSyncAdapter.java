@@ -64,6 +64,7 @@ public class RedditSyncAdapter extends AbstractThreadedSyncAdapter {
 
         AuthenticationState state = AuthenticationManager.get().checkAuthState();
 
+        //if user is authentificated and logged in - get the subscriptions
         if (state.equals(AuthenticationState.READY) && Utils.checkUserLoggedIn()) {
             try {
                 RedditAPI.getUserSubscriptions(mContext);

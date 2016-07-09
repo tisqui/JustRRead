@@ -9,6 +9,7 @@ import android.view.View;
 
 /**
  * Created by squirrel on 4/25/16.
+ * Click listener for Feed RecycleView
  */
 public class PostClickListener implements RecyclerView.OnItemTouchListener {
 

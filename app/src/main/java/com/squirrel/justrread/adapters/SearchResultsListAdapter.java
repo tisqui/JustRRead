@@ -56,6 +56,11 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
         return convertView;
     }
 
+    /**
+     * Set the on click listener for the Subscribe button
+     * @param subredditId the id of the subreddit to check the status
+     * @param subButton the Subscribe button to set
+     */
     private void setSubscribeButton(final String subredditId, final Button subButton){
         subButton.setText("Subscribe");
         subButton.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +95,11 @@ public class SearchResultsListAdapter extends ArrayAdapter<String> {
 
     }
 
+    /**
+     * Set the Unsubscribe button on click listener and unsubscription call
+     * @param subredditId
+     * @param subButton
+     */
     private void setUnsubscribeButton(final String subredditId, final Button subButton){
         subButton.setText("Unsubscribe");
         subButton.setOnClickListener(new View.OnClickListener() {

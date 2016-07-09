@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by squirrel on 5/29/16.
+ * Handles search actions of the user.
  */
 public class SubredditSearchResultsActivity extends BaseActivity {
 
@@ -80,6 +81,11 @@ public class SubredditSearchResultsActivity extends BaseActivity {
         handleIntent(intent);
     }
 
+    /**
+     * Handles the search intent. If the intent is ACTION_SEARCH - send the search request and
+     * show the search results.
+     * @param intent the incoming intent
+     */
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

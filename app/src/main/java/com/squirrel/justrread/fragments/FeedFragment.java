@@ -135,31 +135,15 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-
     private OnFragmentInteractionListener mListener;
 
     public FeedFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment FeedFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static FeedFragment newInstance() {
         FeedFragment fragment = new FeedFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, "test");
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -175,9 +159,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onCreate(savedInstanceState);
 
         mRedditAPI = new RedditAPI();
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
         setHasOptionsMenu(true);
 
         mDefaultPageTitle = getContext().getString(R.string.drawer_page_title_all);
@@ -322,12 +303,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -364,6 +339,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
 
     }
 
+    /**
+     * Get the data for the frontpage feed
+     */
     public void getInitialFrontpage(){
         if (Utils.isNetworkAvailable(getContext())) {
             mSubredditPaginator = new SubredditPaginator(AuthenticationManager.get().getRedditClient());
@@ -407,7 +385,6 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
      * activity.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -423,23 +400,7 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
             if (null != tv) {
                 // if cursor is empty, why?
                 int message = R.string.empty_posts_list;
-//                @RedditSyncAdapter.PostsStatus int location = Utils.getPostsStatus(getActivity());
-//                switch (location) {
-//                    case RedditSyncAdapter.POSTS_STATUS_SERVER_DOWN:
-//                        message = R.string.list_posts_server_is_down;
-//                        break;
-//                    case RedditSyncAdapter.POSTS_STATUS_SERVER_INVALID:
-//                        message = R.string.list_posts_server_is_invalid;
-//                        break;
-//                    case RedditSyncAdapter.POSTS_STATUS_INVALID:
-//                        message = R.string.list_posts_posts_invalid;
-//                        break;
-//                    default:
-//                        if (!Utils.isNetworkAvailable(getActivity())) {
-//                            message = R.string.no_network_available;
-//                        }
-//                }
-//                tv.setText(message);
+                tv.setText(message);
             }
         }
     }
@@ -491,6 +452,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    /**
+     * Get the lists of posts sorted by the new sorting parameter value
+     */
     public void refreshNewSorting() {
         if (Utils.isNetworkAvailable(getContext())) {
             new AsyncTask<Void, Void, Void>() {
@@ -533,6 +497,10 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         return mSubredditId;
     }
 
+    /**
+     * Load the posts for the new subreddit
+     * @param subredditId the id of the subreddit to load
+     */
     public void refreshNewSubreddit(final String subredditId) {
         if (Utils.isNetworkAvailable(getContext())) {
             setIsSubreddit(true);
@@ -591,6 +559,9 @@ public class FeedFragment extends Fragment implements LoaderManager.LoaderCallba
         return false;
     }
 
+    /**
+     * Set the activity page title. Format /subreddit_name | filter_value
+     */
     public void setPageTitle(){
         if(isSubreddit()){
             getActivity().setTitle("/" + mSubredditId + " | " + Utils.getMainFeedSortFromSharedPrefs(getContext()));
