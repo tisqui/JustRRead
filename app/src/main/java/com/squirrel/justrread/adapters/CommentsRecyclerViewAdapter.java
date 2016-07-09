@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.squirrel.justrread.R;
+import com.squirrel.justrread.Utils;
 
 import net.dean.jraw.models.Comment;
 import net.dean.jraw.models.CommentNode;
@@ -53,8 +54,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentIte
                     holder.mCommentDateTextView.setText("no date");
                 }
                 holder.mCommentRatingTextView.setText(comment.getScore() + "");
-                if (comment.getAuthor() != null) {
-                    holder.mCommentTextView.setText(Html.fromHtml(comment.getBody()));
+                if (comment.getBody() != null) {
+                    String html = Utils.getHtmlFromMarkdown(comment.getBody());
+                    holder.mCommentTextView.setText(Html.fromHtml(html));
                 } else {
                     holder.mCommentTextView.setVisibility(View.GONE);
                 }
