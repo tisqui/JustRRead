@@ -11,4 +11,5 @@
                     android:updatePeriodMillis="0"
                     android:widgetCategory="home_screen|keyguard"
                     tools:ignore="UnusedAttribute"
+                    android:previewImage="@drawable/widget"
     />
