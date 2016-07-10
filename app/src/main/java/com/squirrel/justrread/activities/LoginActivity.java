@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 public class LoginActivity extends BaseActivity {
 
     public static final String APP_ID = BuildConfig.APP_ID;
-    public static final String URL = BuildConfig.REDIRECT_URL;
+    public static final String URL = "https://www.udacity.com/";
 
     public static final Credentials CREDENTIALS = Credentials.installedApp(APP_ID, URL);
     public static final String LOG_TAG = LoginActivity.class.getSimpleName();

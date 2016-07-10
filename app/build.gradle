@@ -29,8 +29,6 @@ android {
     }
     buildTypes.each {
         it.buildConfigField 'String', 'APP_ID', MyAppId
-        it.buildConfigField 'String', 'REDIRECT_URL', MyRedirectUrl
-        it.buildConfigField 'String', 'APP_UNIQUE_ID', MyUniqueAppId
         it.buildConfigField 'String', 'USER_NAME', MyUserName
         it.buildConfigField 'String', 'TEST_DEVICE_ID', MyTestDevice
     }

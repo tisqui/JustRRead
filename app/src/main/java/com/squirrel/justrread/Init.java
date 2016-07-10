@@ -18,8 +18,6 @@ import net.dean.jraw.http.UserAgent;
 public class Init extends Application {
 
     private RedditTokenStore mRedditTokenStore;
-    private static final String APP_ID = BuildConfig.APP_ID;
-    private static final String RED_URL = BuildConfig.REDIRECT_URL;
     public Tracker mTracker;
 
     @Override
@@ -37,7 +35,7 @@ public class Init extends Application {
      * Intialize the authentification client from JRAW
      */
     public void initializeAuth(){
-        RedditClient reddit = new RedditClient(UserAgent.of("installed app", BuildConfig.APP_UNIQUE_ID, "v0.1", BuildConfig.USER_NAME));
+        RedditClient reddit = new RedditClient(UserAgent.of("installed app", "com.squirrel.justrread", "v0.1", BuildConfig.USER_NAME));
         reddit.setLoggingMode(LoggingMode.NEVER);
         mRedditTokenStore = new RedditTokenStore(this);
         //initialize Authentification manager
