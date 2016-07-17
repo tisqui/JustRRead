@@ -87,6 +87,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/imgBg"
                 android:src="@drawable/ic_duck_white_36dp"
+                android:clickable="true"
                 android:contentDescription="@string/detail_post_thumbnail_img_content_desc"/>
 
             <TextView

@@ -190,6 +190,12 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                         Navigator.navigateToWebview(getContext(), mPost.getUrl());
                     }
                 });
+                mDetailThumb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Navigator.navigateToWebview(getContext(), mPost.getUrl());
+                    }
+                });
             } else {
                 mDetailSource.setVisibility(View.GONE);
             }
