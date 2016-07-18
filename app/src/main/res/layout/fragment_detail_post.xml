@@ -115,6 +115,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:autoLink="web"
+                android:linksClickable="true"
                 android:textColor="@color/tisteTextColor"
                 android:text="Test text description"/>
 

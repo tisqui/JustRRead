@@ -73,6 +73,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:autoLink="web"
+        android:linksClickable="true"
         android:textColor="@color/tisteTextColor"
         android:textSize="@dimen/commentTextSize"
         android:text="text text text"/>

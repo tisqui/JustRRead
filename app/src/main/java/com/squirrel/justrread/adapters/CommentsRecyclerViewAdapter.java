@@ -3,6 +3,7 @@ package com.squirrel.justrread.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentIte
                 if (comment.getBody() != null) {
                     String html = Utils.getHtmlFromMarkdown(comment.getBody());
                     holder.mCommentTextView.setText(Html.fromHtml(html));
+                    Linkify.addLinks(holder.mCommentTextView, Linkify.WEB_URLS);
                 } else {
                     holder.mCommentTextView.setVisibility(View.GONE);
                 }
