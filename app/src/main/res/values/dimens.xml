@@ -31,5 +31,6 @@
     <dimen name="widget_collection_min_resize_width">220dp</dimen>
     <dimen name="widget_collection_min_resize_height">180dp</dimen>
 
+    <dimen name="expanded_title_margin_start">64dp</dimen>
 
 </resources>

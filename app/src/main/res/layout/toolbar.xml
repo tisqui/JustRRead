@@ -7,4 +7,5 @@
     android:background="?attr/colorPrimary"
     app:popupTheme="@style/Theme.JustRReadApp.PopupOverlay"
     app:theme="@style/ActionBarThemeOverlay"
+    app:layout_scrollFlags="scroll|enterAlways|snap"
     />
