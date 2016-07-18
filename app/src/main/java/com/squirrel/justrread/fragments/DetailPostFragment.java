@@ -166,6 +166,11 @@ public class DetailPostFragment extends Fragment implements LoaderManager.Loader
                 mDetailNumComments.setText(mPost.getNumComments() + getContext().getString(R.string.detail_comments_text));
             }
 
+            if(mPost.getUpVotes()>0){
+                mDetailVotesNum.setTextColor(getResources().getColor(R.color.positiveCommentTextColor));
+            } else {
+                mDetailVotesNum.setTextColor(getResources().getColor(R.color.negativeCommentTextColor));
+            }
             mDetailVotesNum.setText(mPost.getUpVotes() + "");
 
             //set the recycler view

@@ -42,6 +42,8 @@
     <color name="detail_grey_text">#BDBDBD</color>
     <color name="detail_info_block_background">#FFFFFF</color>
     <color name="detailTextColor">#212121</color>
+    <color name="positiveCommentTextColor">#00E676</color>
+    <color name="negativeCommentTextColor">#F44336</color>
 
     <!-- Dark Palette -->
     <color name="colorPrimaryD">#03A9F4</color>
@@ -53,6 +55,8 @@
     <color name="popupBackgroundD">#757575</color>
     <color name="mainBackgroundD">#212121</color>
     <color name="mainDividerColorD">#EEEEEE</color>
+
+
 
 
 </resources>
