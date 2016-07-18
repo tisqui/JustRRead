@@ -39,25 +39,30 @@
             android:textSize="@dimen/smallTextSize"
             />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/ic_thumb_up_outline_grey600_18dp"
-            android:contentDescription="@string/comments_icon_content_description"/>
-
-        <TextView
-            android:id="@+id/comment_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="34343"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/smallTextSize"
-            />
-
-
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_thumb_up_outline_grey600_18dp"
+        android:contentDescription="@string/comments_icon_content_description"
+        android:layout_alignTop="@+id/comment_top_bloc"
+        android:layout_toLeftOf="@+id/comment_rating"
+        android:id="@+id/imageView"/>
+
+    <TextView
+        android:id="@+id/comment_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="343"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/smallTextSize"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
+        android:layout_alignTop="@+id/comment_top_bloc"/>
 
     <TextView
         android:id="@+id/comment_text"
@@ -68,7 +73,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:autoLink="web"
-        android:textSize="@dimen/smallTextSize"
+        android:textColor="@color/tisteTextColor"
+        android:textSize="@dimen/commentTextSize"
         android:text="text text text"/>
 
 </RelativeLayout>

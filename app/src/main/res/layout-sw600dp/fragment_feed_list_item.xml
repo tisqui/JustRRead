@@ -20,20 +20,21 @@
             <Button
                 android:id="@+id/fragment_feed_list_item_up_btn"
                 style="@style/ListItemButtons"
-                android:drawableStart="@drawable/ic_chevron_up"
+                android:drawableTop="@drawable/ic_chevron_up"
                 android:contentDescription="@string/feed_item_upvote_content_descr"/>
 
             <TextView
                 android:id="@+id/fragment_feed_list_item_votes_num"
-                android:layout_width="32dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="12sp"
                 android:textColor="@color/buttonsTextColor"/>
 
             <Button
                 android:id="@+id/fragment_feed_list_item_down_btn"
                 style="@style/ListItemButtons"
-                android:drawableStart="@drawable/ic_chevron_down"
+                android:drawableBottom="@drawable/ic_chevron_down"
                 android:contentDescription="@string/feed_item_downvote_content_desc"/>
         </LinearLayout>
 
@@ -64,14 +65,16 @@
 
                 <TextView
                     android:id="@+id/fragment_feed_list_item_source"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
+                    android:maxWidth="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:singleLine="true"
                     android:maxLength="15"
                     android:ellipsize="end"
                     android:textColor="@color/buttonsTextColor"
-                    android:textSize="@dimen/smallTextSize"/>
+                    android:textSize="@dimen/smallTextSize"
+                    android:text="imgur"/>
 
                 <TextView
                     android:id="@+id/fragment_feed_list_item_time"
@@ -79,7 +82,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:textColor="@color/postsListdateTextColor"
-                    android:textSize="@dimen/smallTextSize"/>
+                    android:textSize="@dimen/smallTextSize"
+                    android:text="an hour ago"/>
 
             </LinearLayout>
 
@@ -90,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:maxLines="3"
+                android:textColor="@color/tisteTextColor"
                 android:textSize="@dimen/titleTextSize"/>
 
             <LinearLayout
@@ -108,7 +113,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="@color/detail_grey_text"
+                    android:textSize="12sp"/>
 
                 <!--<Button-->
                     <!--android:id="@+id/fragment_feed_list_item_comments_btn"-->

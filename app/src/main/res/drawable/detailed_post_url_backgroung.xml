@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true"
-          android:drawable="@color/imgBg"/>
+          android:drawable="@color/feedItemPressedBgd"/>
     <item android:state_pressed="true"
-          android:drawable="@color/imgBg"/>
-    <item android:drawable="@android:color/transparent"/>
+          android:drawable="@color/feedItemPressedBgd"/>
+    <item android:drawable="@color/link_bg">
+        <shape>
+            <stroke
+                android:width="1dp"
+                android:color="@color/colorPrimary" >
+            </stroke>
+        </shape>
+    </item>
 </selector>

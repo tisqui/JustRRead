@@ -9,6 +9,7 @@
 
     <!-- Posts list -->
     <dimen name="smallTextSize">12dp</dimen>
+    <dimen name="commentTextSize">14dp</dimen>
     <dimen name="contentTextSize">14dp</dimen>
     <dimen name="titleTextSize">16dp</dimen>
     <dimen name="feed_image_thumbnail_size">80dp</dimen>

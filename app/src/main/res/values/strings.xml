@@ -81,7 +81,7 @@
     <string name="date_util_unit_year">year</string>
     <string name="date_util_unit_years">years</string>
     <string name="date_util_prefix_lt">less than a</string>
-    <string name="date_util_prefix_about">about</string>
+    <string name="date_util_prefix_about"></string>
     <string name="date_util_prefix_over">over</string>
     <string name="date_util_prefix_almost">almost</string>
     <string name="date_util_suffix">ago</string>

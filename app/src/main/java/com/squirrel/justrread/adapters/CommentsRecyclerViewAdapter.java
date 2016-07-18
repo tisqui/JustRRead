@@ -59,6 +59,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentIte
                 } else {
                     holder.mCommentDateTextView.setText("no date");
                 }
+                if(comment.getScore()>0){
+                    holder.mCommentRatingTextView.setTextColor(mContext.getResources().getColor(R.color.positiveCommentTextColor));
+                }else{
+                    holder.mCommentRatingTextView.setTextColor(mContext.getResources().getColor(R.color.negativeCommentTextColor));
+                }
                 holder.mCommentRatingTextView.setText(comment.getScore() + "");
                 if (comment.getBody() != null) {
                     String html = Utils.getHtmlFromMarkdown(comment.getBody());
